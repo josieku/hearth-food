@@ -1,4 +1,4 @@
-# react-express-starter-kit
+# hearth
 > Boilerplate containing a front-end using React and a back-end api using Express.
 
 ### Motivation
