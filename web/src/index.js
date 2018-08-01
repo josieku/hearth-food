@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import CustomerSignup from './CustomerSignup';
+import App from './components/general/App';
 import './index.css';
 
 ReactDOM.render(
-  <CustomerSignup />,
+  <App />,
   document.getElementById('root')
 );
