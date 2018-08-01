@@ -1,4 +1,8 @@
 node_modules
 dist
-.env
+env.sh
 semantic
+.DS_Store
+package-lock.json
+./server/package-lock.json
+./web/package-lock.json
