@@ -29,6 +29,7 @@ router.post('/signup', function(req,res) {
     password: req.body.password,
     phone: req.body.phone,
     email: req.body.email,
+    role: 'consumer',
   })
   user.save()
   .then(save =>res.json(save))
@@ -37,16 +38,25 @@ router.post('/signup', function(req,res) {
 
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
-  res.json({
-    success:!!req.user,
-    user: req.user,
-  })
+
+  if (req.user.role === "chef"){
+    User.findById(req.user._id).populate('menu').populate('orders').exec()
+        .then(user => res.json(user))
+  } else if (req.user.role === "consumer") {
+    User.findById(req.user._id).populate('orders').exec()
+        .then(user => res.json(user))
+  } else{
+    res.json(req.user);
+  }
+  
 });
 
 router.get('/ping',function(req,res){
-  res.send({
-  user:req.user
-  })
+  if (req.user){
+    res.status(200).send(req.user);
+  } else{
+    res.status(400).send(null);
+  }
 })
 
 return router;

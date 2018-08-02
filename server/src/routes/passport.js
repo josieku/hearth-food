@@ -3,7 +3,7 @@ var session = require('express-session')
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
-// var User = require('../models/models').User;
+var User = require('../models/models').User;
 //var MongoStore = require('connect-mongo')(session); //will use later??
 var mongoose = require('mongoose');
 
@@ -23,8 +23,8 @@ passport.deserializeUser(function(id, done) {
 });
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
+  function(email, password, done) {
+    User.findOne({ email: email }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });

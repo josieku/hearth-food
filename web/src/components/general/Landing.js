@@ -6,8 +6,8 @@ import GeneralLanding from "./GeneralLanding";
 export default class Landing extends Component{
   render(){
     const user = this.props.user;
-    if (user.role === "chef" && user) return <ChefLanding/>
-    else if (user.role === "consumer" && user) return <ConsumerLanding/>
-    else return <GeneralLanding/>;
+    if (user.role === "chef" && user) return <ChefLanding user={user}/>
+    else if (user.role === "consumer" && user) return <ConsumerLanding user={user}/>
+    else return <GeneralLanding user={user}/>;
   }
 };

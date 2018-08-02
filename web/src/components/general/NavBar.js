@@ -17,7 +17,7 @@ function nav(role, id){
     return (
       <div>
         <Link to="/messages">Messages</Link>
-        <Link to={`/user/${id}`}>Profile</Link>
+        <Link to={`/chef/${id}`}>Profile</Link>
         <Link to='/'>Consumer Mode</Link>
       </div>
     )
@@ -26,24 +26,17 @@ function nav(role, id){
       <div>
         <Link to='/'>About</Link>
         <Link to='/'>Become a Chef</Link>
-        <Link to='/'>Sign up</Link>
-        <Link to='/'>Log in</Link>
+        <Link to='/auth/signup'>Sign up</Link>
+        <Link to='/auth/login'>Log in</Link>
       </div>
     )
   }
 }
 
 export default class NavBar extends Component{
-  state = { role: this.props.user.role, id: this.props.user._id}
-
   render(){
-    console.log(this.props);
     return (
-      <div>{nav(this.state.role, this.state.id)}</div>
+      <div>{nav(this.props.user.role, this.props.user._id)}</div>
     )
-    // const user = this.props.location.state.user;
-    // if (user.role === "chef") return <ChefLanding/>
-    // else if (user.role === "consumer") return <ConsumerLanding/>
-    // else return <GeneralLanding/>;
   }
 };

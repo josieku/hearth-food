@@ -2,22 +2,19 @@ import React from "react";
 import { Input, Button } from 'semantic-ui-react'
 
 class CustomerSignup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      first: '',
-      last: '',
-      phone: '',
-      password: '',
-      email: '',
-      repeat: '',
-    };
-  }
+  state = {
+    first: '',
+    last: '',
+    phone: '',
+    password: '',
+    email: '',
+    repeat: '',
+  };
 
-  signup(event) {
+  signup = (event) => {
     event.preventDefault()
     console.log('about to fetch')
-    fetch('/signup', {
+    fetch('/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,14 +37,19 @@ class CustomerSignup extends React.Component {
         throw "The sign up did not work, please try again."
       }
     })
-  }
-
-  handleChange(name, event) {
     this.setState({
-      [name]: event.target.value,
-    });
+      first: '',
+      last: '',
+      phone: '',
+      password: '',
+      email: '',
+      repeat: '',
+    })
   }
 
+  handleChange = (name, event) => {
+    this.setState({ name });
+  }
 
   render() {
     return(
@@ -55,27 +57,27 @@ class CustomerSignup extends React.Component {
         <h1>Register to get your meals cooked from one of our chefs!</h1>
         <form onSubmit={(event) => this.signup(event)}>
           <label>First Name:
-              <Input type="text" name="first" placeholder="Please enter your full name" onChange={event => this.handleChange('name', event)}/>
+              <Input type="text" name="first" placeholder="Please enter your full name" onChange={e => this.setState({first: e.target.value})}/>
           </label>
           <label>Last Name:
-              <Input type="text" name="last" placeholder="Please enter your full name" onChange={event => this.handleChange('name', event)}/>
+              <Input type="text" name="last" placeholder="Please enter your full name" onChange={e => this.setState({last: e.target.value})}/>
           </label>
           <label>Phone Number:
-              <Input type="number" name="phone" placeholder="Phone Number" onChange={event => this.handleChange('phone', event)}/>
+              <Input type="number" name="phone" placeholder="Phone Number" onChange={e => this.setState({phone: e.target.value})}/>
           </label>
           <label>Email:
-              <Input type="email" name="email" placeholder="Email" onChange={event => this.handleChange('email', event)}/>
+              <Input type="email" name="email" placeholder="Email" onChange={e => this.setState({email: e.target.value})}/>
           </label>
           <label>Password:
-              <Input type="text" name="password" placeholder="Password" onChange={event => this.handleChange('password', event)}/>
+              <Input type="text" name="password" placeholder="Password" onChange={e => this.setState({password: e.target.value})}/>
           </label>
           <label>Repeat your password:
-              <Input type="text" name="repeat" placeholder="Run it back" onChange={event => this.handleChange('repeat', event)}/>
+              <Input type="text" name="repeat" placeholder="Run it back" onChange={e => this.setState({repeat: e.target.value})}/>
           </label>
           <label>Picture of driver's license:
             <input type="file" />
           </label>
-          <Button type="submit" value="Submit" content='Submit'/>
+          <Button onClick={this.signup} type="submit" value="Submit" content='Submit'/>
         </form>
       </div>
     )

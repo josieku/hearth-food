@@ -39,8 +39,13 @@ var userSchema = mongoose.Schema({
   location:{
     type: String
   },
-  preferrences:{
-    type: []
+  preferences:{
+    type: [],
+    default: []
+  },
+  rating: {
+    type: Number,
+    default: 5
   },
   role:{
     type: String,
@@ -76,7 +81,8 @@ var mealSchema = mongoose.Schema({
   },
   chef: {
     type: mongoose.Schema.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: true
   },
   cuisine: {
     type: [],
@@ -97,6 +103,10 @@ var mealSchema = mongoose.Schema({
   image: {
     type: String
   },
+  status:{
+    type: String,
+    default: "pending"
+  },
   reviews: {
     type: [
       {
@@ -104,6 +114,10 @@ var mealSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId
       }
     ]
+  },
+  overallRating:{
+    type: Number,
+    default: 0,
   },
   location: {
     type: String,
@@ -160,7 +174,7 @@ var userReviewSchema = mongoose.Schema({
 var User = mongoose.model('User', userSchema);
 var Meal = mongoose.model('Meal', mealSchema);
 var Mealreview = mongoose.model('Mealreview', mealReviewSchema);
-var Userreview = mongoose.model('Userreview', chefReviewSchema);
+var Userreview = mongoose.model('Userreview', userReviewSchema);
 
 module.exports = {
   User: User,
