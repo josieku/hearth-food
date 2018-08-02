@@ -160,7 +160,7 @@ var userReviewSchema = mongoose.Schema({
 var User = mongoose.model('User', userSchema);
 var Meal = mongoose.model('Meal', mealSchema);
 var Mealreview = mongoose.model('Mealreview', mealReviewSchema);
-var Userreview = mongoose.model('Userreview', chefReviewSchema);
+var Userreview = mongoose.model('Userreview', userReviewSchema);
 
 module.exports = {
   User: User,

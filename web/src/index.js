@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/general/App';
 import './index.css';
+import MapContainer from './components/maps/MapContainer'
 
 ReactDOM.render(
-  <App />,
+  <MapContainer />,
   document.getElementById('root')
 );
