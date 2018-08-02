@@ -25,6 +25,7 @@
     "passport-local": "^1.0.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-modal": "^3.5.1",
     "react-router-dom": "^4.3.1",
     "semantic-ui": "^2.3.3",
     "semantic-ui-css": "^2.3.3",

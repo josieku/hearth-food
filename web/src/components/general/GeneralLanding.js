@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Image, Grid } from 'semantic-ui-react';
 
+import NavBar from './NavBar';
+
 export default class GeneralLanding extends Component{
   render(){
     return(
