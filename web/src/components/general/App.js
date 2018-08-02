@@ -38,8 +38,8 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <div>
-            <h2>hearth</h2>
+          <div className="hearthHead">
+            <h1>Hearth</h1>
           </div>
           <NavBar user={this.state.user}/>
           <Switch>
