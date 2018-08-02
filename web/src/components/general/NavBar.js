@@ -3,42 +3,6 @@ import { Link } from 'react-router-dom';
 import ConsumerLanding from './../consumer/ConsumerLanding';
 import ChefLanding from './../chef/ChefLanding';
 import GeneralLanding from './GeneralLanding';
-<<<<<<< HEAD
-
-function nav(role, id){
-  if (role === "consumer") {
-    return (
-      <div>
-        <Link to="/request" >Request</Link>
-        <Link to="/messages">Messages</Link>
-        <Link to={`/user/${id}`}>Profile</Link>
-      </div>
-    )
-  } else if (role === "chef") {
-    return (
-      <div>
-        <Link to="/messages">Messages</Link>
-        <Link to={`/chef/${id}`}>Profile</Link>
-        <Link to='/'>Consumer Mode</Link>
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <Link to='/'>About</Link>
-        <Link to='/'>Become a Chef</Link>
-        <Link to='/auth/signup'>Sign up</Link>
-        <Link to='/auth/login'>Log in</Link>
-      </div>
-    )
-  }
-}
-
-export default class NavBar extends Component{
-  render(){
-    return (
-      <div>{nav(this.props.user.role, this.props.user._id)}</div>
-=======
 import { Menu } from 'semantic-ui-react';
 import './../../../public/index.css'
 export default class NavBar extends Component {
@@ -94,10 +58,10 @@ export default class NavBar extends Component {
             <Link to='/'>
               <Menu.Item name='Become a Chef' active={ activeItem === 'becomeChef'} />
             </Link>
-            <Link to='/signup'>
+            <Link to='/auth/signup'>
               <Menu.Item name='Sign up' active={ activeItem === 'signup'} />
             </Link>
-            <Link to='/'>
+            <Link to='/auth/login'>
               <Menu.Item name='Log In' active={ activeItem === 'logIn'} />
             </Link>
           </Menu>
@@ -109,7 +73,6 @@ export default class NavBar extends Component {
 
     return (
       <div className="flex-container">{this.nav(this.state.role, this.state.id)}</div>
->>>>>>> caad4676a40f23f4d113ce856e5e31b24302d21d
     )
   }
 }
