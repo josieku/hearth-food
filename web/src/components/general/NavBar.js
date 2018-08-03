@@ -77,7 +77,7 @@ export default class NavBar extends Component {
     const { fixed } = this.state
     return (
       <div className="flex-container">
-          {this.nav(this.state.role, this.state.id)}
+          {this.nav(this.props.user.role, this.props.user._id)}
       </div>
     )
   }
