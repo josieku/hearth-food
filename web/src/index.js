@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/general/App'
+import MapContainer from './components/maps/MapContainer'
 
 ReactDOM.render(
   <div style={{height: '100vh', width: '100vw'}}>
-    <App />
+    <MapContainer />
   </div>,
   document.getElementById('root')
 );

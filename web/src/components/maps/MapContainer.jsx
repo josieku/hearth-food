@@ -1,30 +1,34 @@
 const _ = require("lodash");
 import React from 'react';
-const { compose, withProps, lifecycle } = require("recompose");
+import ReactDOM from 'react-dom'
+import {geolocated} from 'react-geolocated';
+const { compose, withProps, lifecycle, defaultProps} = require("recompose");
 const {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
 } = require("react-google-maps");
-const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+import SearchBox from "react-google-maps/lib/components/places/SearchBox"
+const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
 
-const MapWithASearchBox = compose(
+const MapWithASearchBox = geolocated({
+  positionOptions: {
+    enableHighAccuracy: false,
+  },
+  userDecisionTimeout: 5000,
+})(compose(
   withProps({
-    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=&v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDM7lCbSzaudr_c9xSve0RiF7Zl5UX2rac&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
+    containerElement: <div style={{ height: `100%`, width: '50%', position: 'absolute', right: '0' }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({
     componentWillMount() {
       const refs = {}
-
       this.setState({
         bounds: null,
-        center: {
-          lat: 41.9, lng: -87.624
-        },
         markers: [],
         onMapMounted: ref => {
           refs.map = ref;
@@ -40,7 +44,7 @@ const MapWithASearchBox = compose(
         },
         onPlacesChanged: () => {
           const places = refs.searchBox.getPlaces();
-          const bounds = new google.maps.LatLngBounds();
+          const bounds = new window.google.maps.LatLngBounds();
 
           places.forEach(place => {
             if (place.geometry.viewport) {
@@ -65,17 +69,25 @@ const MapWithASearchBox = compose(
   }),
   withScriptjs,
   withGoogleMap
-)(props =>
+)((props) => {
+  return (
   <GoogleMap
     ref={props.onMapMounted}
     defaultZoom={15}
-    center={props.center}
+    center={{lat: props.coords.latitude, lng: props.coords.longitude}}
     onBoundsChanged={props.onBoundsChanged}
   >
+    <MarkerWithLabel
+      position={{lat: props.coords.latitude, lng: props.coords.longitude}}
+      labelAnchor={new window.google.maps.Point(0, 0)}
+      labelStyle={{backgroundColor: "purple", fontSize: "28px", padding: "16px"}}
+    >
+      <div>This is you!</div>
+    </MarkerWithLabel>
     <SearchBox
       ref={props.onSearchBoxMounted}
       bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
+      controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
       onPlacesChanged={props.onPlacesChanged}
     >
       <input
@@ -97,9 +109,17 @@ const MapWithASearchBox = compose(
       />
     </SearchBox>
     {props.markers.map((marker, index) =>
-      <Marker key={index} position={marker.position} />
+      <MarkerWithLabel
+        key={index}
+        position={marker.position}
+        labelAnchor={new window.google.maps.Point(0, 0)}
+        labelStyle={{backgroundColor: "yellow", fontSize: "32px", padding: "16px"}}
+      >
+        <div>Hello There!</div>
+      </MarkerWithLabel>
     )}
   </GoogleMap>
+)
+})
 );
-
 export default MapWithASearchBox
