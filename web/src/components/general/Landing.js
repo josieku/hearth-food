@@ -8,6 +8,6 @@ export default class Landing extends Component{
     const user = this.props.user;
     if (user.role === "chef" && user) return <ChefLanding user={user}/>
     else if (user.role === "consumer" && user) return <ConsumerLanding user={user}/>
-    else return <GeneralLanding user={user}/>;
+    else return <GeneralLanding user={user} landing={this.props.landing}/>;
   }
 };

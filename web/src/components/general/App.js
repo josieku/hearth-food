@@ -18,6 +18,7 @@ class App extends Component {
   // landing page, not logged in
   state = {
     user: {},
+    landing: true
   };
 
   componentDidMount = async e => {
@@ -28,9 +29,14 @@ class App extends Component {
       this.setState({ user })
     }
   }
-
   login = user => {
-    this.setState({ user })
+    this.setState({ user, landing: false })
+  }
+  landing = e => {
+    this.setState({landing: true })
+  }
+  notLand = e => {
+    this.setState({landing: false})
   }
 
   render() {
@@ -38,10 +44,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <div className="hearthHead">
-            <h1>Hearth</h1>
-          </div>
-          <NavBar user={this.state.user}/>
+          {this.state.landing ? null : <NavBar user={this.state.user}/>}
           <Switch>
             <Route exact={true} path="/" render={(props) => <Landing user={this.state.user} {...props}/>}/>
             <Route path="/users" render={(props) => <User user={this.state.user} {...props}/>}/>

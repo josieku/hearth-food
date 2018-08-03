@@ -43,7 +43,7 @@ export default class ConsumerLanding extends Component{
     const response = await fetch('/meal/listings');
     console.log(response);
     const listArr = await response.json();
-    this.setState({ listings: listArr})
+    this.setState({ listings: listArr })
     console.log(listArr);
   }
 

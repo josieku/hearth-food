@@ -14,7 +14,7 @@ export default class ConsumerProfile extends Component{
     // }
     const response = await fetch(`/user/${this.props.id}`);
     const profile = await response.json();
-    this.setState({ profile: profile})
+    this.setState({ profile: profile })
   }
 
   render(){
