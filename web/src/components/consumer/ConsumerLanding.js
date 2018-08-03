@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 
 function Listing(meal){
   return (
-    <div className="meal-listings">
+    <div className="meal-listings" key={meal._id}>
       <img src=""/>
       <h3><Link to={`/meal/${meal._id}`}>{meal.title}</Link></h3>
-      <p>{meal.description}</p>
-      <p><strong>{meal.price}</strong></p>
-      <p>{meal.ingredients}</p>
+      <p>Description: {meal.description}</p>
+      <p>Price: <strong>${meal.price}</strong></p>
+      <p>Ingredients: {meal.ingredients}</p>
     </div>
   )
 }
@@ -42,7 +42,7 @@ export default class ConsumerLanding extends Component{
     console.log('in here')
     fetch('/meal/listings')
       .then(resp => resp.json())
-      .then(listings => this.setState({ listings }));
+      .then(listings => {console.log(listings); this.setState({ listings })});
   }
 
   sort = indicator => {
@@ -63,9 +63,10 @@ export default class ConsumerLanding extends Component{
           <button onClick={()=>{this.sort("high")}}>Price: High to Low</button>
           <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
         </div>
-        {this.state.listing
+        <MealListings listings={this.state.listings}/>
+        {/* {this.state.listing
           ? <MealListings listings={this.state.listings}/>
-          : <p>No meals available in your area :( </p>}
+          : <p>No meals available in your area :( </p>} */}
         <Map listings={this.state.listings}/>
       </div>
     )

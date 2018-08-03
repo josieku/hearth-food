@@ -24,8 +24,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth', auth(passport))
-app.use('/user', users)
 app.use('/meal', meals)
+app.use('/user', users)
 app.use('/chef', chefs)
 
 const PORT = process.env.PORT || 3005;

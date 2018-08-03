@@ -8,11 +8,14 @@ var Meal = require('../models/models').Meal;
 
 router.get('/:id', (req, res) => {
   User.findOne({role:'chef', _id: req.params.id })
+      .populate('requests')
+      .exec()
       .then(user => {console.log(user); res.json(user)})
       .catch(err => console.error(err))
 })
 
-router.post('/:id/add', async (req,res) => {
+router.post('/:id/add', (req,res) => {
+  console.log('adding')
   var newMeal = new Meal({
     title: req.body.title,
     ingredients: req.body.ingredients,
@@ -20,6 +23,7 @@ router.post('/:id/add', async (req,res) => {
     price: req.body.price,
     location: "somewhere",
     status: "pending",
+    cuisine: req.body.cuisine,
     chef: req.body.chef,
   })
 

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 // import Modal from 'react-modal';
-import { Button, Header, Image, Modal } from 'semantic-ui-react'
-
-
+// import { Button, Header, Image, Modal } from 'semantic-ui-react'
 
 export default class Add extends Component{
   state = {
@@ -10,46 +8,26 @@ export default class Add extends Component{
     description: "",
     ingredients: "",
     price: 0,
-  }
-
-  componentDidMount() {
-    // Modal.setAppElement('#root');
+    cuisine: "",
   }
 
   save = e => {
     console.log('saving');
-    this.props.save(this.state.title, this.state.description, this.state.ingredients, parseInt(this.state.price));
+    this.props.save(this.state.title,
+                    this.state.description,
+                    this.state.ingredients,
+                    parseInt(this.state.price),
+                    this.state.cuisine);
     this.setState({
       title: "",
       description: "",
       ingredients: "",
       price:0,
+      cuisine: ""
     })
   }
 
-  afterOpenModal= ()=> {
-    // references are now sync'd and can be accessed.
-  }
-
-  closeModal = () => {
-    this.setState({open: false});
-  }
-
   render() {
-
-
-
-    // const customStyles = {
-    //   content : {
-    //     top                   : '50%',
-    //     left                  : '50%',
-    //     right                 : 'auto',
-    //     bottom                : 'auto',
-    //     marginRight           : '-50%',
-    //     transform             : 'translate(-50%, -50%)'
-    //   }
-    // };
-
     return (
       <div>
         <div>Add a Dish</div>
@@ -57,7 +35,8 @@ export default class Add extends Component{
           <input placeholder="Title" onChange={e => this.setState({title: e.target.value})}/>
           <input placeholder="Description" onChange={e => this.setState({description: e.target.value})}/>
           <input placeholder="Ingredients" onChange={e => this.setState({ingredients: e.target.value})}/>
-          <input placeholder="price" onChange={e => this.setState({price: e.target.value})}/>
+          <input placeholder="Price" onChange={e => this.setState({price: e.target.value})}/>
+          <input placeholder="Cuisine" onChange={e => this.setState({cuisine: e.target.value})}/>
         </form>
         <button onClick={this.save}>Add to menu</button>
         {/* <button onClick={() => this.setState({ open: true })}>Add a Dish</button>

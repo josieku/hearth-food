@@ -42,7 +42,7 @@ export default class ChefProfile extends Component{
     this.setState({ profile: profile})
   }
 
-  saveDish = (title, description, ingredients, price) => {
+  saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
     console.log('saving', title, description, ingredients, price)
     fetch(`/chef/${this.props.user._id}/add`, {
@@ -51,12 +51,7 @@ export default class ChefProfile extends Component{
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({
-        title,
-        description,
-        ingredients,
-        price,
-        chef}),
+      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef }),
     })
     .then(resp => resp.json())
     .then(saved => {
