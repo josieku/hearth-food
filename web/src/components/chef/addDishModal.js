@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Modal from 'react-modal';
-import { Button, Header, Image } from 'semantic-ui-react'
+// import Modal from 'react-modal';
+import { Button, Header, Image, Modal } from 'semantic-ui-react'
 
 
 
@@ -26,7 +26,7 @@ export default class Add extends Component{
       price:0,
     })
   }
-  
+
   afterOpenModal= ()=> {
     // references are now sync'd and can be accessed.
   }

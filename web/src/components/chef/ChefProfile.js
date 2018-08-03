@@ -69,6 +69,7 @@ export default class ChefProfile extends Component{
   }
 
   render(){
+    console.log(this.props);
     return(
       <div>
         <p>Consumer Profile</p>
@@ -80,7 +81,6 @@ export default class ChefProfile extends Component{
         </div>
         <div style={{border:"1px solid black"}}>
           <button><Link to={`/chef/${this.state.profile._id}/add`}>Add a Dish</Link></button>
-          {/* <Add save={this.saveDish}/> */}
           {MenuListing(this.state.menu)}
         </div>
         <Route path={`/chef/${this.state.profile._id}/add`} render={() => <Add save={this.saveDish}/>}/>

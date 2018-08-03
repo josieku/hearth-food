@@ -38,13 +38,11 @@ export default class ConsumerLanding extends Component{
     listings: [],
   }
 
-  componentDidMount = async e => {
+  componentDidMount = e => {
     console.log('in here')
-    const response = await fetch('/meal/listings');
-    console.log(response);
-    const listArr = await response.json();
-    this.setState({ listings: listArr})
-    console.log(listArr);
+    fetch('/meal/listings')
+      .then(resp => resp.json())
+      .then(listings => this.setState({ listings }));
   }
 
   sort = indicator => {

@@ -6,12 +6,10 @@ import GeneralLanding from './GeneralLanding';
 import { Menu } from 'semantic-ui-react';
 import './../../../public/index.css'
 export default class NavBar extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      activeItem: 'messages',
-    }
+  state = {
+    activeItem: 'messages',
   }
+
   handleItemClick = (e, { name }) => this.setState({activeItem: name});
 
   nav = (role, id) => {
@@ -39,7 +37,7 @@ export default class NavBar extends Component {
             <Link to='/'>
               <Menu.Item name='Messages' active={ activeItem === 'messages'} />
             </Link>
-            <Link to='/'>
+            <Link to={`/chef/${id}`}>
               <Menu.Item name='Profile' active={ activeItem === 'profile'} />
             </Link>
             <Link to='/'>
@@ -51,7 +49,7 @@ export default class NavBar extends Component {
     } else {
       return (
         <div>
-          <Menu className="navBar">
+          <Menu text className="navBar">
             <Link to='/'>
               <Menu.Item name='About' active={ activeItem === 'about'} />
             </Link>
@@ -72,7 +70,7 @@ export default class NavBar extends Component {
   render(){
 
     return (
-      <div className="flex-container">{this.nav(this.state.role, this.state.id)}</div>
+      <div className="flex-container">{this.nav(this.props.user.role, this.props.user._id)}</div>
     )
   }
 }
