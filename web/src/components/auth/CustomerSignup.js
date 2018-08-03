@@ -10,7 +10,6 @@ class CustomerSignup extends React.Component {
     email: '',
     repeat: '',
   };
-
   signup = (event) => {
     event.preventDefault()
     console.log('about to fetch')

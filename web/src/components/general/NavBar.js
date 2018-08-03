@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ConsumerLanding from './../consumer/ConsumerLanding';
 import ChefLanding from './../chef/ChefLanding';
 import GeneralLanding from './GeneralLanding';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Container } from 'semantic-ui-react';
 import './../../../public/index.css'
 export default class NavBar extends Component {
   state = {
@@ -16,8 +16,8 @@ export default class NavBar extends Component {
     const { activeItem } = this.state
     if (role === "consumer") {
       return (
-        <div>
-          <Menu text className="navBar">
+        <div style={{ marginLeft: '1em'}}>
+          <Container text className="navBar">
             <Link to="/request" >
               <Menu.Item name='Request' active={ activeItem === 'request'} />
             </Link>
@@ -27,13 +27,13 @@ export default class NavBar extends Component {
             <Link to={`/user/${id}`}>
               <Menu.Item name='Profile' active={ activeItem === 'profile'} />
             </Link>
-          </Menu>
+          </Container>
         </div>
       )
     } else if (role === "chef") {
       return (
         <div>
-          <Menu text className="navBar">
+          <Container text className="navBar">
             <Link to='/'>
               <Menu.Item name='Messages' active={ activeItem === 'messages'} />
             </Link>
@@ -43,13 +43,13 @@ export default class NavBar extends Component {
             <Link to='/'>
               <Menu.Item name='Consumer Mode' active={ activeItem === 'consumer'} />
             </Link>
-          </Menu>
+          </Container>
         </div>
       )
     } else {
       return (
         <div>
-          <Menu text className="navBar">
+          <Container text inverted className="navBar">
             <Link to='/'>
               <Menu.Item name='About' active={ activeItem === 'about'} />
             </Link>
@@ -62,15 +62,24 @@ export default class NavBar extends Component {
             <Link to='/auth/login'>
               <Menu.Item name='Log In' active={ activeItem === 'logIn'} />
             </Link>
-          </Menu>
+          </Container>
         </div>
       )
     }
   }
   render(){
-
+    const { fixed } = this.state
     return (
-      <div className="flex-container">{this.nav(this.props.user.role, this.props.user._id)}</div>
+      <div className="flex-container">
+        <Menu
+          fixed={fixed ? 'top' : null}
+          inverted={!fixed}
+          pointing={!fixed}
+          secondary={!fixed}
+          size='large'>
+          {this.nav(this.state.role, this.state.id)}
+        </Menu>
+      </div>
     )
   }
 }

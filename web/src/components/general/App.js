@@ -6,7 +6,7 @@ import Landing from './Landing';
 import NavBar from './NavBar';
 import Meal from './../meals/Meal';
 import User from './User';
-
+import MapContainer from '.././maps/MapContainer'
 import CustomerSignup from './../auth/CustomerSignup';
 import Login from './../auth/Login';
 import ConsumerProfile from './../consumer/ConsumerProfile';
@@ -19,6 +19,7 @@ class App extends Component {
   // landing page, not logged in
   state = {
     user: {},
+    landing: true
   };
 
   componentDidMount = async e => {
@@ -29,10 +30,14 @@ class App extends Component {
       this.setState({ user })
     }
   }
-
   login = user => {
-    console.log("logged in ", user)
-    this.setState({ user })
+    this.setState({ user, landing: false })
+  }
+  landing = e => {
+    this.setState({landing: true })
+  }
+  notLand = e => {
+    this.setState({landing: false})
   }
 
   render() {
@@ -40,14 +45,12 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <div>
-            <h2>hearth</h2>
-          </div>
-          <NavBar user={this.state.user}/>
+          {this.state.landing ? null : <NavBar user={this.state.user}/>}
           <Switch>
             <Route exact={true} path="/" render={(props) => <Landing user={this.state.user} {...props}/>}/>
             <Route path="/users" render={(props) => <User user={this.state.user} {...props}/>}/>
-            <Route exact path="/meal" render={(props) => <Meal user={this.state.user} {...props}/>}/>
+            <Route path="/meal" render={(props) => <Meal user={this.state.user} {...props}/>}/>
+            <Route path="/map" component={MapContainer}/>
             <Route path="/auth/signup" component={CustomerSignup}/>
             <Route path="/auth/login" render={(props) => <Login login={this.login} {...props}/>}/>
             <Route path='/user/:id' render={({ match}) => <ConsumerProfile user={this.state.user} id={match.params.id}/>}/>
