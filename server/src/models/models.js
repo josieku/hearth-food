@@ -67,6 +67,14 @@ var userSchema = mongoose.Schema({
       }
     ]
   },
+  requests: {
+    type: [
+      {
+        ref: 'Request',
+        type: mongoose.Schema.ObjectId
+      }
+    ]
+  },
   verified: {
     type: Boolean,
     required: true,
@@ -122,6 +130,14 @@ var mealSchema = mongoose.Schema({
   location: {
     type: String,
     required: true
+  },
+  orders: {
+    type: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Request'
+      }
+    ]
   }
 })
 
@@ -171,14 +187,43 @@ var userReviewSchema = mongoose.Schema({
   }
 })
 
+var requestsSchema = mongoose.Schema({
+  chef: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User'
+  },
+  consumer: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User'
+  },
+  meal: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Meal'
+  },
+  requests: {
+    type: String
+  },
+  time: {
+    type: Date,
+    required: true
+  },
+  accepted: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+})
+
 var User = mongoose.model('User', userSchema);
 var Meal = mongoose.model('Meal', mealSchema);
 var Mealreview = mongoose.model('Mealreview', mealReviewSchema);
 var Userreview = mongoose.model('Userreview', userReviewSchema);
+var Request = mongoose.model('Request', requestsSchema);
 
 module.exports = {
   User: User,
   Meal: Meal,
   Mealreview: Mealreview,
-  Userreview: Userreview
+  Userreview: Userreview,
+  Request: Request
 }

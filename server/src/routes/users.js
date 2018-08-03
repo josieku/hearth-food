@@ -7,6 +7,8 @@ var User = require('../models/models').User;
 
 router.get('/:id', (req, res) => {
   User.findById(req.params.id)
+      .populate('orders')
+      .exec()
       .then(user => {console.log(user); res.json(user)})
       .catch(err => console.error(err))
 })

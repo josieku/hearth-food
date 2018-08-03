@@ -13,6 +13,7 @@ import ConsumerProfile from './../consumer/ConsumerProfile';
 import ChefProfile from './../chef/ChefProfile';
 import Add from './../chef/addDishModal';
 import MealProfile from './../meals/MealProfile';
+import MealEdit from './../meals/MealProfile-Edit'
 
 class App extends Component {
   // landing page, not logged in
@@ -54,6 +55,7 @@ class App extends Component {
             <Route path="/auth/login" render={(props) => <Login login={this.login} {...props}/>}/>
             <Route path='/user/:id' render={({ match}) => <ConsumerProfile user={this.state.user} id={match.params.id}/>}/>
             <Route path='/chef/:id' render={(props) => <ChefProfile user={this.state.user} id={props.match.params.id} {...props}/>}/>
+            {/* <Route exact path='/meal/:id/edit' render={(props) => <MealEdit id={props.match.params.id} user={this.state.user} {...props}/>}/> */}
             <Route path='/meal/:id' render={(props) => <MealProfile id={props.match.params.id} user={this.state.user} {...props}/>}/>
             {/* <Route path={`/chef/:id/add`} component={Add}/> */}
             {/* <Route path="/messages" render={() => <Messages user = {this.state.user}/>}/>

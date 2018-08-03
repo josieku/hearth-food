@@ -6,12 +6,10 @@ import GeneralLanding from './GeneralLanding';
 import { Menu, Container } from 'semantic-ui-react';
 import './../../../public/index.css'
 export default class NavBar extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      activeItem: 'messages',
-    }
+  state = {
+    activeItem: 'messages',
   }
+
   handleItemClick = (e, { name }) => this.setState({activeItem: name});
 
   nav = (role, id) => {
@@ -39,7 +37,7 @@ export default class NavBar extends Component {
             <Link to='/'>
               <Menu.Item name='Messages' active={ activeItem === 'messages'} />
             </Link>
-            <Link to='/'>
+            <Link to={`/chef/${id}`}>
               <Menu.Item name='Profile' active={ activeItem === 'profile'} />
             </Link>
             <Link to='/'>
