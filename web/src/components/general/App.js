@@ -45,7 +45,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          {this.state.landing ? null : <NavBar user={this.state.user}/>}
+          <NavBar user={this.state.user}/>
           <Switch>
             <Route exact={true} path="/" render={(props) => <Landing user={this.state.user} {...props}/>}/>
             <Route path="/users" render={(props) => <User user={this.state.user} {...props}/>}/>

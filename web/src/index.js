@@ -6,7 +6,7 @@ import './../public/index.css';
 
 ReactDOM.render(
   <div style={{height: '100vh', width: '100vw'}}>
-    <MapContainer />
+    <App />
   </div>,
   document.getElementById('root')
 );
