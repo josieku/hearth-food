@@ -7,6 +7,9 @@ export default class Login extends React.Component {
     password: '',
     email: '',
   };
+  componentDidMount(){
+    this.props.notLand();
+  };
   login = (event) => {
     event.preventDefault()
     console.log('about to login')

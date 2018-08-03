@@ -39,6 +39,7 @@ export default class ConsumerLanding extends Component{
   }
 
   componentDidMount = e => {
+    this.props.notLand();
     console.log('in here')
     fetch('/meal/listings')
       .then(resp => resp.json())
