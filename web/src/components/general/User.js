@@ -2,11 +2,13 @@ import React, { Component } from "react";
 import { Route } from 'react-router-dom';
 
 import ConsumerProfile from './../consumer/ConsumerProfile';
+import Login from './../auth/Login'
 
 export default class User extends Component{
   render(){
     return(
       <div>
+        User
         <Route
           exact={true}
           path='/user/:id'

@@ -3,14 +3,16 @@ var session = require('express-session')
 const bodyParser = require('body-parser')
 import passport from './routes/passport'
 import auth from './routes/auth'
-import routes from './routes/routes'
+import users from './routes/users'
+import meals from './routes/meals'
+import chefs from './routes/chefs'
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 const app = express();
 const server = require('http').Server(app);
 
 app.use(session({ secret: "tractor",
-store: new MongoStore({mongooseConnection: require('mongoose').connection}),
+// store: new MongoStore({mongooseConnection: require('mongoose').connection}),
 })); //secret string is used to hash the cookie
 app.use(bodyParser.urlencoded({ extended: false })); //doesn't matter if the body is json or not
 app.use(bodyParser.json()) // turning post requests into json objects
@@ -21,8 +23,10 @@ app.get('/', (req, res) => {
   res.send('hello')
 })
 
-app.use('/', auth(passport)) //used at every single route
-// app.use('/', routes) //used at every single route
+app.use('/auth', auth(passport))
+app.use('/user', users)
+app.use('/meal', meals)
+app.use('/chef', chefs)
 
 const PORT = process.env.PORT || 3005;
 server.listen(PORT, error => {

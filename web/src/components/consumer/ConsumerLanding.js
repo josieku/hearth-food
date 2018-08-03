@@ -34,36 +34,41 @@ class Map extends Component {
 };
 
 export default class ConsumerLanding extends Component{
-  // state = {
-  //   listings: [],
-  // }
-  //
-  // componentDidMount = async e => {
-  //   const response = await fetch('/listings');
-  //   const listArr = await response.json();
-  //   this.setState({ listings: listArr})
-  // }
-  //
-  // sort = indicator => {
-  //   if (indicator === "high"){
-  //     const tempArr = this.state.listings.slice().sort((a,b)=>a["price"]-b["price"])
-  //     this.setState({listings: tempArr})
-  //   } else if (indicator === "low"){
-  //     const tempArr = this.state.listings.slice().sort((a,b)=>b["price"]-a["price"])
-  //     this.setState({listings: tempArr})
-  //   }
-  // }
+  state = {
+    listings: [],
+  }
+
+  componentDidMount = async e => {
+    console.log('in here')
+    const response = await fetch('/meal/listings');
+    console.log(response);
+    const listArr = await response.json();
+    this.setState({ listings: listArr})
+    console.log(listArr);
+  }
+
+  sort = indicator => {
+    if (indicator === "high"){
+      const tempArr = this.state.listings.slice().sort((a,b)=>a["price"]-b["price"])
+      this.setState({listings: tempArr})
+    } else if (indicator === "low"){
+      const tempArr = this.state.listings.slice().sort((a,b)=>b["price"]-a["price"])
+      this.setState({listings: tempArr})
+    }
+  }
 
   render(){
     return(
       <div>
         <p>Consumer Landing</p>
-        {/* <div className="filter">
-          <button onClick={()=>{sort("high")}}>Price: High to Low</button>
-          <button onClick={()=>{sort("low")}}>Price: Low to High</button>
+        <div className="filter">
+          <button onClick={()=>{this.sort("high")}}>Price: High to Low</button>
+          <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
         </div>
-        <MealListings listings={this.state.listings}/>
-        <Map listings={this.state.listings}/> */}
+        {this.state.listing
+          ? <MealListings listings={this.state.listings}/>
+          : <p>No meals available in your area :( </p>}
+        <Map listings={this.state.listings}/>
       </div>
     )
   }
