@@ -57,9 +57,6 @@ HomepageHeading.propTypes = {
 
 class DesktopContainer extends Component {
   state = {}
-  componentDidMount(){
-    this.props.landing();
-  }
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
 
@@ -118,9 +115,6 @@ DesktopContainer.propTypes = {
 
 class MobileContainer extends Component {
   state = {}
-  componentDidMount(){
-    this.props.landing()
-  }
   handlePusherClick = () => {
     const { sidebarOpened } = this.state
 

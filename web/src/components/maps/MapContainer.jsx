@@ -2,7 +2,7 @@ const _ = require("lodash");
 import React from 'react';
 import ReactDOM from 'react-dom'
 import {geolocated} from 'react-geolocated';
-const { compose, withProps, lifecycle, defaultProps} = require("recompose");
+const { compose, withProps, lifecycle, defaultProps } = require("recompose");
 const {
   withScriptjs,
   withGoogleMap,
@@ -11,12 +11,19 @@ const {
 } = require("react-google-maps");
 import SearchBox from "react-google-maps/lib/components/places/SearchBox"
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
+import { Circle } from "react-google-maps";
 
-// var coords = geolocated({
-//   positionOptions: {
-//     enableHighAccuracy: false,
-//   },
-// })
+function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d * 1000; // meters
+}
 
 var geo = window.navigator.geolocation
 
@@ -30,7 +37,6 @@ var MapWithLocation = compose(
   lifecycle({
     componentDidMount() {
       var self = this
-      console.log(this)
       geo.getCurrentPosition(function(position) {
         if (position) {
           self.setState({
@@ -45,15 +51,29 @@ var MapWithLocation = compose(
       const refs = {}
       this.setState({
         bounds: null,
+        circleBounds: null,
         center: {lat: 0, lng: 0},
+        radius: 1000,
         markers: [],
         onMapMounted: ref => {
           refs.map = ref;
         },
+        onCircleMounted: ref => {
+          refs.circle = ref;
+        },
         onBoundsChanged: () => {
           this.setState({
             bounds: refs.map.getBounds(),
-            center: refs.map.getCenter(),
+            radius: measure(refs.map.getBounds().f.b,refs.map.getBounds().b.b, refs.map.getBounds().f.f, refs.map.getBounds().b.f)/5,
+          }, () => {
+            this.setState({
+              circleBounds: refs.circle.getBounds()
+            })
+          })
+        },
+        onRadiusChanged: () => {
+          this.setState({
+            circleBounds: refs.circle.getBounds(),
           })
         },
         onSearchBoxMounted: ref => {
@@ -61,22 +81,20 @@ var MapWithLocation = compose(
         },
         onPlacesChanged: () => {
           const places = refs.searchBox.getPlaces();
-          const bounds = new window.google.maps.LatLngBounds();
-
-          places.forEach(place => {
-            if (place.geometry.viewport) {
-              bounds.union(place.geometry.viewport)
-            } else {
-              bounds.extend(place.geometry.location)
-            }
+          const bounds = this.state.circleBounds
+          console.log(places[0].geometry.location)
+          var places2 = places.filter(place => {
+            var dist = measure(place.geometry.location.lat(), place.geometry.location.lng(), this.state.center.lat, this.state.center.lng)
+            return (dist < this.state.radius)
           });
-          const nextMarkers = places.map(place => ({
+          console.log(places2)
+          const nextMarkers = places2.map(place => ({
             position: place.geometry.location,
+            name: place.name
           }));
           const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
 
           this.setState({
-            center: nextCenter,
             markers: nextMarkers,
           });
           // refs.map.fitBounds(bounds);
@@ -99,8 +117,21 @@ var MapWithLocation = compose(
           labelAnchor={new window.google.maps.Point(0, 0)}
           labelStyle={{backgroundColor: "purple", fontSize: "28px", padding: "16px"}}
         >
-          <div>This is you!</div>
+          <div>You!</div>
         </MarkerWithLabel>
+        <Circle
+          ref={props.onCircleMounted}
+          options={{
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          }}
+          center={props.center}
+          radius={props.radius}
+        >
+        </Circle>
         <SearchBox
           ref={props.onSearchBoxMounted}
           bounds={props.bounds}
@@ -130,9 +161,9 @@ var MapWithLocation = compose(
             key={index}
             position={marker.position}
             labelAnchor={new window.google.maps.Point(0, 0)}
-            labelStyle={{backgroundColor: "yellow", fontSize: "32px", padding: "16px"}}
+            labelStyle={{backgroundColor: "orange", fontSize: "18px", padding: "16px"}}
           >
-            <div>Hello There!</div>
+            <div>{marker.name}</div>
           </MarkerWithLabel>
         )}
       </GoogleMap>
