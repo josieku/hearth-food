@@ -1,12 +1,11 @@
 import React from "react";
-import { Input, Button } from 'semantic-ui-react'
+import { Input, Button, Segment, Form } from 'semantic-ui-react'
 
 export default class Login extends React.Component {
   state = {
     password: '',
     email: '',
   };
-
   login = (event) => {
     event.preventDefault()
     console.log('about to login')
@@ -42,16 +41,18 @@ export default class Login extends React.Component {
   render() {
     return(
       <div>
-        <h1>Login!</h1>
-        <form onSubmit={(event) => this.signup(event)}>
-          <label>Email:
-              <Input type="email" name="email" placeholder="Email" onChange={e => this.setState({email: e.target.value})}/>
-          </label>
-          <label>Password:
-              <Input type="text" name="password" placeholder="Password" onChange={e => this.setState({password: e.target.value})}/>
-          </label>
-          <Button onClick={this.login} type="submit" value="Submit" content='Submit'/>
-        </form>
+        <h1>Join the hearth family!</h1>
+        <Segment style={{marginLeft:'20%', marginRight: '20%', borderRadius: '15px', backgroundColor:'#FA8334'}}>
+          <Form onSubmit={(event) => this.signup(event)}>
+            <label style={{ padding: '10px'}}>Email:</label>
+                <Input type="email" name="email" placeholder="Email" onChange={e => this.setState({email: e.target.value})}/>
+                <br/>
+            <label style={{padding: '10px'}}>Password:</label>
+                <Input type="text" name="password" placeholder="Password" onChange={e => this.setState({password: e.target.value})}/>
+              <br/>
+            <Button onClick={this.login} type="submit" value="Submit" content='Submit' style={{margin: '10px'}}/>
+          </Form>
+        </Segment>
       </div>
     )
   }

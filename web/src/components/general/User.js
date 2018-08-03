@@ -5,6 +5,9 @@ import ConsumerProfile from './../consumer/ConsumerProfile';
 import Login from './../auth/Login'
 
 export default class User extends Component{
+  compoentnDidMount(){
+    this.props.notLand();
+  }
   render(){
     return(
       <div>

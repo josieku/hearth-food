@@ -39,7 +39,7 @@ export default class ChefProfile extends Component{
     // else fetch the profile of the chef
     const response = await fetch(`/chef/${this.props.id}`);
     const profile = await response.json();
-    this.setState({ profile: profile})
+    this.setState({ profile: profile })
   }
 
   saveDish = (title, description, ingredients, price) => {
