@@ -77,7 +77,7 @@ export default class NavBar extends Component {
           pointing={!fixed}
           secondary={!fixed}
           size='large'>
-          {this.nav(this.state.role, this.state.id)}
+          {this.nav(this.props.user.role, this.props.user._id)}
         </Menu>
       </div>
     )

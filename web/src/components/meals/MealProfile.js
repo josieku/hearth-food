@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Route, Link } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import MealView from './MealProfile-View';
 import MealEdit from './MealProfile-Edit';
+import MealRequest from './MealProfile-Request';
 
 export default class MealProfile extends Component {
   state = {
@@ -14,15 +15,13 @@ export default class MealProfile extends Component {
     fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
       .then(meal => {
-        // console.log('meal', meal);
         this.setState({ meal });
         console.log(this.props);
-        // this.props.history.push(`/meal/${this.props.id}/show`);
       })
   }
 
   save = (title, description, ingredients, price, cuisine) => {
-    fetch(`/meal/${this.props.user._id}/save`, {
+    fetch(`/meal/${this.props.id}/save`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,12 +37,34 @@ export default class MealProfile extends Component {
     })
   }
 
+  archive = () => {
+    fetch(`/meal/${this.props.id}/archive`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+    })
+    .then(resp => resp.json())
+    .then(meal => this.setState({ meal }))
+  }
+
   render(){
-    const path = `/meal/${this.props.user._id}`;
     return(
       <div>
-        <Route exact path='/meal/:id/edit' render={(props) => <MealEdit meal={this.state.meal} user={this.props.user} save={this.save} {...props}/>}/>
-        <Route path='/meal/:id' render={(props)=> <MealView meal={this.state.meal} user={this.props.user} {...props}/> }/>
+        <Switch>
+          <Route exact path='/meal/:id/edit' render={(props) =>
+            <MealEdit meal={this.state.meal} user={this.props.user}
+              save={this.save} archive={this.archive} {...props}/>}/>
+
+          <Route exact path='/meal/:id/request' render={(props) =>
+            <MealRequest meal={this.state.meal}
+              user={this.props.user} {...props}/>}/>
+
+          <Route path='/meal/:id' render={(props)=>
+            <MealView meal={this.state.meal}
+              user={this.props.user} {...props}/> }/>
+        </Switch>
       </div>
     )
   }

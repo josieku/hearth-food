@@ -12,7 +12,6 @@ class CustomerSignup extends React.Component {
   };
   signup = (event) => {
     event.preventDefault()
-    console.log('about to fetch')
     fetch('/auth/signup', {
       method: 'POST',
       headers: {
@@ -44,10 +43,7 @@ class CustomerSignup extends React.Component {
       email: '',
       repeat: '',
     })
-  }
-
-  handleChange = (name, event) => {
-    this.setState({ name });
+    this.props.history.push('/auth/login')
   }
 
   render() {

@@ -40,7 +40,12 @@ router.post('/signup', function(req,res) {
 router.post('/login', passport.authenticate('local'), function(req, res) {
 
   if (req.user.role === "chef"){
-    User.findById(req.user._id).populate('menu').populate('orders').exec()
+    User.findById(req.user._id)
+        .populate('menu')
+        .populate('orders')
+        // .populate('requests')
+        // .populate({path:'requests', populate: "meal"})
+        .exec()
         .then(user => res.json(user))
   } else if (req.user.role === "consumer") {
     User.findById(req.user._id).populate('orders').exec()
@@ -48,7 +53,7 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
   } else{
     res.json(req.user);
   }
-  
+
 });
 
 router.get('/ping',function(req,res){

@@ -8,6 +8,7 @@ import Meal from './../meals/Meal';
 import User from './User';
 import MapContainer from '.././maps/MapContainer'
 import CustomerSignup from './../auth/CustomerSignup';
+import ChefSignup from './../auth/ChefSignup';
 import Login from './../auth/Login';
 import ConsumerProfile from './../consumer/ConsumerProfile';
 import ChefProfile from './../chef/ChefProfile';
@@ -49,9 +50,10 @@ class App extends Component {
           <Switch>
             <Route exact={true} path="/" render={(props) => <Landing user={this.state.user} {...props}/>}/>
             <Route path="/users" render={(props) => <User user={this.state.user} {...props}/>}/>
-            <Route path="/meal" render={(props) => <Meal user={this.state.user} {...props}/>}/>
-            <Route path="/map" component={MapContainer}/>
+            {/* <Route exact path="/meal" render={(props) => <Meal user={this.state.user} {...props}/>}/> */}
+            {/* <Route path="/map" component={MapContainer}/> */}
             <Route path="/auth/signup" component={CustomerSignup}/>
+            <Route path="/auth/signup-chef" render={(props)=><ChefSignup {...props}/>}/>
             <Route path="/auth/login" render={(props) => <Login login={this.login} {...props}/>}/>
             <Route path='/user/:id' render={({ match}) => <ConsumerProfile user={this.state.user} id={match.params.id}/>}/>
             <Route path='/chef/:id' render={(props) => <ChefProfile user={this.state.user} id={props.match.params.id} {...props}/>}/>

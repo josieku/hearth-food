@@ -6,7 +6,14 @@ export default class MealEdit extends Component {
     description: this.props.meal.description,
     ingredients: this.props.meal.ingredients,
     price: this.props.meal.price,
-    cuisine: this.props.meal.cuisine
+    cuisine: this.props.meal.cuisine,
+    chef: Object.assign({}, this.props.meal.chef)
+  }
+
+  componentDidMount(){
+    if (this.props.user._id !== this.state.chef._id){
+      this.props.history.push(`/meal/${this.props.meal._id}`)
+    }
   }
 
   save = e => {
@@ -19,6 +26,28 @@ export default class MealEdit extends Component {
       cuisine: ''
     })
     this.props.history.push(`/meal/${this.props.meal._id}`)
+  }
+
+  archive = e => {
+    this.props.archive();
+    this.setState({
+      title: '',
+      description: '',
+      ingredients: '',
+      price: '',
+      cuisine: ''
+    })
+    this.props.history.push(`/chef/${this.state.chef._id}`)
+  }
+
+  componentWillUnmount(){
+    this.setState({
+      title: '',
+      description: '',
+      ingredients: '',
+      price: '',
+      cuisine: ''
+    })
   }
 
   render(){
@@ -36,6 +65,7 @@ export default class MealEdit extends Component {
           <input placeholder="Cuisine" value={meal.cuisine} onChange={e => this.setState({cuisine: e.target.value})}/>
         </form>
         <button onClick={this.save}>Save</button>
+        <button onClick={this.archive}>Archive Meal</button>
         {/* <Reviews list={this.state.meals.reviews}/> */}
       </div>
     )
