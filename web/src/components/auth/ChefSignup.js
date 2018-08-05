@@ -7,6 +7,9 @@ class ChefApp extends React.Component {
       value: 'Describe your experience cooking and why you would like to cook for Hearth'
     }
   }
+  componentDidMount() {
+    this.props.notLand()
+  }
   handleChange = e => {
     this.setState({value: e.target.value})
   }

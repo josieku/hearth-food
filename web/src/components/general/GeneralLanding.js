@@ -44,7 +44,7 @@ const HomepageHeading = ({ mobile }) => (
         marginTop: mobile ? '0.5em' : '1.5em',
       }}
     />
-    <Button size='huge'>
+    <Button id='getStarted' size='huge'>
       <Link to="/auth/signup" style={{textDecoration: 'none', color: 'white'}}> Get Started </Link>
       <Icon name='right arrow' />
     </Button>
@@ -59,7 +59,6 @@ class DesktopContainer extends Component {
   state = {}
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
-
   render() {
     const { children } = this.props
     const { fixed } = this.state
@@ -85,15 +84,20 @@ class DesktopContainer extends Component {
               size='large'
             >
               <Container>
-                <Menu.Item as='a' active>Home</Menu.Item>
-                <Menu.Item as='a'>Cook with us</Menu.Item>
-                <Menu.Item as='a'>Eat with us</Menu.Item>
-                <Menu.Item as='a'>FAQ</Menu.Item>
+                <Link to='/' style={{textDecoration: 'none', color: 'white'}}>
+                  <Menu.Item active>Home</Menu.Item>
+                </Link>
+                <Link to='/auth/chefSignup' style={{textDecoration: 'none', color: 'white'}}>
+                  <Menu.Item>Cook with us</Menu.Item>
+                </Link>
+                <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>
+                  <Menu.Item>Eat with us</Menu.Item>
+                </Link>
                 <Menu.Item position='right'>
                   <Button inverted={!fixed}>
                     <Link to='/auth/login' style={{textDecoration: 'none', color: 'white'}}>Log in</Link>
                   </Button>
-                  <Button  inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
+                  <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
                     <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
                   </Button>
                 </Menu.Item>
@@ -115,7 +119,6 @@ DesktopContainer.propTypes = {
 
 class MobileContainer extends Component {
   state = {}
-
   handlePusherClick = () => {
     const { sidebarOpened } = this.state
 

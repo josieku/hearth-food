@@ -106,6 +106,11 @@ export default class ChefProfile extends Component{
     } else if (this.props.user._id !== this.props.id){
       this.props.history.goBack();
     }
+    // else fetch the profile of the chef
+    const response = await fetch(`/chef/${this.props.id}`);
+    const profile = await response.json();
+    this.setState({ profile: profile });
+    this.props.notLand();
   }
 
   saveDish = (title, description, ingredients, price, cuisine) => {
