@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MapContainer from './components/maps/MapContainer'
+// import MapContainer from './components/maps/MapContainer'
 import App from './components/general/App';
 import './../public/index.css';
 

@@ -138,6 +138,11 @@ var mealSchema = mongoose.Schema({
         ref: 'Request'
       }
     ]
+  },
+  archived: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 })
 

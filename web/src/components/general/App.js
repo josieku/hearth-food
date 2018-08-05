@@ -8,6 +8,7 @@ import Meal from './../meals/Meal';
 import User from './User';
 import MapContainer from '.././maps/MapContainer'
 import CustomerSignup from './../auth/CustomerSignup';
+import ChefSignup from './../auth/ChefSignup';
 import Login from './../auth/Login';
 import ConsumerProfile from './../consumer/ConsumerProfile';
 import ChefProfile from './../chef/ChefProfile';
