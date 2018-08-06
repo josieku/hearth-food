@@ -81,7 +81,7 @@ class CustomerSignup extends React.Component {
           <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Password' />
           <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Confirm Password' />
           <Form.Input fluid type="file" icon='file' iconPosition='left' placeholder='Driver"s license' />
-          <Button id="loginButton" fluid size='large'>
+          <Button id="loginButton" fluid size='large' onClick={this.signup}>
             Sign Up
           </Button>
         </Segment>
