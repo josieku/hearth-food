@@ -52,7 +52,7 @@ class App extends Component {
             <Route path="/users" render={(props) => <User user={this.state.user} notLand={this.notLand} {...props}/>}/>
             <Route path="/meal" render={(props) => <Meal user={this.state.user} notLand={this.notLand} {...props}/>}/>
             <Route path="/map" component={MapContainer}/>
-            <Route path="/auth/signup" render={(props) => <CustomerSignup notLand={this.notLand}/>}/>
+            <Route path="/auth/signup" render={(props) => <CustomerSignup notLand={this.notLand} {...props}/>}/>
             <Route path="/auth/login" render={(props) => <Login login={this.login} notLand={this.notLand} {...props}/>}/>
             <Route path='/user/:id' render={({ match}) => <ConsumerProfile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
             <Route path='/chef/:id' render={(props) => <ChefProfile user={this.state.user} notLand={this.notLand} id={props.match.params.id} {...props}/>}/>
