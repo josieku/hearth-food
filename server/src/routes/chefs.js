@@ -25,7 +25,7 @@ router.get('/:id/requests', (req, res) => {
          .then(requests => {console.log(requests); res.json(requests)});
 })
 
-router.post('/:id/add', (req,res) => {
+router.post('/:id/menu/add', (req,res) => {
   console.log('adding')
   var newMeal = new Meal({
     title: req.body.title,
@@ -55,36 +55,13 @@ router.post('/:id/add', (req,res) => {
          })
 })
 
-router.post('/:id/accept', (req, res) => {
+router.post('/:id/requests/accept', (req, res) => {
   Request
     .findByIdAndUpdate(req.body.requestId, {accepted: true}, {new: true})
-    .then(request => console.log('request approved'))
-  // Request
-  // .findByIdAndUpdate(req.body.requestId, {accepted: true}, {new: true})
-  // .then(request => {
-  //   User.findById(req.params.id).then(user => {
-  //     const reqs = user.requests.slice();
-  //     console.log('temp requests list', reqs)
-  //     for (var ind in reqs){
-  //       console.log(reqs[ind], request._id);
-  //       console.log(typeof reqs[ind], typeof request._id);
-  //       if ((reqs[ind]).toString() === (request._id).toString()){ console.log('same'); reqs.splice(ind, 1); console.log(reqs); break;}
-  //     };
-  //     user.requests = reqs;
-  //
-  //     const ords = user.requests.slice();
-  //     ords.push(request._id);
-  //     user.orders = ords;
-  //
-  //     user.save().then( () => {
-  //       Request.find({'chef': req.params.id, 'accepted':'false'})
-  //              .then(requests => res.json(requests));
-  //     })
-  //   })
-  // });
+    .then(request => res.send('request approved'))
 })
 
-router.post('/:id/orders', (req, res) => {
+router.get('/:id/orders', (req, res) => {
   Request.find({'chef': req.params.id, 'accepted': 'true'})
          .populate('chef')
          .populate('consumer')
@@ -95,6 +72,10 @@ router.post('/:id/orders', (req, res) => {
 router.post('/:id/complete', (req,res) => {
   Request.findByIdAndUpdate(req.body.requestId, { completed: true })
          .then(request => res.json(request))
+})
+
+router.post('/:id/changeMode', (req,res) => {
+  
 })
 
 export default router;

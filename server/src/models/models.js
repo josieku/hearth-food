@@ -79,6 +79,11 @@ var userSchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  chef: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 })
 

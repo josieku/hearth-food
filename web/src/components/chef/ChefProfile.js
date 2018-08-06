@@ -45,18 +45,16 @@ class RequestListing extends Component{
     .then(requests => this.setState({ requests }))
   }
 
-  acceptRequest = (requestId, index) => {
-    fetch(`/chef/${this.props.chefId}/accept`, {
+  acceptRequest = async (requestId, index) => {
+    await fetch(`/chef/${this.props.chefId}/requests/accept`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({ requestId }),
     })
-    .then(e => {
-      const requests = this.state.requests.slice();
-      requests.splice(index, 1);
-      this.setState({ requests });
-    })
+    const requests = this.state.requests.slice();
+    requests.splice(index, 1);
+    this.setState({ requests });
   }
 
   render(){
@@ -64,8 +62,8 @@ class RequestListing extends Component{
       <div>
         <h2>Requests</h2>
         <ul style={{listStyleType: "none"}}>
-          {this.state.requests
-            ? this.state.requests.map((item, ind) => {console.log(item); return RequestItem(item, ind, this.acceptRequest)})
+          {this.state.requests.length > 0
+            ? this.state.requests.map((item, ind) => RequestItem(item, ind, this.acceptRequest))
             : 'No requests, start sharing your dishes!'}
         </ul>
       </div>
@@ -74,7 +72,6 @@ class RequestListing extends Component{
 }
 
 function RequestItem(item, index, accept) {
-  // console.log(item);
   return (
     <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
       <p>Customer: {item.consumer.firstName}</p>
@@ -88,62 +85,46 @@ function RequestItem(item, index, accept) {
   )
 }
 
-// class OrderListing extends Component{
-//   state = {
-//     orders: []
-//   }
+class OrderListing extends Component{
+  state = {
+    orders: []
+  }
+
+  componentDidMount = () => {
+    fetch(`/chef/${this.props.chefId}/orders`)
+    .then(resp => resp.json())
+    .then(orders => {console.log('orders', orders); this.setState({ orders })})
+  }
+
+  render(){
+    return(
+      <div>
+        <h2>Orders</h2>
+        <ul style={{listStyleType: "none"}}>
+          {this.state.orders.length > 0
+            ? this.state.orders.map(item => OrderItem(item, this.acceptRequest))
+            : 'No orders yet'}
+        </ul>
+      </div>
+    )
+  }
+}
 //
-//   componentDidMount = () => {
-//     fetch(`/chef/${this.props.chefId}/orders`)
-//     .then(resp => resp.json())
-//     .then(requests => this.setState({ requests }))
-//   }
-//
-//   acceptRequest = requestId => {
-//     fetch(`/chef/${this.props.chefId}/accept`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-//       body: JSON.stringify({ requestId }),
-//     })
-//     .then(resp => resp.json())
-//     .then(requests => {
-//       this.setState({ requests })
-//     })
-//   }
-//
-//   render(){
-//     return(
-//       <div>
-//         <h2>Requests</h2>
-//         <ul style={{listStyleType: "none"}}>
-//           {this.state.requests
-//             ? this.state.requests.map(item => {console.log(item); return RequestItem(item, this.acceptRequest)})
-//             : 'No requests, start sharing your dishes!'}
-//         </ul>
-//       </div>
-//     )
-//   }
-// }
-//
-// function OrderItem(item, accept) {
-//   console.log(item);
-//   return (
-//     <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
-//       <p>Customer: {item.consumer.firstName}</p>
-//       <p>Meal: {item.meal.title}</p>
-//       <p>Time: {item.time}</p>
-//       <p>Requests: {item.requests ? item.requests : 'None'}</p>
-//       {item.accepted
-//         ? <button disabled>Accept</button>
-//         : <button onClick={() => accept(item._id)}>Accept</button> }
-//       {/* <Link to={`/meal/${item.}`}>View orders</Link> */}
-//       {/* <Link to={`/meal/${item._id}/archive`}>Archive</Link> */}
-//     </li>
-//   )
-// }
+function OrderItem(item) {
+  return (
+    <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
+      <p>Customer: {item.consumer.firstName}</p>
+      <p>Meal: {item.meal.title}</p>
+      <p>Time: {item.time}</p>
+      <p>Requests: {item.requests ? item.requests : 'None'}</p>
+      {/* {item.accepted
+        ? <button disabled>Accept</button>
+        : <button onClick={() => accept(item._id)}>Accept</button> } */}
+      {/* <Link to={`/meal/${item.}`}>View orders</Link> */}
+      {/* <Link to={`/meal/${item._id}/archive`}>Archive</Link> */}
+    </li>
+  )
+}
 
 export default class ChefProfile extends Component{
   state = {
@@ -162,13 +143,9 @@ export default class ChefProfile extends Component{
       this.props.history.goBack();
     }
     // else fetch the profile of the chef
-    // fetch(`/chef/${this.props.id}`)
-    //   .then(response => response.json())
-    //   .then(profile => {
-    //     const requests = this.props.user.requests.filter(item => !item.accepted)
-    //     const orders = this.props.user.requests.filter(item => item.accepted)
-    //     this.setState({ profile, requests, orders });
-    //   })
+    fetch(`/chef/${this.props.id}`)
+      .then(response => response.json())
+      .then(profile => this.setState({ profile }))
 
     this.props.notLand();
   }
@@ -176,7 +153,7 @@ export default class ChefProfile extends Component{
   saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
     console.log('saving', title, description, ingredients, price)
-    fetch(`/chef/${this.props.user._id}/add`, {
+    fetch(`/chef/${this.props.user._id}/menu/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -197,7 +174,6 @@ export default class ChefProfile extends Component{
 
   render(){
     const profile = this.state.profile;
-    console.log(profile);
     return(
       <div>
         <p>Chef Profile</p>
@@ -215,10 +191,10 @@ export default class ChefProfile extends Component{
             <Add save={this.saveDish}/>}/>
 
           <Route exact path={`/chef/${profile._id}/requests`} render={() =>
-            <RequestListing chefId={profile._id}/>}/>
+            <RequestListing chefId={profile._id} />}/>
 
           <Route exact path={`/chef/${profile._id}/orders`} render={() =>
-            <MenuListing id={profile._id} menu={this.state.menu}/>}/>
+            <OrderListing chefId={profile._id} />}/>
 
           <Route path={`/chef/${profile._id}`} render={() =>
             <MenuListing id={profile._id} menu={this.state.menu}/>}/>
