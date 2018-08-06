@@ -49,7 +49,10 @@ var MapWithLocation = compose(
     },
     componentWillMount() {
       const refs = {}
-      this.setState({
+      var places;
+      var foo;
+      var self = this;
+      self.setState(foo = {
         bounds: null,
         circleBounds: null,
         center: {lat: 0, lng: 0},
@@ -61,43 +64,70 @@ var MapWithLocation = compose(
         onCircleMounted: ref => {
           refs.circle = ref;
         },
-        onBoundsChanged: () => {
-          this.setState({
-            bounds: refs.map.getBounds(),
-            radius: measure(refs.map.getBounds().f.b,refs.map.getBounds().b.b, refs.map.getBounds().f.f, refs.map.getBounds().b.f)/5,
-          }, () => {
-            this.setState({
-              circleBounds: refs.circle.getBounds()
-            })
-          })
-        },
-        onRadiusChanged: () => {
-          this.setState({
-            circleBounds: refs.circle.getBounds(),
-          })
-        },
         onSearchBoxMounted: ref => {
           refs.searchBox = ref;
         },
         onPlacesChanged: () => {
-          const places = refs.searchBox.getPlaces();
-          const bounds = this.state.circleBounds
-          console.log(places[0].geometry.location)
-          var places2 = places.filter(place => {
-            var dist = measure(place.geometry.location.lat(), place.geometry.location.lng(), this.state.center.lat, this.state.center.lng)
-            return (dist < this.state.radius)
-          });
-          console.log(places2)
-          const nextMarkers = places2.map(place => ({
-            position: place.geometry.location,
-            name: place.name
-          }));
-          const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
+          debugger;
+          places = refs.searchBox.getPlaces()
+          if (places) {
+            var bounds = self.state.circleBounds
+            console.log(places, bounds)
+            var places2 = places.filter(place => {
+              var dist = measure(place.geometry.location.lat(), place.geometry.location.lng(), self.state.center.lat, self.state.center.lng)
+              return (dist < self.state.radius)
+            });
+            const nextMarkers = places2.map(place => ({
+              position: place.geometry.location,
+              name: place.name
+            }));
+            const nextCenter = _.get(nextMarkers, '0.position', self.state.center);
 
-          this.setState({
-            markers: nextMarkers,
-          });
+            self.setState({
+              markers: nextMarkers,
+            });
+          }
           // refs.map.fitBounds(bounds);
+        },
+        onBoundsChanged: () => {
+          self.setState({
+            bounds: refs.map.getBounds(),
+            radius: measure(refs.map.getBounds().f.b,refs.map.getBounds().b.b, refs.map.getBounds().f.f, refs.map.getBounds().b.f)/5,
+          }, () => {
+            self.setState({
+              circleBounds: refs.circle.getBounds()
+            }, () => {
+              debugger;
+              if (refs.searchBox) {
+                setTimeout(() => {
+                  foo.onPlacesChanged()
+                }, 2000)
+              }
+              // if (refs.searchBox) {
+              //   var input = document.getElementById('search')
+              //   window.google.maps.event.trigger( input, 'focus')
+              //   // window.google.maps.event.trigger( input, 'keydown', {keyCode:13})
+              //   // var itemsloaded = window.google.maps.event
+              //   // itemsloaded.addDomListener(document.body,
+              //   //   'SearchTrigger',
+              //   //   function(e){
+              //   //     if(e.target.className==='search'){
+              //   //       //remove the listener
+              //   //       window.google.maps.event.removeListener(itemsloaded);
+              //   //       //trigger the events
+              //   //       window.google.maps.event.trigger( input, 'focus')
+              //   //       window.google.maps.event.trigger( input, 'keydown', {keyCode:13})
+              //   //     }
+              //   //   });
+              //   // itemsloaded.trigger(input, 'SearchTrigger')
+              }
+            )
+          })
+        },
+        onRadiusChanged: () => {
+          self.setState({
+            circleBounds: refs.circle.getBounds(),
+          })
         },
       })
     },
@@ -134,11 +164,12 @@ var MapWithLocation = compose(
         </Circle>
         <SearchBox
           ref={props.onSearchBoxMounted}
-          bounds={props.bounds}
+          bounds={props.circleBounds}
           controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
           onPlacesChanged={props.onPlacesChanged}
         >
           <input
+            id="search"
             type="text"
             placeholder="Customized your placeholder"
             style={{
