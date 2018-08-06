@@ -41,6 +41,7 @@ export default class MealRequest extends Component {
   render(){
     const meal = this.props.meal;
     const user = this.props.user;
+    console.log('in here requesting');
     return(
       <div>
         <h3>Request {this.state.chef.firstName} for {meal.title}</h3>

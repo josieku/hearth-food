@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import "./../../../public/App.css";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import Landing from './Landing';
 import NavBar from './NavBar';
@@ -52,12 +52,12 @@ class App extends Component {
             <Route path="/users" render={(props) => <User user={this.state.user} notLand={this.notLand} {...props}/>}/>
             <Route path="/meal" render={(props) => <Meal user={this.state.user} notLand={this.notLand} {...props}/>}/>
             <Route path="/map" component={MapContainer}/>
-            <Route path="/auth/signup" render={(props) => <CustomerSignup notLand={this.notLand} {...props}/>}/>
-            <Route path="/auth/login" render={(props) => <Login login={this.login} notLand={this.notLand} {...props}/>}/>
+            <Route exact path="/auth/signup" render={(props) => <CustomerSignup notLand={this.notLand} {...props}/>}/>
+            <Route exact path="/auth/login" render={(props) => <Login login={this.login} notLand={this.notLand} {...props}/>}/>
             <Route path='/user/:id' render={({ match}) => <ConsumerProfile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
             <Route path='/chef/:id' render={(props) => <ChefProfile user={this.state.user} notLand={this.notLand} id={props.match.params.id} {...props}/>}/>
             {/* <Route exact path='/meal/:id/edit' render={(props) => <MealEdit id={props.match.params.id} user={this.state.user} {...props}/>}/> */}
-            <Route path='/meal/:id' render={(props) => <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>
+            <Route exact path='/meal/:id' render={(props) => <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>
             {/* <Route path={`/chef/:id/add`} component={Add}/> */}
             {/* <Route path="/messages" render={() => <Messages user = {this.state.user}/>}/>
             <Route path="/request" render={() => <Request user = {this.state.user}/>}/> */}

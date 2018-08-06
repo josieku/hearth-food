@@ -69,7 +69,16 @@ export default class ConsumerLanding extends Component{
   render(){
     return(
       <div>
-        <Grid>
+        <div className="filter">
+          <Button onClick={()=>{this.sort("high")}}>Price: High to Low</Button>
+          <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
+        </div>
+        <MealListings listings={this.state.listings}/>
+        {/* {this.state.listing
+          ? <MealListings listings={this.state.listings}/>
+          : <p>No meals available in your area :( </p>} */}
+        <Map listings={this.state.listings}/>
+        {/* <Grid>
           <Grid.Row>
             <Grid.Column width={8}>
           <Item>
@@ -104,7 +113,7 @@ export default class ConsumerLanding extends Component{
       </Item>
     </Grid.Column>
     </Grid.Row>
-      </Grid>
+      </Grid> */}
       </div>
     )
   }

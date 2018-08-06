@@ -149,8 +149,8 @@ export default class ChefProfile extends Component{
   state = {
     profile: this.props.user,
     menu: this.props.user.menu,
-    requests: this.props.user.requests.filter(item => !item.accepted),
-    orders: this.props.user.requests.filter(item => item.accepted),
+    requests: [],
+    orders: [],
     open: false,
   }
 
@@ -162,13 +162,13 @@ export default class ChefProfile extends Component{
       this.props.history.goBack();
     }
     // else fetch the profile of the chef
-    fetch(`/chef/${this.props.id}`)
-      .then(response => response.json())
-      .then(profile => {
-        const requests = this.props.user.requests.filter(item => !item.accepted)
-        const orders = this.props.user.requests.filter(item => item.accepted)
-        this.setState({ profile, requests, orders });
-      })
+    // fetch(`/chef/${this.props.id}`)
+    //   .then(response => response.json())
+    //   .then(profile => {
+    //     const requests = this.props.user.requests.filter(item => !item.accepted)
+    //     const orders = this.props.user.requests.filter(item => item.accepted)
+    //     this.setState({ profile, requests, orders });
+    //   })
 
     this.props.notLand();
   }
@@ -217,11 +217,12 @@ export default class ChefProfile extends Component{
           <Route exact path={`/chef/${profile._id}/requests`} render={() =>
             <RequestListing chefId={profile._id}/>}/>
 
+          <Route exact path={`/chef/${profile._id}/orders`} render={() =>
+            <MenuListing id={profile._id} menu={this.state.menu}/>}/>
+
           <Route path={`/chef/${profile._id}`} render={() =>
             <MenuListing id={profile._id} menu={this.state.menu}/>}/>
 
-          <Route path={`/chef/${profile._id}/orders`} render={() =>
-            <MenuListing id={profile._id} menu={this.state.menu}/>}/>
         </Switch>
       </div>
     )
