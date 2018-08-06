@@ -45,18 +45,17 @@ class RequestListing extends Component{
     .then(requests => this.setState({ requests }))
   }
 
-  acceptRequest = requestId => {
+  acceptRequest = (requestId, index) => {
     fetch(`/chef/${this.props.chefId}/accept`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({ requestId }),
     })
-    .then(resp => resp.json())
-    .then(requests => {
-      this.setState({ requests })
+    .then(e => {
+      const requests = this.state.requests.slice();
+      requests.splice(index, 1);
+      this.setState({ requests });
     })
   }
 
@@ -66,7 +65,7 @@ class RequestListing extends Component{
         <h2>Requests</h2>
         <ul style={{listStyleType: "none"}}>
           {this.state.requests
-            ? this.state.requests.map(item => {console.log(item); return RequestItem(item, this.acceptRequest)})
+            ? this.state.requests.map((item, ind) => {console.log(item); return RequestItem(item, ind, this.acceptRequest)})
             : 'No requests, start sharing your dishes!'}
         </ul>
       </div>
@@ -74,8 +73,8 @@ class RequestListing extends Component{
   }
 }
 
-function RequestItem(item, accept) {
-  console.log(item);
+function RequestItem(item, index, accept) {
+  // console.log(item);
   return (
     <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
       <p>Customer: {item.consumer.firstName}</p>
@@ -84,18 +83,74 @@ function RequestItem(item, accept) {
       <p>Requests: {item.requests ? item.requests : 'None'}</p>
       {item.accepted
         ? <button disabled>Accept</button>
-        : <button onClick={() => accept(item._id)}>Accept</button> }
-      {/* <Link to={`/meal/${item.}`}>View orders</Link> */}
-      {/* <Link to={`/meal/${item._id}/archive`}>Archive</Link> */}
+        : <button onClick={() => accept(item._id, index)}>Accept</button> }
     </li>
   )
 }
+
+// class OrderListing extends Component{
+//   state = {
+//     orders: []
+//   }
+//
+//   componentDidMount = () => {
+//     fetch(`/chef/${this.props.chefId}/orders`)
+//     .then(resp => resp.json())
+//     .then(requests => this.setState({ requests }))
+//   }
+//
+//   acceptRequest = requestId => {
+//     fetch(`/chef/${this.props.chefId}/accept`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       credentials: 'same-origin', // <- this is mandatory to deal with cookies
+//       body: JSON.stringify({ requestId }),
+//     })
+//     .then(resp => resp.json())
+//     .then(requests => {
+//       this.setState({ requests })
+//     })
+//   }
+//
+//   render(){
+//     return(
+//       <div>
+//         <h2>Requests</h2>
+//         <ul style={{listStyleType: "none"}}>
+//           {this.state.requests
+//             ? this.state.requests.map(item => {console.log(item); return RequestItem(item, this.acceptRequest)})
+//             : 'No requests, start sharing your dishes!'}
+//         </ul>
+//       </div>
+//     )
+//   }
+// }
+//
+// function OrderItem(item, accept) {
+//   console.log(item);
+//   return (
+//     <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
+//       <p>Customer: {item.consumer.firstName}</p>
+//       <p>Meal: {item.meal.title}</p>
+//       <p>Time: {item.time}</p>
+//       <p>Requests: {item.requests ? item.requests : 'None'}</p>
+//       {item.accepted
+//         ? <button disabled>Accept</button>
+//         : <button onClick={() => accept(item._id)}>Accept</button> }
+//       {/* <Link to={`/meal/${item.}`}>View orders</Link> */}
+//       {/* <Link to={`/meal/${item._id}/archive`}>Archive</Link> */}
+//     </li>
+//   )
+// }
 
 export default class ChefProfile extends Component{
   state = {
     profile: this.props.user,
     menu: this.props.user.menu,
-    requests: this.props.user.requests,
+    requests: this.props.user.requests.filter(item => !item.accepted),
+    orders: this.props.user.requests.filter(item => item.accepted),
     open: false,
   }
 
@@ -107,9 +162,14 @@ export default class ChefProfile extends Component{
       this.props.history.goBack();
     }
     // else fetch the profile of the chef
-    const response = await fetch(`/chef/${this.props.id}`);
-    const profile = await response.json();
-    this.setState({ profile: profile });
+    fetch(`/chef/${this.props.id}`)
+      .then(response => response.json())
+      .then(profile => {
+        const requests = this.props.user.requests.filter(item => !item.accepted)
+        const orders = this.props.user.requests.filter(item => item.accepted)
+        this.setState({ profile, requests, orders });
+      })
+
     this.props.notLand();
   }
 
@@ -149,6 +209,7 @@ export default class ChefProfile extends Component{
         </div>
         <Link to={`/chef/${profile._id}`}>Menu</Link>
         <Link to={`/chef/${profile._id}/requests`}>Requests</Link>
+        <Link to={`/chef/${profile._id}/orders`}>Orders</Link>
         <Switch>
           <Route exact path={`/chef/${profile._id}/add`} render={() =>
             <Add save={this.saveDish}/>}/>
@@ -157,6 +218,9 @@ export default class ChefProfile extends Component{
             <RequestListing chefId={profile._id}/>}/>
 
           <Route path={`/chef/${profile._id}`} render={() =>
+            <MenuListing id={profile._id} menu={this.state.menu}/>}/>
+
+          <Route path={`/chef/${profile._id}/orders`} render={() =>
             <MenuListing id={profile._id} menu={this.state.menu}/>}/>
         </Switch>
       </div>

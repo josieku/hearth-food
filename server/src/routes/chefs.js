@@ -57,28 +57,44 @@ router.post('/:id/add', (req,res) => {
 
 router.post('/:id/accept', (req, res) => {
   Request
-  .findByIdAndUpdate(req.body.requestId, {accepted: true}, {new: true})
-  .then(request => {
-    User.findById(req.params.id).then(user => {
-      const reqs = user.requests.slice();
-      console.log('temp requests list', reqs)
-      for (var ind in reqs){
-        console.log(reqs[ind], request._id);
-        console.log(typeof reqs[ind], typeof request._id);
-        if ((reqs[ind]).toString() === (request._id).toString()){ console.log('same'); reqs.splice(ind, 1); console.log(reqs); break;}
-      };
-      user.requests = reqs;
+    .findByIdAndUpdate(req.body.requestId, {accepted: true}, {new: true})
+    .then(request => console.log('request approved'))
+  // Request
+  // .findByIdAndUpdate(req.body.requestId, {accepted: true}, {new: true})
+  // .then(request => {
+  //   User.findById(req.params.id).then(user => {
+  //     const reqs = user.requests.slice();
+  //     console.log('temp requests list', reqs)
+  //     for (var ind in reqs){
+  //       console.log(reqs[ind], request._id);
+  //       console.log(typeof reqs[ind], typeof request._id);
+  //       if ((reqs[ind]).toString() === (request._id).toString()){ console.log('same'); reqs.splice(ind, 1); console.log(reqs); break;}
+  //     };
+  //     user.requests = reqs;
+  //
+  //     const ords = user.requests.slice();
+  //     ords.push(request._id);
+  //     user.orders = ords;
+  //
+  //     user.save().then( () => {
+  //       Request.find({'chef': req.params.id, 'accepted':'false'})
+  //              .then(requests => res.json(requests));
+  //     })
+  //   })
+  // });
+})
 
-      const ords = user.requests.slice();
-      ords.push(request._id);
-      user.orders = ords;
+router.post('/:id/orders', (req, res) => {
+  Request.find({'chef': req.params.id, 'accepted': 'true'})
+         .populate('chef')
+         .populate('consumer')
+         .populate('meal')
+         .then(orders => {console.log('orders', orders); res.json(orders)})
+})
 
-      user.save().then( () => {
-        Request.find({'chef': req.params.id, 'accepted':'false'})
-               .then(requests => res.json(requests));
-      })
-    })
-  });
+router.post('/:id/complete', (req,res) => {
+  Request.findByIdAndUpdate(req.body.requestId, { completed: true })
+         .then(request => res.json(request))
 })
 
 export default router;
