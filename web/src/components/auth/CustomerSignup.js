@@ -11,9 +11,7 @@ class CustomerSignup extends React.Component {
     repeat: '',
   };
 
-  componentDidMount(){
-    this.props.notLand();
-  }
+  componentDidMount(){ this.props.notLand() }
 
   signup = (event) => {
     event.preventDefault()
@@ -22,10 +20,10 @@ class CustomerSignup extends React.Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      credentials: 'same-origin',
       body: JSON.stringify({
-        first: this.state.first,
-        last: this.state.last,
+        firstName: this.state.first,
+        lastName: this.state.last,
         password: this.state.password,
         phone: this.state.phone,
         repeat: this.state.repeat,
@@ -54,11 +52,6 @@ class CustomerSignup extends React.Component {
   render() {
     return(
       <div className='login-form'>
-        {/*
-          Heads up! The styles below are necessary for the correct render of this example.
-          You can do same with CSS, the main idea is that all the elements up to the `Grid`
-          below must have a height of 100%.
-        */}
         <style>{`
           body > div,
           body > div > div,
@@ -74,12 +67,12 @@ class CustomerSignup extends React.Component {
             </Header>
             <Form size='large'>
               <Segment stacked>
-                <Form.Input fluid type="name" icon='user' iconPosition='left' placeholder='First Name' />
-                <Form.Input fluid type="name" icon='user' iconPosition='left' placeholder='Last Name' />
-                <Form.Input fluid type="number" icon='mobile' iconPosition='left' placeholder='Phone Number' />
-                <Form.Input fluid type="email" icon='envelope' iconPosition='left' placeholder='E-mail address' />
-                <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Password' />
-                <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Confirm Password' />
+                <Form.Input fluid type="name" icon='user' iconPosition='left' placeholder='First Name' onChange={(e)=>this.setState({ first: e.target.value })}/>
+                <Form.Input fluid type="name" icon='user' iconPosition='left' placeholder='Last Name' onChange={(e)=>this.setState({ last: e.target.value })}/>
+                <Form.Input fluid type="number" icon='mobile' iconPosition='left' placeholder='Phone Number' onChange={(e)=>this.setState({ phone: e.target.value })}/>
+                <Form.Input fluid type="email" icon='envelope' iconPosition='left' placeholder='E-mail address' onChange={(e)=>this.setState({ email: e.target.value })}/>
+                <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Password' onChange={(e)=>this.setState({ password: e.target.value })}/>
+                <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Confirm Password' onChange={(e)=>this.setState({ repeat: e.target.value })} />
                 <Form.Input fluid type="file" icon='file' iconPosition='left' placeholder='Driver"s license' />
                 <Button id="loginButton" fluid size='large' onClick={this.signup}>
                   Sign Up

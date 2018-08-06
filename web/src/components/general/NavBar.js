@@ -28,6 +28,9 @@ export default class NavBar extends Component {
               <Link to={`/user/${id}`}>
                 <Menu.Item name='Profile' active={ activeItem === 'profile'} />
               </Link>
+              <Link to='/auth/logout'>
+                <Menu.Item name='Logout' active={ activeItem === 'logout'} />
+              </Link>
             </Container>
           </Menu>
         </div>
@@ -45,6 +48,9 @@ export default class NavBar extends Component {
               </Link>
               <Link to='/'>
                 <Menu.Item name='Consumer Mode' active={ activeItem === 'consumer'} />
+              </Link>
+              <Link to='/auth/logout'>
+                <Menu.Item name='Logout' active={ activeItem === 'logout'} />
               </Link>
             </Container>
           </Menu>

@@ -56,16 +56,6 @@ export default class ConsumerLanding extends Component{
     }
   }
 
-  // <div className="filter">
-  //   <Button onClick={()=>{this.sort("high")}}>Price: High to Low</Button>
-  //   <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
-  // </div>
-  // <MealListings listings={this.state.listings}/>
-  // {/* {this.state.listing
-  //   ? <MealListings listings={this.state.listings}/>
-  //   : <p>No meals available in your area :( </p>} */}
-  // <Map listings={this.state.listings}/>
-
   render(){
     return(
       <div>
@@ -73,10 +63,9 @@ export default class ConsumerLanding extends Component{
           <Button onClick={()=>{this.sort("high")}}>Price: High to Low</Button>
           <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
         </div>
-        <MealListings listings={this.state.listings}/>
-        {/* {this.state.listing
+        {this.state.listing
           ? <MealListings listings={this.state.listings}/>
-          : <p>No meals available in your area :( </p>} */}
+          : <p>No meals available in your area :( </p>}
         <Map listings={this.state.listings}/>
         {/* <Grid>
           <Grid.Row>
