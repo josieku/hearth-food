@@ -1,9 +1,30 @@
 body {
   width: 100%;
   height: 100%;
-  /* text-align: center; */
 }
 
 .App {
-  background-color: #FFE5A5;
+  background-color: #FFEED8;
+}
+
+#getStarted {
+  color: white;
+  background: #B02E0C
+}
+
+#navBar {
+  font-size: 20px;
+}
+
+/* login page styling  */
+#loginHeader {
+  color: #B02E0C
+}
+#loginButton {
+  color: white;
+  background-color: #B02E0C
+}
+
+#loginMessage {
+  background-color: #FFC654;
 }

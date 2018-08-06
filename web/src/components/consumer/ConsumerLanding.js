@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import { Button, Grid, Item } from "semantic-ui-react";
 function Listing(meal){
   return (
     <div className="meal-listings" key={meal._id}>
@@ -39,10 +39,11 @@ export default class ConsumerLanding extends Component{
   }
 
   componentDidMount = e => {
+    this.props.notLand();
     console.log('in here')
     fetch('/meal/listings')
-      .then(resp => resp.json())
-      .then(listings => {console.log(listings); this.setState({ listings })});
+    .then(resp => resp.json())
+    .then(listings => {console.log(listings); this.setState({ listings })});
   }
 
   sort = indicator => {
@@ -55,12 +56,21 @@ export default class ConsumerLanding extends Component{
     }
   }
 
+  // <div className="filter">
+  //   <Button onClick={()=>{this.sort("high")}}>Price: High to Low</Button>
+  //   <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
+  // </div>
+  // <MealListings listings={this.state.listings}/>
+  // {/* {this.state.listing
+  //   ? <MealListings listings={this.state.listings}/>
+  //   : <p>No meals available in your area :( </p>} */}
+  // <Map listings={this.state.listings}/>
+
   render(){
     return(
       <div>
-        <p>Consumer Landing</p>
         <div className="filter">
-          <button onClick={()=>{this.sort("high")}}>Price: High to Low</button>
+          <Button onClick={()=>{this.sort("high")}}>Price: High to Low</Button>
           <button onClick={()=>{this.sort("low")}}>Price: Low to High</button>
         </div>
         <MealListings listings={this.state.listings}/>
@@ -68,6 +78,42 @@ export default class ConsumerLanding extends Component{
           ? <MealListings listings={this.state.listings}/>
           : <p>No meals available in your area :( </p>} */}
         <Map listings={this.state.listings}/>
+        {/* <Grid>
+          <Grid.Row>
+            <Grid.Column width={8}>
+          <Item>
+            <Item.Image size='small' src='/images/wireframe/image.png' />
+            <Item.Content>
+              <Item.Header as='a'>Cute Dog</Item.Header>
+              <Item.Description>
+                <p>Hello</p>
+                <p>Many people also have their own barometers for what makes a cute dog.</p>
+              </Item.Description>
+            </Item.Content>
+          </Item>
+        </Grid.Column>
+        </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width={8}>
+
+        <Item>
+          <Item.Image size='small' src='/images/wireframe/image.png' />
+          <Item.Content>
+            <Item.Header as='a'>Cute Dog</Item.Header>
+            <Item.Description content='Hello' />
+          </Item.Content>
+        </Item>
+      </Grid.Column>
+      </Grid.Row>
+    <Grid.Row>
+      <Grid.Column width={8}>
+      <Item>
+        <Item.Image size='small' src='/images/wireframe/image.png' />
+        <Item.Content header='Cute Dog' description='hello' />
+      </Item>
+    </Grid.Column>
+    </Grid.Row>
+      </Grid> */}
       </div>
     )
   }

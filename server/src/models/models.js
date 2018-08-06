@@ -138,6 +138,11 @@ var mealSchema = mongoose.Schema({
         ref: 'Request'
       }
     ]
+  },
+  archived: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 })
 
@@ -208,6 +213,11 @@ var requestsSchema = mongoose.Schema({
     required: true
   },
   accepted: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  completed: {
     type: Boolean,
     required: true,
     default: false

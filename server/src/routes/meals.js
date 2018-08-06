@@ -8,7 +8,7 @@ var Request = require('../models/models').Request;
 var User = require('../models/models').User;
 
 router.get('/listings', (req, res) => {
-  Meal.find({})
+  Meal.find({archived: false})
       .then(meals => {console.log('meals', meals); res.json(meals)})
 })
 
@@ -24,10 +24,16 @@ router.get('/:id', (req, res) => {
 
 router.post('/:id/save', (req, res) => {
   console.log('saving meal');
-  console.log(req.params.id);
-  // Meal.find({"_id":{"$oid":req.params.id}}).then(meals => console.log("meals", meals));
-  // Meal.findOne({"_id":{"$oid":req.params.id}}).then(meal => console.log("meal", meal));
-  Meal.findByIdAndUpdate(req.params.id, {$set: req.body})
+
+  const changes = {
+    title: req.body.title,
+    description: req.body.description,
+    ingredients: req.body.ingredients,
+    price: req.body.price,
+    cuisine: req.body.cuisine
+  }
+
+  Meal.findByIdAndUpdate(req.params.id, changes, {new: true})
       .populate('chef')
       .exec()
       .then(meal => {console.log('!!!!!updated meal!!!!', meal); res.json(meal)})
@@ -47,21 +53,32 @@ router.post('/:id/request', (req, res) => {
 
   newRequest.save().then(saved => {
     User.findById(req.body.consumer).then(consumer => {
-      consumer.orders = consumer.orders.slice().push(saved._id);
+      const tempOrders = consumer.orders.slice();
+      tempOrders.push(saved._id);
+      consumer.orders = tempOrders;
       consumer.save();
     })
 
     User.findById(req.body.chef).then(chef => {
-      chef.requests = chef.requests.slice().push(saved._id);
+      const tempRequests = chef.requests.slice();
+      tempRequests.push(saved._id);
+      chef.requests = tempRequests;
       chef.save();
     })
 
     Meal.findById(req.body.meal).then(meal => {
-      meal.orders = meal.orders.slice().push(saved._id);
+      const tempOrders = meal.orders.slice();
+      tempOrders.push(saved._id);
+      meal.orders = tempOrders;
       meal.save();
     })
   })
   console.log('meal requested');
+})
+
+router.post('/:id/archive', (req, res) => {
+  Meal.findByIdAndUpdate(req.params.id, {archived: true}, {new: true})
+      .then(archived => res.json(archived))
 })
 
 export default router;

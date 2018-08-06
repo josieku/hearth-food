@@ -19,21 +19,32 @@ class Reviews extends Component {
     return(
       <div className="review-board">
         <ul>
-          {this.props.list.map(review => OneReview(review))}
+          {this.props.list ? this.props.list.map(review => OneReview(review)) : <p>No reviews yet!</p>}
         </ul>
       </div>
     )
   }
 }
 
-export default class MealView extends Component {
-  request = e => {
-    this.props.history.push(`/meal/${this.props.meal._id}/request`)
+function requestEditButton(user, chef, meal) {
+  if (meal.archived){
+    return null
   }
 
-  edit = e => {
-    this.props.history.push(`/meal/${this.props.meal._id}/edit`);
+  if (user._id === chef._id){
+    return <button><Link to={`/meal/${meal._id}/edit`}>Edit meal</Link></button>
   }
+
+  for (var ind in user.orders){
+    if (user.orders[ind]===meal._id){
+      return <button>Cancel request</button>
+    }
+  }
+
+  return <button><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></button>
+}
+
+export default class MealView extends Component {
 
   render(){
     const meal = this.props.meal;
@@ -42,8 +53,10 @@ export default class MealView extends Component {
     return(
       <div>
         <p>Meal Profile</p>
+        {meal.archived ? <h1>This meal has been archived</h1> : null}
         <h4>{meal.title}</h4>
-        {user._id === chef._id? <Link to={`/meal/${this.props.meal._id}/edit`}>Edit meal</Link>: <button onClick={this.request}>Request this meal</button>}
+        {requestEditButton(user, chef, meal)}
+        <p>Price: <strong>{meal.price}</strong></p>
         <img src={meal.picture}/>
         <p>Cuisine: {meal.cuisine}</p>
         <p><strong>Description:</strong></p>
@@ -51,7 +64,7 @@ export default class MealView extends Component {
         <p><strong>Ingredients:</strong></p>
         <p>{meal.ingredients}</p>
         <p><strong>Reviews:</strong></p>
-        {/* <Reviews list={this.state.meals.reviews}/> */}
+        <Reviews list={meal.reviews}/>
       </div>
     )
   }
