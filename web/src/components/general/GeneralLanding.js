@@ -56,7 +56,7 @@ HomepageHeading.propTypes = {
 }
 
 class DesktopContainer extends Component {
-  state = {}
+  state = {};
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
   render() {
@@ -124,6 +124,9 @@ class MobileContainer extends Component {
 
     if (sidebarOpened) this.setState({ sidebarOpened: false })
   }
+  compoentDidMount() {
+    this.props.landing();
+  };
 
   handleToggle = () => this.setState({ sidebarOpened: !this.state.sidebarOpened })
 
@@ -135,14 +138,15 @@ class MobileContainer extends Component {
       <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
         <Sidebar.Pushable>
           <Sidebar as={Menu} animation='uncover' inverted vertical visible={sidebarOpened}>
-            <Menu.Item as='a' active>
-              Home
-            </Menu.Item>
-            <Menu.Item as='a'>Work</Menu.Item>
-            <Menu.Item as='a'>Company</Menu.Item>
-            <Menu.Item as='a'>Careers</Menu.Item>
-            <Menu.Item as='a'>Log in</Menu.Item>
-            <Menu.Item as='a'>Sign Up</Menu.Item>
+            <Link to='/' style={{textDecoration: 'none', color: 'white'}}>
+              <Menu.Item active>Home</Menu.Item>
+            </Link>
+            <Link to='/auth/chefSignup' style={{textDecoration: 'none', color: 'white'}}>
+              <Menu.Item>Cook with us</Menu.Item>
+            </Link>
+            <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>
+              <Menu.Item>Eat with us</Menu.Item>
+            </Link>
           </Sidebar>
 
           <Sidebar.Pusher
@@ -312,4 +316,14 @@ const HomepageLayout = () => (
     </Segment>
   </ResponsiveContainer>
 )
-export default HomepageLayout
+class parentCont extends Component {
+  componentDidMount() {
+    this.props.landing();
+  }
+  render() {
+    return (
+      HomepageLayout()
+    )
+  }
+}
+export default parentCont
