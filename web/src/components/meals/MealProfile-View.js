@@ -26,7 +26,6 @@ class Reviews extends Component {
   }
 }
 
-
 function requestEditButton(user, chef, meal) {
   if (meal.archived){
     return null
@@ -44,7 +43,6 @@ function requestEditButton(user, chef, meal) {
 
   return <button><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></button>
 }
-
 
 export default class MealView extends Component {
 
