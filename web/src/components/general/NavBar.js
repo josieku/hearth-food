@@ -45,11 +45,14 @@ export default class NavBar extends Component {
               <Link to='/dashboard'>
                 <Menu.Item name='Messages' active={ activeItem === 'messages'} />
               </Link>
-              <Link to={`/dashboard/${id}`}>
-                <Menu.Item name='Profile' active={ activeItem === 'profile'} />
-              </Link>
               <Link to='/dashboard/menu'>
                 <Menu.Item name='Menu' active={ activeItem === 'consumer'} />
+              </Link>
+              <Link to={`/dashboard/history`}>
+                <Menu.Item name='History' active={ activeItem === 'history'} />
+              </Link>
+              <Link to={`/dashboard/${id}`}>
+                <Menu.Item name='Profile' active={ activeItem === 'profile'} />
               </Link>
               <Link to='/auth/logout'>
                 <Menu.Item name='Logout'/>

@@ -52,7 +52,8 @@ router.post('/:id/menu/add', (req,res) => {
     status: "pending",
     cuisine: req.body.cuisine,
     chef: req.body.chef,
-    picture: req.body.picture
+    picture: req.body.picture,
+    availability: req.body.availability
   })
 
   newMeal.save()

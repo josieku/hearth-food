@@ -3,6 +3,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 
 import Add from './Menu-Add';
 import MenuListing from './Menu-Listing';
+import SetAvailability from './Menu-SetAvailability';
 
 export default class Menu extends Component{
   state = {
@@ -26,14 +27,15 @@ export default class Menu extends Component{
 
   saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
-    console.log('saving', title, description, ingredients, price)
+    const availability = "available";
+    // console.log('saving', title, description, ingredients, price)
     fetch(`/chef/${this.props.user._id}/menu/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef }),
+      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef, availability }),
     })
     .then(resp => resp.json())
     .then(saved => {
@@ -55,9 +57,13 @@ export default class Menu extends Component{
           <Route exact path='/dashboard/menu/add' render={(props) =>
             <Add save={this.saveDish} {...props}/>}/>
 
+          <Route exact path="/dashboard/menu/setavailable" render={(props) =>
+            <SetAvailability {...props}/> }/>
+
           <Route exact path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id}
                          menu={this.state.menu} {...props}/>}/>
+
         </Switch>
       </div>
     )
