@@ -91,16 +91,22 @@ export default class SetAvailability extends Component {
     this.setState({ count })
   }
 
+  commit = () => {
+    this.props.set(this.state.count);
+    this.props.history.push(`/meal/${this.props.meal._id}`);
+  }
+
   render() {
-    // const meal = this.props.meal;
+    const meal = this.props.meal;
     return(
       <div>
-        {/* <h4>Set availability for {meal.title}</h4> */}
+        <h4>Set availability for {meal.title}</h4>
         <p>When are you offering this meal?</p>
         <button onClick={this.addTime}>Add time slots</button>
         {this.state.count.map((obj, ind) =>
           <TimeSlot ind={ind} date={obj.date} start={obj.start}
             end={obj.end} save={this.save}/>)}
+        <button onClick={this.commit}>Save</button>
       </div>
     )
   }

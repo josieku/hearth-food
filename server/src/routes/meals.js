@@ -81,4 +81,12 @@ router.post('/:id/archive', (req, res) => {
       .then(archived => res.json(archived))
 })
 
+router.post('/:id/setavailable', (req, res) => {
+  Meal.findByIdAndUpdate(req.params.id, { availability: req.body.availability })
+      .populate('chef')
+      .exec()
+      .then(meal => res.json(meal))
+      .catch(err => console.error(err))
+})
+
 export default router;

@@ -32,7 +32,12 @@ function requestEditButton(user, chef, meal) {
   }
 
   if (user._id === chef._id){
-    return <button><Link to={`/meal/${meal._id}/edit`}>Edit meal</Link></button>
+    return (
+      <div>
+        <button><Link to={`/meal/${meal._id}/edit`}>Edit meal</Link></button>
+        <button><Link to={`/meal/${meal._id}/setavailable`}>Set Availability</Link></button>
+      </div>
+    )
   }
 
   for (var ind in user.orders){
