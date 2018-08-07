@@ -8,14 +8,16 @@ export default class Meal extends Component{
     return(
       <div>
         <Route
-          exact={true}
-          path='/meal/:id'
+          exact path='/meal/:id'
           render={({ match }) => (
             // user passed from rending in BrowserRouter
             // profile passed from id in URL
             <MealProfile id={match.params.id} user={this.props.user}/>
           )}
         />
+
+        <Route exact path="/meal/:id/setavailable" render={(props) =>
+          <SetAvailability {...props}/> }/>
         {/* <Route
           exact={true}
           path='/user/:id/edit'

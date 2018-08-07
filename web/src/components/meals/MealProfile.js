@@ -5,22 +5,7 @@ import MealView from './MealProfile-View';
 import MealEdit from './MealProfile-Edit';
 import MealRequest from './MealProfile-Request';
 import NavBar from './../general/NavBar';
-
-class Hi extends Component {
-  render(){
-    return(
-      <h1>hi</h1>
-    )
-  }
-}
-
-class Bye extends Component {
-  render(){
-    return(
-      <h1>bye</h1>
-    )
-  }
-}
+import MealAvailability from './MealProfile-SetAvailability';
 
 export default class MealProfile extends Component {
   state = {
@@ -66,6 +51,19 @@ export default class MealProfile extends Component {
     .then(meal => this.setState({ meal }))
   }
 
+  setAvailability = availability => {
+    fetch(`/meal/${this.props.id}/setavailable`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ availability }),
+    })
+    .then(resp => resp.json())
+    .then(meal => this.setState({ meal }))
+  }
+
   render(){
     const id = this.props.id
     return(
@@ -78,6 +76,11 @@ export default class MealProfile extends Component {
 
           <Route exact path={`/meal/${id}/request`} render={(props) =>
             <MealRequest meal={this.state.meal}
+              user={this.props.user} {...props}/>}/>
+
+          <Route exact path={`/meal/${id}/setavailable`} render={(props) =>
+            <MealAvailability meal={this.state.meal}
+              set={this.setAvailability}
               user={this.props.user} {...props}/>}/>
 
           <Route path={`/meal/${id}`} render={(props)=>
