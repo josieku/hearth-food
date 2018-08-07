@@ -36,6 +36,7 @@ router.post('/:id/menu/add', (req,res) => {
     status: "pending",
     cuisine: req.body.cuisine,
     chef: req.body.chef,
+    picture: req.body.picture
   })
 
   newMeal.save()
@@ -75,7 +76,7 @@ router.post('/:id/complete', (req,res) => {
 })
 
 router.post('/:id/changeMode', (req,res) => {
-  
+
 })
 
 export default router;

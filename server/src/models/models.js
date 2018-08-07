@@ -113,7 +113,7 @@ var mealSchema = mongoose.Schema({
     type: Number,
     required: true
   },
-  image: {
+  picture: {
     type: String
   },
   status:{
