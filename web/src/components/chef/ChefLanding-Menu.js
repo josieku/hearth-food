@@ -3,11 +3,8 @@ import { Route, Link, Switch } from 'react-router-dom';
 
 import Add from './addDishModal';
 import MenuListing from './ChefProfile-Menu';
-// import RequestListing from './ChefProfile-Requests';
-// import OrderListing from './ChefProfile-Orders';
-// import HistoryListing from './ChefProfile-History';
 
-export default class ChefProfile extends Component{
+export default class Menu extends Component{
   state = {
     profile: this.props.user,
     menu: this.props.user.menu,
@@ -16,11 +13,11 @@ export default class ChefProfile extends Component{
 
   componentDidMount = () => {
     // if user does not exist, redirects user back to login page
-    if (Object.keys(this.props.user).length===0){
-      this.props.history.push('/auth/login');
-    } else if (this.props.user._id !== this.props.id){
-      this.props.history.goBack();
-    }
+    // if (Object.keys(this.props.user).length===0){
+    //   this.props.history.push('/auth/login');
+    // } else if (this.props.user._id !== this.props.id){
+    //   this.props.history.goBack();
+    // }
     // else fetch the profile of the chef
     fetch(`/chef/${this.props.id}`)
       .then(response => response.json())
@@ -50,32 +47,16 @@ export default class ChefProfile extends Component{
   }
 
   render(){
+    console.log('in chef landing');
     const profile = this.state.profile;
     return(
       <div>
-        <p>Chef Profile</p>
-        <div style={{border:"1px solid black"}}>
-          <h4>{profile.firstName}</h4>
-          <img src={profile.picture} height="150px" width="150px"/>
-          {profile.verified ? <p>Verified</p> : null }
-          <p>Current Rating: {profile.rating} </p>
-        </div>
-        <Link to={`/chef/${profile._id}`}>Menu</Link>
-        {/* <Link to={`/chef/${profile._id}/history`}>History</Link> */}
+        <h2>Menu</h2>
         <Switch>
-          <Route exact path={`/chef/${profile._id}/add`} render={() =>
+          <Route exact path='/menu/add' render={() =>
             <Add save={this.saveDish}/>}/>
 
-          {/* <Route exact path={`/chef/${profile._id}/requests`} render={() =>
-            <RequestListing chefId={profile._id} />}/>
-
-          <Route exact path={`/chef/${profile._id}/orders`} render={() =>
-            <OrderListing chefId={profile._id} />}/>
-
-          <Route exact path={`/chef/${profile._id}/history`} render={() =>
-            <HistoryListing chefId={profile._id} />}/> */}
-
-          <Route path={`/chef/${profile._id}`} render={() =>
+          <Route path="/menu" render={() =>
             <MenuListing id={profile._id} menu={this.state.menu}/>}/>
 
         </Switch>

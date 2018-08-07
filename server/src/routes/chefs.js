@@ -10,8 +10,6 @@ var Request = require('../models/models').Request;
 router.get('/:id', (req, res) => {
   User.findOne({role:'chef', _id: req.params.id })
       .populate('requests')
-      // .populate({path:'requests', populate: "meal"})
-      // .populate({path:'requests', populate: "consumer"})
       .exec()
       .then(user => {console.log(user); res.json(user)})
       .catch(err => console.error(err))
@@ -22,11 +20,29 @@ router.get('/:id/requests', (req, res) => {
          .populate('chef')
          .populate('consumer')
          .populate('meal')
-         .then(requests => {console.log(requests); res.json(requests)});
+         .exec()
+         .then(requests => res.json(requests));
+})
+
+router.get('/:id/orders', (req, res) => {
+  Request.find({'chef': req.params.id, 'accepted': 'true'})
+         .populate('chef')
+         .populate('consumer')
+         .populate('meal')
+         .exec()
+         .then(orders => res.json(orders))
+})
+
+router.get('/:id/history', (req, res) => {
+  Request.find({'chef': req.params.id, 'expired': 'true'})
+         .populate('chef')
+         .populate('consumer')
+         .populate('meal')
+         .exec()
+         .then(history => res.json(history))
 })
 
 router.post('/:id/menu/add', (req,res) => {
-  console.log('adding')
   var newMeal = new Meal({
     title: req.body.title,
     ingredients: req.body.ingredients,
@@ -62,21 +78,21 @@ router.post('/:id/requests/accept', (req, res) => {
     .then(request => res.send('request approved'))
 })
 
-router.get('/:id/orders', (req, res) => {
-  Request.find({'chef': req.params.id, 'accepted': 'true'})
-         .populate('chef')
-         .populate('consumer')
-         .populate('meal')
-         .then(orders => {console.log('orders', orders); res.json(orders)})
-})
-
 router.post('/:id/complete', (req,res) => {
-  Request.findByIdAndUpdate(req.body.requestId, { completed: true })
+  Request.findByIdAndUpdate(req.body.requestId, { completed: true, expired: true })
          .then(request => res.json(request))
 })
 
 router.post('/:id/changeMode', (req,res) => {
-
+  User.findById(req.params.id)
+         .then(user => {
+           if (user.role === "chef"){
+             user.role = "consumer";
+           } else if (user.role === "consumer") {
+             user.role = "chef";
+           }
+           user.save().then(user => res.json(user))
+         })
 })
 
 export default router;

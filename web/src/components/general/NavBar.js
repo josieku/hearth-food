@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import ConsumerLanding from './../consumer/ConsumerLanding';
-import ChefLanding from './../chef/ChefLanding';
-import GeneralLanding from './GeneralLanding';
+// import ConsumerLanding from './../consumer/ConsumerLanding';
+// import ChefLanding from './../chef/ChefLanding';
+// import GeneralLanding from './GeneralLanding';
 import { Menu, Container } from 'semantic-ui-react';
 import './../../../public/index.css'
 export default class NavBar extends Component {
@@ -11,6 +11,10 @@ export default class NavBar extends Component {
   }
 
   handleItemClick = (e, { name }) => this.setState({activeItem: name});
+
+  logout = () => {
+    this.props.logout();
+  }
 
   nav = (role, id) => {
     const { activeItem } = this.state
@@ -28,8 +32,8 @@ export default class NavBar extends Component {
               <Link to={`/user/${id}`}>
                 <Menu.Item name='Profile' active={ activeItem === 'profile'} />
               </Link>
-              <Link to='/auth/logout'>
-                <Menu.Item name='Logout' active={ activeItem === 'logout'} />
+              <Link to='/auth/logout' innerRef={this.logout}>
+                <Menu.Item name='Logout' active={ activeItem === 'logout'}/>
               </Link>
             </Container>
           </Menu>
@@ -40,17 +44,17 @@ export default class NavBar extends Component {
         <div>
           <Menu text id='navBar'>
             <Container>
-              <Link to='/'>
+              <Link to='/dashboard'>
                 <Menu.Item name='Messages' active={ activeItem === 'messages'} />
               </Link>
-              <Link to={`/chef/${id}`}>
+              <Link to={`/dashboard/${id}`}>
                 <Menu.Item name='Profile' active={ activeItem === 'profile'} />
               </Link>
-              <Link to='/'>
-                <Menu.Item name='Consumer Mode' active={ activeItem === 'consumer'} />
+              <Link to='/dashboard/menu'>
+                <Menu.Item name='Menu' active={ activeItem === 'consumer'} />
               </Link>
-              <Link to='/auth/logout'>
-                <Menu.Item name='Logout' active={ activeItem === 'logout'} />
+              <Link to='/auth/logout' innerRef={this.logout}>
+                <Menu.Item name='Logout'/>
               </Link>
             </Container>
           </Menu>
@@ -80,10 +84,9 @@ export default class NavBar extends Component {
     }
   }
   render(){
-    const { fixed } = this.state
     return (
       <div className="flex-container">
-          {this.nav(this.props.user.role, this.props.user._id)}
+          {this.props.user === null ? null : this.nav(this.props.user.role, this.props.user._id)}
       </div>
     )
   }
