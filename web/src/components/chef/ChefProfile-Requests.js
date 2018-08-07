@@ -1,66 +1,61 @@
 import React, { Component } from "react";
-import { Route, Link, Switch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export default class Requests extends Component{
+function RequestItem(item, index, accept) {
+  return (
+    <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
+      <p>Customer: {item.consumer.firstName}</p>
+      <p>Meal: {item.meal.title}</p>
+      <p>Time: {item.time}</p>
+      <p>Requests: {item.requests ? item.requests : 'None'}</p>
+      {item.accepted
+        ? <button disabled>Accept</button>
+        : <button onClick={() => accept(item._id, index)}>Accept</button> }
+    </li>
+  )
+}
+
+export default class RequestListing extends Component{
   state = {
-    profile: this.props.user,
-    menu: this.props.user.menu,
-    open: false,
+    requests: [],
+    mounted: false,
   }
 
-  componentDidMount = e => {
-    // if user does not exist, redirects user back to login page
-    if (Object.keys(this.props.user).length===0){
-      this.props.history.push('/auth/login');
-    } else if (this.props.user._id !== this.props.id){
-      this.props.history.goBack();
+  componentDidMount = () => {
+    this.setState({ mounted: true })
+    fetch(`/chef/${this.props.chefId}/requests`)
+    .then(resp => resp.json())
+    .then(requests => this.setState({ requests }))
+  }
+
+  acceptRequest = async (requestId, index) => {
+    if (this.mounted && Object.keys(this.props.user).length > 0){
+      await fetch(`/chef/${this.props.chefId}/requests/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin', // <- this is mandatory to deal with cookies
+        body: JSON.stringify({ requestId }),
+      })
+      const requests = this.state.requests.slice();
+      requests.splice(index, 1);
+      this.setState({ requests });
     }
   }
 
-  saveDish = (title, description, ingredients, price, cuisine) => {
-    const chef = this.state.profile._id;
-    console.log('saving', title, description, ingredients, price)
-    fetch(`/chef/${this.props.user._id}/add`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef }),
-    })
-    .then(resp => resp.json())
-    .then(saved => {
-      console.log(saved);
-      const menu = this.state.menu.slice();
-      menu.push(saved);
-      console.log('menu', menu);
-      this.setState({ menu })
-    })
+  componentWillUnmount = () => {
+    this.setState({ mounted: false })
   }
 
   render(){
-    const profile = this.state.profile;
     return(
       <div>
-        <p>Chef Profile</p>
-        <div style={{border:"1px solid black"}}>
-          <h4>{profile.firstName}</h4>
-          <img src={profile.picture} height="150px" width="150px"/>
-          {profile.verified ? <p>Verified</p> : null }
-          <p>Current Rating: {profile.rating} </p>
-        </div>
-        {/* <div style={{border:"1px solid black"}}>
-          <button><Link to={`/chef/${this.state.profile._id}/add`}>Add a Dish</Link></button>
-          {MenuListing(this.state.menu)}
-        </div> */}
-        <Link to={`/chef/${profile._id}`}>Menu</Link>
-        {/* <Link to={`/chef/${profile._id}/requests`}>Requests</Link> */}
-        <Switch>
-          <Route path={`/chef/${profile._id}`} render={() => <MenuListing menu={this.state.menu} />}/>
-          <Route exact path={`/chef/${profile._id}/add`} render={() => <Add save={this.saveDish}/>}/>
-          {/* <Route exact path={`/chef/${profile._id}/requests`} render={() => <Add save={this.saveDish}/>}/> */}
-        </Switch>
+        <h2>Requests</h2>
+        <ul style={{listStyleType: "none"}}>
+          {this.state.requests.length > 0
+            ? this.state.requests.map((item, ind) => RequestItem(item, ind, this.acceptRequest))
+            : 'No requests, start sharing your dishes!'}
+        </ul>
       </div>
     )
   }
-};
+}

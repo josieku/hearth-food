@@ -34,16 +34,26 @@ class Map extends Component {
 };
 
 export default class ConsumerLanding extends Component{
-  state = {
-    listings: [],
+  constructor(props){
+    super(props);
+    this.validateLogin();
+    this.state = {
+      listings: [],
+    }
+  }
+
+  validateLogin = async () =>{
+    if (Object.keys(this.props.user).length === 0 || this.props.user.role === "chef"){
+      await this.props.history.push('/')
+    }
   }
 
   componentDidMount = e => {
     this.props.notLand();
-    console.log('in here')
+    console.log("in consumer landing")
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => {console.log(listings); this.setState({ listings })});
+    .then(listings => this.setState({ listings }));
   }
 
   sort = indicator => {

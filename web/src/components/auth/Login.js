@@ -26,10 +26,10 @@ export default class Login extends React.Component {
     })
     .then(async (resp)=>{
       if(resp.status===200){
-        console.log("passed!")
         const user = await Promise.resolve(resp.json());
+        console.log("passed!", user);
         this.props.login(user);
-        this.props.history.push('/')
+        this.props.history.push({pathname: '/dashboard', state: {user: user}})
       }
       else{
         throw "Login failed, please try again."

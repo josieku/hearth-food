@@ -222,7 +222,17 @@ var requestsSchema = mongoose.Schema({
     required: true,
     default: false
   },
+  payment: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
   completed: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  expired: {
     type: Boolean,
     required: true,
     default: false

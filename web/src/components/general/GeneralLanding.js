@@ -59,6 +59,38 @@ class DesktopContainer extends Component {
   state = {};
   hideFixedMenu = () => this.setState({ fixed: false })
   showFixedMenu = () => this.setState({ fixed: true })
+
+  renderButtons = () => {
+    const { fixed } = this.state
+    if (this.props.user){
+      if (Object.keys(this.props.user).length > 0) return (
+        <Button inverted={!fixed}>
+          <Link to='/dashboard' style={{textDecoration: 'none', color: 'white'}}>Dashboard</Link>
+        </Button>
+      )
+      else return (
+        <div>
+          <Button inverted={!fixed}>
+            <Link to='/auth/login' style={{textDecoration: 'none', color: 'white'}}>Log in</Link>
+          </Button>
+          <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
+            <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
+          </Button>
+        </div>
+      )
+    }
+    else return (
+      <div>
+        <Button inverted={!fixed}>
+          <Link to='/auth/login' style={{textDecoration: 'none', color: 'white'}}>Log in</Link>
+        </Button>
+        <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
+          <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
+        </Button>
+      </div>
+    )
+  }
+
   render() {
     const { children } = this.props
     const { fixed } = this.state
@@ -94,12 +126,7 @@ class DesktopContainer extends Component {
                   <Menu.Item>Eat with us</Menu.Item>
                 </Link>
                 <Menu.Item position='right'>
-                  <Button inverted={!fixed}>
-                    <Link to='/auth/login' style={{textDecoration: 'none', color: 'white'}}>Log in</Link>
-                  </Button>
-                  <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-                    <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
-                  </Button>
+                  {this.renderButtons()}
                 </Menu.Item>
               </Container>
             </Menu>
@@ -250,7 +277,7 @@ const HomepageLayout = () => (
               "I shouldn't have gone with their competitor."
             </Header>
             <p style={{ fontSize: '1.33em' }}>
-              <Image avatar src='/images/avatar/large/nan.jpg' />
+              {/* <Image avatar src='/images/avatar/large/nan.jpg' /> */}
               <b>Nan</b> Chief Fun Officer Acme Toys
             </p>
           </Grid.Column>
