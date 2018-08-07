@@ -22,7 +22,7 @@ import {
  * such things.
  */
 const HomepageHeading = ({ mobile }) => (
-  <Container text>
+  <Container text id="headerCont">
     <Header
       as='h1'
       content='hearth'
@@ -73,10 +73,11 @@ class DesktopContainer extends Component {
           <Segment
             inverted
             textAlign='center'
-            style={{ minHeight: 700, padding: '1em 0em' }}
+            style={{ minHeight: 700, padding: '1em 0em', backgroundColor: '#B73535' }}
             vertical
           >
             <Menu
+              id="mainPageMenu"
               fixed={fixed ? 'top' : null}
               inverted={!fixed}
               pointing={!fixed}
@@ -157,13 +158,13 @@ class MobileContainer extends Component {
             <Segment
               inverted
               textAlign='center'
-              style={{ minHeight: 350, padding: '1em 0em' }}
+              style={{ minHeight: 350, padding: '1em 0em', backgroundColor: '#B73535' }}
               vertical
             >
               <Container>
-                <Menu inverted pointing secondary size='large'>
+                <Menu id="mainPageMenu" inverted pointing secondary size='large'>
                   <Menu.Item onClick={this.handleToggle}>
-                    <Icon name='sidebar' />
+                    <Icon name='sidebar' size="large"/>
                   </Menu.Item>
                   <Menu.Item position='right'>
                     <Button as='a' inverted>
