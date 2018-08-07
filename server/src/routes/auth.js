@@ -29,6 +29,7 @@ router.post('/signup', function(req,res) {
     phone: req.body.phone,
     email: req.body.email,
     role: 'consumer',
+    picture: req.body.file
   })
   user.save()
   .then(save =>res.json(save))
