@@ -23,7 +23,7 @@ export default class MenuListing extends Component{
     return (
       <div>
         <h2>Menu</h2>
-        <button><Link to='/menu/add'>Add a Dish</Link></button>
+        <button><Link to='/dashboard/menu/add'>Add a Dish</Link></button>
         <ul style={{listStyleType: "none"}}>
           {this.props.menu ? this.props.menu.map(MenuListItem): 'Empty menu :(  Add dishes now!'}
         </ul>

@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-// import ConsumerLanding from './../consumer/ConsumerLanding';
-// import ChefLanding from './../chef/ChefLanding';
-// import GeneralLanding from './GeneralLanding';
 import { Menu, Container } from 'semantic-ui-react';
 import './../../../public/index.css'
+
 export default class NavBar extends Component {
   state = {
     activeItem: 'messages',
@@ -32,7 +30,7 @@ export default class NavBar extends Component {
               <Link to={`/user/${id}`}>
                 <Menu.Item name='Profile' active={ activeItem === 'profile'} />
               </Link>
-              <Link to='/auth/logout' innerRef={this.logout}>
+              <Link to='/auth/logout'>
                 <Menu.Item name='Logout' active={ activeItem === 'logout'}/>
               </Link>
             </Container>
@@ -53,7 +51,7 @@ export default class NavBar extends Component {
               <Link to='/dashboard/menu'>
                 <Menu.Item name='Menu' active={ activeItem === 'consumer'} />
               </Link>
-              <Link to='/auth/logout' innerRef={this.logout}>
+              <Link to='/auth/logout'>
                 <Menu.Item name='Logout'/>
               </Link>
             </Container>
@@ -86,7 +84,7 @@ export default class NavBar extends Component {
   render(){
     return (
       <div className="flex-container">
-          {this.props.user === null ? null : this.nav(this.props.user.role, this.props.user._id)}
+          {this.props.user === null ? this.nav(null, null) : this.nav(this.props.user.role, this.props.user._id)}
       </div>
     )
   }

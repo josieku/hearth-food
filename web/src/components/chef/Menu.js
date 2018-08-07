@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
 
-import Add from './addDishModal';
-import MenuListing from './ChefProfile-Menu';
+import Add from './Menu-Add';
+import MenuListing from './Menu-Listing';
 
 export default class Menu extends Component{
   state = {
@@ -42,7 +42,7 @@ export default class Menu extends Component{
       menu.push(saved);
       // console.log('menu', menu);
       this.setState({ menu })
-      this.props.history.push(`/chef/${this.props.user._id}`)
+      this.props.history.push(`/dashboard/menu`)
     })
   }
 
@@ -51,14 +51,13 @@ export default class Menu extends Component{
     const profile = this.state.profile;
     return(
       <div>
-        <h2>Menu</h2>
         <Switch>
-          <Route exact path='/menu/add' render={() =>
-            <Add save={this.saveDish}/>}/>
+          <Route exact path='/dashboard/menu/add' render={(props) =>
+            <Add save={this.saveDish} {...props}/>}/>
 
-          <Route path="/menu" render={() =>
-            <MenuListing id={profile._id} menu={this.state.menu}/>}/>
-
+          <Route exact path="/dashboard/menu" render={(props) =>
+            <MenuListing id={profile._id}
+                         menu={this.state.menu} {...props}/>}/>
         </Switch>
       </div>
     )

@@ -4,6 +4,7 @@ import { Route, Switch, Link } from 'react-router-dom';
 import MealView from './MealProfile-View';
 import MealEdit from './MealProfile-Edit';
 import MealRequest from './MealProfile-Request';
+import NavBar from './../general/NavBar';
 
 class Hi extends Component {
   render(){
@@ -69,6 +70,7 @@ export default class MealProfile extends Component {
     const id = this.props.id
     return(
       <div>
+        <NavBar user={this.props.user}/>
         <Switch>
           <Route exact path={`/meal/${id}/edit`} render={(props) =>
             <MealEdit meal={this.state.meal} user={this.props.user}

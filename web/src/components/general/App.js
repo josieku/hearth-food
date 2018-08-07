@@ -30,16 +30,13 @@ class App extends Component {
 
   //this is where location settings should go
   login = user => {
-    console.log("login", user);
     localStorage.setItem('user', JSON.stringify(user));
     const loggedin = Object.assign(user);
-    console.log(loggedin);
     this.setState({
       user: Object.assign(user),
       landing: false,
       testing: 'passed'
     })
-    console.log('state user', this.state);
   }
 
   landing = () => {
@@ -53,16 +50,13 @@ class App extends Component {
   logout = () => {
     localStorage.removeItem('user');
     this.setState({ user: {} });
+    console.log('loggedout');
   }
 
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-          {this.state.landing
-            ? null
-            : <NavBar user={this.state.user} logout={this.logout}/>}
-
           <Switch>
             <Route exact path="/" render={(props) =>
               <GeneralLanding user={this.state.user} landing={this.landing}/>}/>
@@ -70,7 +64,8 @@ class App extends Component {
             <Route path="/dashboard" render={(props) =>
               <Landing user={this.state.user}
                        landing={this.landing}
-                       notLand={this.notLand} {...props}/>}/>
+                       notLand={this.notLand}
+                       logout={this.props.logout} {...props}/>}/>
 
             <Route path="/map" component={MapContainer}/>
 

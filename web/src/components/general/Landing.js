@@ -30,9 +30,9 @@ export default class Landing extends Component{
     return (
       <div>
         {user.role === "chef" && user
-        ? <ChefLanding notLand={this.props.notLand} user={user}/>
+        ? <ChefLanding notLand={this.props.notLand} logout={this.props.logout} user={user}/>
         : user.role === "consumer" && user
-        ? <ConsumerLanding notLand={this.props.notLand} user={user}/>
+        ? <ConsumerLanding notLand={this.props.notLand} logout={this.props.logout} user={user}/>
         : <Redirect to="/"/>}
       </div>
     )

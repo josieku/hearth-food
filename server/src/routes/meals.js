@@ -72,7 +72,7 @@ router.post('/:id/request', (req, res) => {
       meal.orders = tempOrders;
       meal.save();
     })
-  })
+  }).then(e => res.send('requested'))
   console.log('meal requested');
 })
 
