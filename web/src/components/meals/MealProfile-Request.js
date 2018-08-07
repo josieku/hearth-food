@@ -29,8 +29,8 @@ export default class MealRequest extends Component {
         time: new Date(),
       }),
     })
-    .then(e => {
-      this.setState({
+    .then(async e => {
+      await this.setState({
         time: "",
         requests: "",
       })

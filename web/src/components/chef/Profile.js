@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
 
-import Add from './addDishModal';
-import MenuListing from './ChefProfile-Menu';
+// import Add from './addDishModal';
+// import MenuListing from './ChefProfile-Menu';
 // import RequestListing from './ChefProfile-Requests';
 // import OrderListing from './ChefProfile-Orders';
 // import HistoryListing from './ChefProfile-History';
@@ -60,25 +60,6 @@ export default class ChefProfile extends Component{
           {profile.verified ? <p>Verified</p> : null }
           <p>Current Rating: {profile.rating} </p>
         </div>
-        <Link to={`/chef/${profile._id}`}>Menu</Link>
-        {/* <Link to={`/chef/${profile._id}/history`}>History</Link> */}
-        <Switch>
-          <Route exact path={`/chef/${profile._id}/add`} render={() =>
-            <Add save={this.saveDish}/>}/>
-
-          {/* <Route exact path={`/chef/${profile._id}/requests`} render={() =>
-            <RequestListing chefId={profile._id} />}/>
-
-          <Route exact path={`/chef/${profile._id}/orders`} render={() =>
-            <OrderListing chefId={profile._id} />}/>
-
-          <Route exact path={`/chef/${profile._id}/history`} render={() =>
-            <HistoryListing chefId={profile._id} />}/> */}
-
-          <Route path={`/chef/${profile._id}`} render={() =>
-            <MenuListing id={profile._id} menu={this.state.menu}/>}/>
-
-        </Switch>
       </div>
     )
   }

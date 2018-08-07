@@ -25,12 +25,12 @@ router.get('/:id/requests', (req, res) => {
 })
 
 router.get('/:id/orders', (req, res) => {
-  Request.find({'chef': req.params.id, 'accepted': 'true'})
+  Request.find({'chef': req.params.id, 'accepted': 'true', 'completed': 'false'})
          .populate('chef')
          .populate('consumer')
          .populate('meal')
          .exec()
-         .then(orders => res.json(orders))
+         .then(orders => {console.log('orders', orders); res.json(orders)})
 })
 
 router.get('/:id/history', (req, res) => {

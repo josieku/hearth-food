@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Grid, Item, Divider } from "semantic-ui-react";
 
+import NavBar from './../general/NavBar'
+
 function Listing(meal){
   return (
     <div id="listItem" key={meal._id}>
@@ -90,6 +92,7 @@ export default class ConsumerLanding extends Component{
   render(){
     return(
       <div style={{padding: '2%'}}>
+        <NavBar user={this.props.user} logout={this.props.logout}/>
         <Grid columns={2} padded="vertically">
           <Grid.Column>
             <div id="availableMeals">
