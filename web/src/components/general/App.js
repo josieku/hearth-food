@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-// import "./../../../public/App.css";
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import localStorage from 'localStorage';
 
 import Landing from './Landing';
 import NavBar from './NavBar';
@@ -14,35 +14,30 @@ import ConsumerProfile from './../consumer/ConsumerProfile';
 import ChefProfile from './../chef/ChefProfile';
 import Add from './../chef/addDishModal';
 import MealProfile from './../meals/MealProfile';
-import MealEdit from './../meals/MealProfile-Edit'
+import MealEdit from './../meals/MealProfile-Edit';
 
 class App extends Component {
-  // landing page, not logged in
   state = {
     user: {},
     landing: true
   };
 
   componentDidMount = async e => {
-    const response = await fetch('/auth/ping');
-    console.log(response);
-    if (response.status === 200){
-      const user = await response.json();
-      this.setState({ user })
-    }
-  }
-  login = user => {
-    this.setState({ user, landing: false })
-  }
-  landing = e => {
-    this.setState({landing: true })
-  }
-  notLand = e => {
-    this.setState({landing: false})
+    const user = localStorage.getItem('user');
+    if (user){ this.setState({ user: JSON.parse(user) }) }
   }
 
+  //this is where location settings should go
+  login = user => {
+    this.setState({ user, landing: false })
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  landing = () => { this.setState({landing: true }) }
+
+  notLand = () => { this.setState({landing: false}) }
+
   render() {
-    console.log(this.state);
     return (
       <BrowserRouter>
         <div className="App">
@@ -50,15 +45,13 @@ class App extends Component {
           <Switch>
             <Route exact={true} path="/" render={(props) => <Landing user={this.state.user} landing={this.landing} notLand={this.notLand} {...props}/>}/>
             <Route path="/users" render={(props) => <User user={this.state.user} notLand={this.notLand} {...props}/>}/>
-            <Route path="/meal" render={(props) => <Meal user={this.state.user} notLand={this.notLand} {...props}/>}/>
             <Route path="/map" component={MapContainer}/>
             <Route exact path="/auth/signup" render={(props) => <CustomerSignup notLand={this.notLand} {...props}/>}/>
             <Route exact path="/auth/login" render={(props) => <Login login={this.login} notLand={this.notLand} {...props}/>}/>
             <Route path='/user/:id' render={({ match}) => <ConsumerProfile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
             <Route path='/chef/:id' render={(props) => <ChefProfile user={this.state.user} notLand={this.notLand} id={props.match.params.id} {...props}/>}/>
-            {/* <Route exact path='/meal/:id/edit' render={(props) => <MealEdit id={props.match.params.id} user={this.state.user} {...props}/>}/> */}
-            <Route exact path='/meal/:id' render={(props) => <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>
-            {/* <Route path={`/chef/:id/add`} component={Add}/> */}
+            <Route path='/meal/:id' render={(props) => <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>
+            <Route exact path='/auth/logout' render={() => {localStorage.removeItem('user'); this.setState({ user: {} }); return <Redirect to='/'/>}}/>
             {/* <Route path="/messages" render={() => <Messages user = {this.state.user}/>}/>
             <Route path="/request" render={() => <Request user = {this.state.user}/>}/> */}
           </Switch>
