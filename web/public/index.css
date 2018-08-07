@@ -35,6 +35,7 @@ body {
 }
 /* Consumer Landing Styling */
 #mealList {
+  margin-top: 50px;
 }
 
 #availableMeals {
