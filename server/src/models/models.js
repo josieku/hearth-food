@@ -109,6 +109,11 @@ var mealSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  availability:{
+    type: String,
+    required: true,
+    default: ""
+  },
   price: {
     type: Number,
     required: true

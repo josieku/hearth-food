@@ -53,7 +53,6 @@ export default class ChefProfile extends Component{
     const profile = this.state.profile;
     return(
       <div>
-        <p>Chef Profile</p>
         <div style={{border:"1px solid black"}}>
           <h4>{profile.firstName}</h4>
           <img src={profile.picture} height="150px" width="150px"/>

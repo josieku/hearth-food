@@ -25,7 +25,7 @@ export default class Add extends React.Component {
   }
 
   save = e => {
-    console.log('saving');
+    // console.log('saving', this.state);
     this.props.save(this.state.title,
                     this.state.description,
                     this.state.ingredients,

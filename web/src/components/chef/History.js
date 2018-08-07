@@ -7,7 +7,7 @@ function HistoryItem(item) {
       <p>Customer: {item.consumer.firstName}</p>
       <p>Meal: {item.meal.title}</p>
       <p>Time: {item.time}</p>
-      <p>Status: <strong>{item.payment ? <span>Ready to cook!</span> : <span>Awaiting payment...</span>}</strong></p>
+      <p>Status: <strong>{item.completed ? <span>Done!</span>:<span>Expired...</span>}</strong></p>
       <p>Additional requests: {item.requests ? item.requests : 'None'}</p>
     </li>
   )
@@ -27,7 +27,7 @@ export default class HistoryListing extends Component{
   render(){
     return(
       <div>
-        <h2>Orders</h2>
+        <h2>Request History</h2>
         <ul style={{listStyleType: "none"}}>
           {this.state.history.length > 0
             ? this.state.history.map(HistoryItem)
