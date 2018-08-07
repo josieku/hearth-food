@@ -4,18 +4,23 @@ body {
 }
 
 .App {
-  background-color: #FFEED8;
+  background-color: #F7F2F2;
 }
 
 #getStarted {
   color: white;
-  background: #B02E0C
+  background: #969595
 }
 
 #navBar {
   font-size: 20px;
 }
 
+
+/* Landing page styling */
+#mainPageMenu {
+  border: 0px
+}
 /* login page styling  */
 #loginHeader {
   color: #B02E0C
@@ -27,4 +32,23 @@ body {
 
 #loginMessage {
   background-color: #FFC654;
+}
+/* Consumer Landing Styling */
+#mealList {
+}
+
+#availableMeals {
+
+}
+
+#mapDiv {
+
+}
+
+#recentMealHeader {
+
+}
+
+#listOfRecents {
+
 }

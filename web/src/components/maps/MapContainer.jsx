@@ -2,7 +2,7 @@ const _ = require("lodash");
 import React from 'react';
 import ReactDOM from 'react-dom'
 import {geolocated} from 'react-geolocated';
-const { compose, withProps, lifecycle, defaultProps} = require("recompose");
+const { compose, withProps, lifecycle, defaultProps } = require("recompose");
 const {
   withScriptjs,
   withGoogleMap,
@@ -11,12 +11,19 @@ const {
 } = require("react-google-maps");
 import SearchBox from "react-google-maps/lib/components/places/SearchBox"
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
+import { Circle } from "react-google-maps";
 
-// var coords = geolocated({
-//   positionOptions: {
-//     enableHighAccuracy: false,
-//   },
-// })
+function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d * 1000; // meters
+}
 
 var geo = window.navigator.geolocation
 
@@ -30,7 +37,6 @@ var MapWithLocation = compose(
   lifecycle({
     componentDidMount() {
       var self = this
-      console.log(this)
       geo.getCurrentPosition(function(position) {
         if (position) {
           self.setState({
@@ -43,43 +49,85 @@ var MapWithLocation = compose(
     },
     componentWillMount() {
       const refs = {}
-      this.setState({
+      var places;
+      var foo;
+      var self = this;
+      self.setState(foo = {
         bounds: null,
+        circleBounds: null,
         center: {lat: 0, lng: 0},
+        radius: 1000,
         markers: [],
         onMapMounted: ref => {
           refs.map = ref;
         },
-        onBoundsChanged: () => {
-          this.setState({
-            bounds: refs.map.getBounds(),
-            center: refs.map.getCenter(),
-          })
+        onCircleMounted: ref => {
+          refs.circle = ref;
         },
         onSearchBoxMounted: ref => {
           refs.searchBox = ref;
         },
         onPlacesChanged: () => {
-          const places = refs.searchBox.getPlaces();
-          const bounds = new window.google.maps.LatLngBounds();
+          debugger;
+          places = refs.searchBox.getPlaces()
+          if (places) {
+            var bounds = self.state.circleBounds
+            console.log(places, bounds)
+            var places2 = places.filter(place => {
+              var dist = measure(place.geometry.location.lat(), place.geometry.location.lng(), self.state.center.lat, self.state.center.lng)
+              return (dist < self.state.radius)
+            });
+            const nextMarkers = places2.map(place => ({
+              position: place.geometry.location,
+              name: place.name
+            }));
+            const nextCenter = _.get(nextMarkers, '0.position', self.state.center);
 
-          places.forEach(place => {
-            if (place.geometry.viewport) {
-              bounds.union(place.geometry.viewport)
-            } else {
-              bounds.extend(place.geometry.location)
-            }
-          });
-          const nextMarkers = places.map(place => ({
-            position: place.geometry.location,
-          }));
-          const nextCenter = _.get(nextMarkers, '0.position', this.state.center);
-
-          this.setState({
-            center: nextCenter,
-            markers: nextMarkers,
-          });
+            self.setState({
+              markers: nextMarkers,
+            });
+          }
           // refs.map.fitBounds(bounds);
+        },
+        onBoundsChanged: () => {
+          self.setState({
+            bounds: refs.map.getBounds(),
+            radius: measure(refs.map.getBounds().f.b,refs.map.getBounds().b.b, refs.map.getBounds().f.f, refs.map.getBounds().b.f)/5,
+          }, () => {
+            self.setState({
+              circleBounds: refs.circle.getBounds()
+            }, () => {
+              debugger;
+              if (refs.searchBox) {
+                setTimeout(() => {
+                  foo.onPlacesChanged()
+                }, 2000)
+              }
+              // if (refs.searchBox) {
+              //   var input = document.getElementById('search')
+              //   window.google.maps.event.trigger( input, 'focus')
+              //   // window.google.maps.event.trigger( input, 'keydown', {keyCode:13})
+              //   // var itemsloaded = window.google.maps.event
+              //   // itemsloaded.addDomListener(document.body,
+              //   //   'SearchTrigger',
+              //   //   function(e){
+              //   //     if(e.target.className==='search'){
+              //   //       //remove the listener
+              //   //       window.google.maps.event.removeListener(itemsloaded);
+              //   //       //trigger the events
+              //   //       window.google.maps.event.trigger( input, 'focus')
+              //   //       window.google.maps.event.trigger( input, 'keydown', {keyCode:13})
+              //   //     }
+              //   //   });
+              //   // itemsloaded.trigger(input, 'SearchTrigger')
+              }
+            )
+          })
+        },
+        onRadiusChanged: () => {
+          self.setState({
+            circleBounds: refs.circle.getBounds(),
+          })
         },
       })
     },
@@ -99,15 +147,29 @@ var MapWithLocation = compose(
           labelAnchor={new window.google.maps.Point(0, 0)}
           labelStyle={{backgroundColor: "purple", fontSize: "28px", padding: "16px"}}
         >
-          <div>This is you!</div>
+          <div>You!</div>
         </MarkerWithLabel>
+        <Circle
+          ref={props.onCircleMounted}
+          options={{
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35
+          }}
+          center={props.center}
+          radius={props.radius}
+        >
+        </Circle>
         <SearchBox
           ref={props.onSearchBoxMounted}
-          bounds={props.bounds}
+          bounds={props.circleBounds}
           controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
           onPlacesChanged={props.onPlacesChanged}
         >
           <input
+            id="search"
             type="text"
             placeholder="Customized your placeholder"
             style={{
@@ -130,9 +192,9 @@ var MapWithLocation = compose(
             key={index}
             position={marker.position}
             labelAnchor={new window.google.maps.Point(0, 0)}
-            labelStyle={{backgroundColor: "yellow", fontSize: "32px", padding: "16px"}}
+            labelStyle={{backgroundColor: "orange", fontSize: "18px", padding: "16px"}}
           >
-            <div>Hello There!</div>
+            <div>{marker.name}</div>
           </MarkerWithLabel>
         )}
       </GoogleMap>
