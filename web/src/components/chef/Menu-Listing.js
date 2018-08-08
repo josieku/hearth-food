@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Grid, Menu, Segment } from 'semantic-ui-react'
+import { Button, Grid, Menu, Segment } from 'semantic-ui-react';
 
 function MenuListItem(item) {
   return (

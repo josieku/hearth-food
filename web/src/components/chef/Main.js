@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
+import { Button, Grid, Menu, Segment } from 'semantic-ui-react';
 
 import RequestListing from './Main-Requests';
 import OrderListing from './Main-Orders';
@@ -75,14 +76,20 @@ export default class Main extends Component{
     return(
       <div>
         <p>Chef Landing - Main</p>
+        <Grid columns={2}>
+          <Grid.Column width={8}>
+            <OrderListing chefId={profile._id}
+              complete={this.complete}
+              setOrders={this.setOrders}
+              orders={this.state.orders} />
+            </Grid.Column>
+          <Grid.Column width={8}>
         <RequestListing chefId={profile._id}
                         accept={this.acceptRequest}
                         setRequests={this.setRequests}
                         requests={this.state.requests}/>
-        <OrderListing chefId={profile._id}
-                      complete={this.complete}
-                      setOrders={this.setOrders}
-                      orders={this.state.orders} />
+          </Grid.Column>
+        </Grid>
       </div>
     )
   }
