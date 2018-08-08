@@ -6,6 +6,7 @@ const router = Router();
 var Meal = require('../models/models').Meal;
 var Request = require('../models/models').Request;
 var User = require('../models/models').User;
+var Available = require('../models/models').Available;
 
 router.get('/listings', (req, res) => {
   Meal.find({archived: false})
@@ -16,10 +17,17 @@ router.get('/:id', (req, res) => {
   console.log('fetching');
   Meal.findById(req.params.id)
       .populate('chef')
+      .populate('availability')
       // .populate('reviews')
       .exec()
       .then(meal => {console.log(meal); res.json(meal)})
       .catch(err => console.error(err))
+})
+
+router.get('/:id/available', (req, res) => {
+  console.log('fetching available');
+  Available.find({ 'meal': req.params.id, 'passed': false })
+           .then(available => {console.log(available); res.json(available)})
 })
 
 router.post('/:id/save', (req, res) => {
@@ -82,11 +90,24 @@ router.post('/:id/archive', (req, res) => {
 })
 
 router.post('/:id/setavailable', (req, res) => {
-  Meal.findByIdAndUpdate(req.params.id, { availability: req.body.availability })
-      .populate('chef')
-      .exec()
-      .then(meal => res.json(meal))
-      .catch(err => console.error(err))
+  const tempAvailable = new Available({
+    meal: req.body.mealId,
+    chef: req.body.chefId,
+    date: req.body.date,
+    start: req.body.start,
+    end: req.body.end,
+  })
+
+  tempAvailable.save().then(available => {
+    Meal.findByIdAndUpdate(req.body.mealId)
+        .then(meal => {
+          const availability = meal.availability.slice();
+          availability.push(available._id);
+
+          meal.availability = availability;
+          meal.save().then(e => res.json(available));
+        })
+  })
 })
 
 export default router;

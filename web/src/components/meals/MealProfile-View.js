@@ -49,21 +49,33 @@ function requestEditButton(user, chef, meal) {
   return <button><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></button>
 }
 
-export default class MealView extends Component {
+function timeslots(timeObj) {
+  return(
+    <div style={{border: "1px solid black"}}>
+      <p>Date: {new Date(timeObj.date).toDateString()}</p>
+      <p>Time: {timeObj.start} to {timeObj.end}</p>
+    </div>
+  )
+}
 
+export default class MealView extends Component {
   render(){
     const meal = this.props.meal;
     const chef = Object.assign({}, meal.chef);
     const user = this.props.user;
+    console.log(this.props.times)
     return(
       <div>
         <p>Meal Profile</p>
         {meal.archived ? <h1>This meal has been archived</h1> : null}
         <h4>{meal.title}</h4>
-        {requestEditButton(user, chef, meal)}
-        <p>Price: <strong>{meal.price}</strong></p>
         <img src={meal.picture}/>
-        <p>Cuisine: {meal.cuisine}</p>
+        {requestEditButton(user, chef, meal)}
+        <p><strong>Available Times: </strong></p>
+        {this.props.times.map(timeslots)}
+        <p>Price: <strong>{meal.price}</strong></p>
+        <p><strong>Cuisine: </strong></p>
+        <p>{meal.cuisine}</p>
         <p><strong>Description:</strong></p>
         <p>{meal.description}</p>
         <p><strong>Ingredients:</strong></p>
