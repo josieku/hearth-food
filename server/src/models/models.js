@@ -41,7 +41,8 @@ var userSchema = mongoose.Schema({
   },
   preferences:{
     type: [],
-    default: []
+    default: [],
+    required: true
   },
   rating: {
     type: Number,
@@ -260,6 +261,10 @@ var requestsSchema = mongoose.Schema({
         ref: 'Request'
       }
     ]
+  },
+  delivery: {
+    type: Boolean,
+    default: false,
   }
 })
 

@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
   console.log('fetching');
   Meal.findById(req.params.id)
       .populate('chef')
-      .populate('availability')
+      // .populate('availability')
       // .populate('reviews')
       .exec()
       .then(meal => {console.log(meal); res.json(meal)})

@@ -8,7 +8,7 @@ function PendingItem(item, index, cancel) {
       <p>Meal: {item.meal.title}</p>
       <p>Time: {item.time}</p>
       <p>Requests: {item.requests ? item.requests : 'None'}</p>
-      <p>Status: PENDING</p>
+      <p>Awaiting: {item.accepted ? "Customer Payment" : "Chef Approval"}</p>
       {item.accepted
         ? <button disabled>Cancel</button>
         : <button onClick={() => cancel(item._id, index)}>Cancel</button> }

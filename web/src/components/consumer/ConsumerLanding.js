@@ -4,6 +4,8 @@ import { Button, Divider, Dropdown, Grid, Item, Search } from "semantic-ui-react
 
 import NavBar from './../general/NavBar';
 import Listings from './Main';
+import Orders from './Orders';
+import Profile from './UserProfile';
 
 export default class ConsumerLanding extends Component{
   validateLogin = async () =>{
@@ -14,7 +16,6 @@ export default class ConsumerLanding extends Component{
 
   componentDidMount = e => {
     this.props.notLand();
-    console.log("in consumer landing")
     if (Object.keys(this.props.user).length === 0 || this.props.user.role === "chef"){
       this.props.history.push('/')
     }
@@ -26,8 +27,10 @@ export default class ConsumerLanding extends Component{
       <div style={{padding: '2%'}}>
         <NavBar user={user} logout={this.props.logout}/>
         <Switch>
-          <Route exact path="/dashboard/orders" render={(props)=> <Listings user={user} {...props} />}/>
+          <Route exact path="/dashboard/orders" render={(props)=> <Orders user={user} {...props} />}/>
           <Route exact path="/dashboard" render={(props)=> <Listings user={user} {...props} />}/>
+          {/* <Route exact path='/user/:id' render={({ match }) =>
+            <Profile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/> */}
         </Switch>
       </div>
       )
