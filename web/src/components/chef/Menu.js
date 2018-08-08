@@ -22,12 +22,12 @@ export default class Menu extends Component{
     // else fetch the profile of the chef
     fetch(`/chef/${this.props.id}`)
       .then(response => response.json())
-      .then(profile => this.setState({ profile }))
+      .then(profile => this.setState({ profile, menu: profile.menu }))
   }
 
   saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
-    // console.log('saving', title, description, ingredients, price)
+    const availability = "available";
     fetch(`/chef/${this.props.user._id}/menu/add`, {
       method: 'POST',
       headers: {
@@ -38,10 +38,8 @@ export default class Menu extends Component{
     })
     .then(resp => resp.json())
     .then(saved => {
-      // console.log(saved);
       const menu = this.state.menu.slice();
       menu.push(saved);
-      // console.log('menu', menu);
       this.setState({ menu })
       this.props.history.push(`/dashboard/menu`)
     })
