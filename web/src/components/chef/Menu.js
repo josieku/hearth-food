@@ -3,7 +3,7 @@ import { Route, Link, Switch } from 'react-router-dom';
 
 import Add from './Menu-Add';
 import MenuListing from './Menu-Listing';
-import SetAvailability from './Menu-SetAvailability';
+// import SetAvailability from './Menu-SetAvailability';
 
 export default class Menu extends Component{
   state = {
@@ -34,7 +34,7 @@ export default class Menu extends Component{
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef, availability }),
+      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef }),
     })
     .then(resp => resp.json())
     .then(saved => {
@@ -53,9 +53,6 @@ export default class Menu extends Component{
         <Switch>
           <Route exact path='/dashboard/menu/add' render={(props) =>
             <Add save={this.saveDish} {...props}/>}/>
-
-          <Route exact path="/dashboard/menu/setavailable" render={(props) =>
-            <SetAvailability {...props}/> }/>
 
           <Route exact path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id}

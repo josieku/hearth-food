@@ -14,7 +14,7 @@ export default class MealRequest extends Component {
   }
 
   request = e => {
-    console.log("fetching to request")
+    // console.log("fetching to request")
     fetch(`/meal/${this.props.meal._id}/request`, {
       method: 'POST',
       headers: {
@@ -41,7 +41,7 @@ export default class MealRequest extends Component {
   render(){
     const meal = this.props.meal;
     const user = this.props.user;
-    console.log('in here requesting');
+    // console.log('in here requesting');
     return(
       <div>
         <h3>Request {this.state.chef.firstName} for {meal.title}</h3>
@@ -51,13 +51,10 @@ export default class MealRequest extends Component {
           <p>Ingredients: {meal.ingredients}</p>
           <h2>Price: {meal.price}</h2>
         </ul>
-        <form>
-          <input placeholder="Additional Requests"
-                 value={this.state.requests}
-                 onChange={e => this.setState({requests: e.target.value})}/>
-          <input type="date"/>
-                 {/* // onChange={e => this.setState({time: new Date(e.target.value)})}/> */}
-        </form>
+        <input placeholder="Additional Requests"
+               value={this.state.requests}
+               onChange={e => this.setState({requests: e.target.value})}/>
+        
         <button onClick={this.request}>Request</button>
       </div>
     )

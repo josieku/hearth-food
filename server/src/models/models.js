@@ -110,9 +110,12 @@ var mealSchema = mongoose.Schema({
     required: true
   },
   availability:{
-    type: String,
-    required: true,
-    default: ""
+    type: [
+      {
+        ref: 'Available',
+        type: mongoose.Schema.ObjectId
+      }
+    ]
   },
   price: {
     type: Number,
@@ -244,16 +247,48 @@ var requestsSchema = mongoose.Schema({
   }
 })
 
+var availabilitySchema = mongoose.Schema({
+  meal: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Meal',
+    required: true
+  },
+  chef: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  start: {
+    type: String,
+    required: true,
+  },
+  end: {
+    type: String,
+    required: true,
+  },
+  passed: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+})
+
 var User = mongoose.model('User', userSchema);
 var Meal = mongoose.model('Meal', mealSchema);
 var Mealreview = mongoose.model('Mealreview', mealReviewSchema);
 var Userreview = mongoose.model('Userreview', userReviewSchema);
 var Request = mongoose.model('Request', requestsSchema);
+var Available = mongoose.model('Available', availabilitySchema);
 
 module.exports = {
   User: User,
   Meal: Meal,
   Mealreview: Mealreview,
   Userreview: Userreview,
-  Request: Request
+  Request: Request,
+  Available: Available
 }
