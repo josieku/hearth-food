@@ -25,39 +25,6 @@ export default class Main extends Component{
       }))
   }
 
-  // acceptRequest = async (requestId, index) => {
-  //   // console.log('accepting');
-  //   // console.log(this.state.mounted, Object.keys(this.props.user).length)
-  //   if (this.state.mounted && Object.keys(this.props.user).length > 0){
-  //     await fetch(`/chef/${this.props.chefId}/requests/accept`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-  //       body: JSON.stringify({ requestId }),
-  //     })
-  //     const requests = this.state.requests.slice();
-  //     const accepted = requests.splice(index, 1)[0];
-  //     const orders = this.state.orders.slice();
-  //     orders.push(Object.create(accepted));
-  //     this.setState({ requests, orders });
-  //   }
-  // }
-  // complete = async (requestId, index) => {
-  //   if (this.state.mounted && Object.keys(this.props.user).length > 0){
-  //     await fetch(`/chef/${this.props.id}/complete`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-  //       body: JSON.stringify({ requestId }),
-  //     })
-  //   }
-  //   const orders = this.state.orders.slice();
-  //   orders.splice(index, 1);
-  //   this.setState({ orders });
-  // }
-
   cancel = () => {
     // cancel request function
     // updates request to cancel = true
@@ -72,15 +39,6 @@ export default class Main extends Component{
         <p>Orders</p>
         <PendingListing pending={this.state.pending} cancel={this.cancel}/>
         <ScheduledListing scheduled={this.state.scheduled} cancel={this.cancel}/>
-
-        {/* <RequestListing chefId={profile._id}
-                        accept={this.acceptRequest}
-                        setRequests={this.setRequests}
-                        requests={this.state.requests}/>
-        <OrderListing chefId={profile._id}
-                      complete={this.complete}
-                      setOrders={this.setOrders}
-                      orders={this.state.orders} /> */}
       </div>
     )
   }
