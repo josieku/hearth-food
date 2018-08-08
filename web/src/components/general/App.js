@@ -62,10 +62,8 @@ class App extends Component {
               <GeneralLanding user={this.state.user} landing={this.landing}/>}/>
 
             <Route path="/dashboard" render={(props) =>
-              <Landing user={this.state.user}
-                       landing={this.landing}
-                       notLand={this.notLand}
-                       logout={this.props.logout} {...props}/>}/>
+              <Landing user={this.state.user} landing={this.landing}
+                 notLand={this.notLand} logout={this.props.logout} {...props}/>}/>
 
             <Route path="/map" component={MapContainer}/>
 

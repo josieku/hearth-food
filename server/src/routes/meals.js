@@ -90,24 +90,35 @@ router.post('/:id/archive', (req, res) => {
 })
 
 router.post('/:id/setavailable', (req, res) => {
-  const tempAvailable = new Available({
-    meal: req.body.mealId,
-    chef: req.body.chefId,
-    date: req.body.date,
-    start: req.body.start,
-    end: req.body.end,
-  })
+  if (req.body.availableId){
+    const updates = {
+      date: req.body.date,
+      start: req.body.start,
+      end: req.body.end
+    }
+    Available.findByIdAndUpdate(req.body.availableId, updates)
+             .then(available => res.json(available));
 
-  tempAvailable.save().then(available => {
-    Meal.findByIdAndUpdate(req.body.mealId)
-        .then(meal => {
-          const availability = meal.availability.slice();
-          availability.push(available._id);
+  } else{
+    const tempAvailable = new Available({
+      meal: req.body.mealId,
+      chef: req.body.chefId,
+      date: req.body.date,
+      start: req.body.start,
+      end: req.body.end,
+    })
 
-          meal.availability = availability;
-          meal.save().then(e => res.json(available));
-        })
-  })
+    tempAvailable.save().then(available => {
+      Meal.findByIdAndUpdate(req.body.mealId)
+          .then(meal => {
+            const availability = meal.availability.slice();
+            availability.push(available._id);
+
+            meal.availability = availability;
+            meal.save().then(e => res.json(available));
+          })
+    })
+  }
 })
 
 export default router;

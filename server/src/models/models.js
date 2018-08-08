@@ -244,6 +244,22 @@ var requestsSchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  cancelled: {
+    type: Boolean,
+    default: false
+  },
+  changed: {
+    type: Boolean,
+    default: false
+  },
+  changes: {
+    type: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Request'
+      }
+    ]
   }
 })
 

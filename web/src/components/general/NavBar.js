@@ -21,8 +21,8 @@ export default class NavBar extends Component {
         <div style={{ marginLeft: '1em'}}>
           <Menu text id='navBar'>
             <Container>
-              <Link to="/request" >
-                <Menu.Item name='Request' active={ activeItem === 'request'} />
+              <Link to="/dashboard/orders" >
+                <Menu.Item name='Orders' active={ activeItem === 'orders'} />
               </Link>
               <Link to="/messages">
                 <Menu.Item name='Messages' active={ activeItem === 'messages'} />

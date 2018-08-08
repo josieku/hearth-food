@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const router = Router();
 
 var User = require('../models/models').User;
+var Meal = require('../models/models').Meal;
+var Request = require('../models/models').Request;
 
 router.get('/:id', (req, res) => {
   User.findById(req.params.id)
@@ -12,5 +14,15 @@ router.get('/:id', (req, res) => {
       .then(user => {console.log(user); res.json(user)})
       .catch(err => console.error(err))
 })
+
+router.get('/:id/orders', (req,res) => {
+  Request.find({ 'consumer': req.params.id })
+         .populate('chef')
+         .populate('consumer')
+         .populate('meal')
+         .exec()
+         .then(requests => res.json(requests))
+})
+
 
 export default router;

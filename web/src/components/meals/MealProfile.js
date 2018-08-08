@@ -52,38 +52,7 @@ export default class MealProfile extends Component {
     .then(meal => this.setState({ meal }))
   }
 
-  setAvailability = count => {
-    const times = [];
-    count.forEach(item => {
-      fetch(`/meal/${this.props.id}/setavailable`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              credentials: 'same-origin',
-              body: JSON.stringify({
-                mealId: this.props.id,
-                chefId: this.state.chefId,
-                date: item.date,
-                start: item.start,
-                end: item.end,
-              }),
-            })
-      .then(resp => resp.json())
-      .then(available => times.push(available))
-    })
-    this.setState({ times })
-  }
-
-  addTime = () => {
-    const times = this.state.times.slice();
-    times.push({});
-    this.setState({ times })
-  }
-
-  save = (ind, timeObj) => {
-    const times = this.state.times.slice();
-    times.splice(ind, 1, timeObj);
+  setAvailability = (times) => {
     this.setState({ times })
   }
 
@@ -104,11 +73,7 @@ export default class MealProfile extends Component {
 
           <Route exact path={`/meal/${id}/setavailable`} render={(props) =>
             <MealAvailability meal={this.state.meal} mealId={id}
-              set={this.setAvailability}
-              times={this.state.times}
-              addTime={this.addTime}
-              save={this.save}
-              user={this.props.user} {...props}/>}/>
+              set={this.setAvailability} user={this.props.user} {...props}/>}/>
 
           <Route path={`/meal/${id}`} render={(props)=>
             <MealView meal={this.state.meal}
