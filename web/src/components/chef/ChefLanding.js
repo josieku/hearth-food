@@ -5,7 +5,6 @@ import Main from './Main';
 import Menu from './Menu';
 import History from './History';
 // import Messages from './ChefLanding-Message';
-import Profile from './Profile';
 import NavBar from './../general/NavBar'
 
 export default class ChefLanding extends Component{
@@ -18,10 +17,9 @@ export default class ChefLanding extends Component{
       <div>
         <NavBar user={user} logout={this.props.logout}/>
         <Switch>
-          <Route exact path={`/dashboard/${user._id}`} render={(props) => <Profile user={user} notLand={this.props.notLand} id={user._id} {...props}/>}/>
-          <Route path="/dashboard/menu" render={(props)=> <Menu user={user} {...props} />}/>
-          <Route exact path="/dashboard" render={(props)=> <Main user={user} id={user._id} {...props} />}/>
-          <Route path="/dashboard/history" render={(props)=> <History chefId={user._id} {...props} />}/>
+          <Route exact path="/dashboard/menu" render={(props)=> <Menu user={user} {...props} />}/>
+          <Route exact path="/dashboard/history" render={(props)=> <History chefId={user._id} {...props} />}/>
+          <Route path="/dashboard" render={(props)=> <Main user={user} id={user._id} {...props} />}/>
           {/* <Route path="/messages" render={(props)=> <Messages user={user} {...props} />}/> */}
         </Switch>
       </div>

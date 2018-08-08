@@ -14,11 +14,12 @@ export default class MealProfile extends Component {
     times: [],
   }
 
-  componentDidMount = async () => {
-    await fetch(`/meal/${this.props.id}`)
+  componentDidMount = () => {
+    console.log('mounting');
+    fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
-      .then(async meal => {
-        await this.setState({ meal, chefId: meal.chef._id, times: meal.availability });
+      .then(meal => {
+        this.setState({ meal, chefId: meal.chef._id, times: meal.availability });
         console.log(this.state);
       })
   }
@@ -58,7 +59,7 @@ export default class MealProfile extends Component {
 
   render(){
     const id = this.props.id
-    console.log('times', this.state.times)
+    console.log(this.state.meal)
     return(
       <div>
         <NavBar user={this.props.user}/>

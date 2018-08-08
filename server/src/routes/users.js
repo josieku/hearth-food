@@ -24,5 +24,13 @@ router.get('/:id/orders', (req,res) => {
          .then(requests => res.json(requests))
 })
 
+router.get('/:id/recent', (req, res) => {
+  Request.find({ 'consumer': req.params.id })
+         .then(requests => {
+           const end = requests.length;
+           const list = requests.slice(end-3);
+           res.json(list);
+         })
+})
 
 export default router;
