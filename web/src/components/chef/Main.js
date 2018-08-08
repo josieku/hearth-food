@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
+import { Button, Divider, Grid, Menu, Segment } from 'semantic-ui-react';
 
 import RequestListing from './Main-Requests';
 import OrderListing from './Main-Orders';
@@ -17,16 +18,16 @@ export default class Main extends Component{
   componentDidMount = () => {
     this.setState({ mounted: true })
     fetch(`/chef/${this.props.id}`)
-      .then(response => response.json())
-      .then(profile => this.setState({ profile }))
+    .then(response => response.json())
+    .then(profile => this.setState({ profile }))
 
     fetch(`/chef/${this.props.id}/orders`)
-      .then(resp => resp.json())
-      .then(orders => this.setState({ orders }))
+    .then(resp => resp.json())
+    .then(orders => this.setState({ orders }))
 
     fetch(`/chef/${this.props.id}/requests`)
-      .then(resp => resp.json())
-      .then(requests => this.setState({ requests }))
+    .then(resp => resp.json())
+    .then(requests => this.setState({ requests }))
   }
 
   acceptRequest = async (requestId, index) => {
@@ -64,17 +65,26 @@ export default class Main extends Component{
   render(){
     const profile = this.state.profile;
     return(
-      <div>
-        <h1 style={{borderBottom:"1px solid gray"}}>Welcome back, {profile.firstName}!</h1>
-        <RequestListing chefId={profile._id}
-                        accept={this.acceptRequest}
-                        setRequests={this.setRequests}
-                        requests={this.state.requests}/>
-        <OrderListing chefId={profile._id}
-                      complete={this.complete}
-                      setOrders={this.setOrders}
-                      orders={this.state.orders} />
-      </div>
-    )
-  }
-};
+      <div style={{marginLeft: '20px', marginRight: '20px'}}>
+        <p>Chef Landing - Main</p>
+        <Grid columns={2} >
+          <Grid.Column width={8} >
+            <OrderListing
+              chefId={profile._id}
+              complete={this.complete}
+              setOrders={this.setOrders}
+              orders={this.state.orders} />
+            </Grid.Column>
+            <Divider vertical style={{justifyContents: 'center'}}/>
+            <Grid.Column width={8}>
+              <RequestListing
+                chefId={profile._id}
+                accept={this.acceptRequest}
+                setRequests={this.setRequests}
+                requests={this.state.requests}/>
+              </Grid.Column>
+            </Grid>
+          </div>
+        )
+      }
+    };

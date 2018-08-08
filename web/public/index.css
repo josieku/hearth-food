@@ -42,15 +42,7 @@ body {
   background-color: #B73535;
   font-size: medium;
 }
-
-#mapDiv {
-
-}
-
-#recentMealHeader {
-
-}
-
-#listOfRecents {
-
+/* Chef Landing Styling */
+#chefLandingHeader {
+  background-color: #B73535
 }
