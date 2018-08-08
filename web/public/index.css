@@ -4,7 +4,7 @@ body {
 }
 
 .App {
-  background-color: #F7F2F2;
+  background-color: white;
 }
 
 #getStarted {
@@ -39,7 +39,8 @@ body {
 }
 
 #availableMeals {
-
+  background-color: #B73535;
+  font-size: medium;
 }
 
 #mapDiv {
