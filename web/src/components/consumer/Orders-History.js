@@ -1,29 +1,26 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 
-function ScheduledItem(item, index, cancel) {
+function HistoryItem(item, index) {
   return (
     <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
       <p>Chef: {item.chef.firstName}</p>
       <p>Meal: {item.meal.title}</p>
       <p>Pickup Time: {item.time}</p>
       <p>Requests: {item.requests ? item.requests : 'None'}</p>
-      {item.accepted
-        ? <button disabled>Cancel</button>
-        : <button onClick={() => cancel(item._id, index)}>Cancel</button> }
     </li>
   )
 }
 
-export default class ScheduledListing extends Component{
+export default class HistoryListing extends Component{
   render(){
     return(
       <div>
-        <h2>Scheduled</h2>
+        <h2>Previous Orders</h2>
         <ul style={{listStyleType: "none"}}>
-          {this.props.scheduled.length > 0
-            ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind, this.props.cancel))
-            : 'No pending requests, order more!!'}
+          {this.props.history.length > 0
+            ? this.props.history.map((item, ind) => HistoryItem(item, ind))
+            : 'No previous orders... Order more!'}
         </ul>
       </div>
     )

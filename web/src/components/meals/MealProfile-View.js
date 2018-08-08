@@ -63,7 +63,7 @@ export default class MealView extends Component {
     const meal = this.props.meal;
     const chef = Object.assign({}, meal.chef);
     const user = this.props.user;
-    console.log(this.props.times)
+    console.log(meal)
     return(
       <div>
         <p>Meal Profile</p>

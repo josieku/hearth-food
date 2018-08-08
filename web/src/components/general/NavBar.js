@@ -21,6 +21,9 @@ export default class NavBar extends Component {
         <div style={{ marginLeft: '1em'}}>
           <Menu text id='navBar'>
             <Container>
+              <Link to="/dashboard" >
+                <Menu.Item name='Dashboard' active={ activeItem === 'dashboard'} />
+              </Link>
               <Link to="/dashboard/orders" >
                 <Menu.Item name='Orders' active={ activeItem === 'orders'} />
               </Link>
@@ -43,7 +46,7 @@ export default class NavBar extends Component {
           <Menu text id='navBar'>
             <Container>
               <Link to='/dashboard'>
-                <Menu.Item name='Messages' active={ activeItem === 'messages'} />
+                <Menu.Item name='Dashboard' active={ activeItem === 'dashboard'} />
               </Link>
               <Link to='/dashboard/menu'>
                 <Menu.Item name='Menu' active={ activeItem === 'consumer'} />
@@ -51,7 +54,7 @@ export default class NavBar extends Component {
               <Link to={`/dashboard/history`}>
                 <Menu.Item name='History' active={ activeItem === 'history'} />
               </Link>
-              <Link to={`/dashboard/${id}`}>
+              <Link to={`/user/${id}`}>
                 <Menu.Item name='Profile' active={ activeItem === 'profile'} />
               </Link>
               <Link to='/auth/logout'>

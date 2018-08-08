@@ -15,13 +15,6 @@ export default class Main extends Component{
   }
 
   componentDidMount = () => {
-    // if user does not exist, redirects user back to login page
-    // if (Object.keys(this.props.user).length===0){
-    //   this.props.history.push('/auth/login');
-    // } else if (this.props.user._id !== this.props.id){
-    //   this.props.history.goBack();
-    // }
-    // else fetch the profile of the chef
     this.setState({ mounted: true })
     fetch(`/chef/${this.props.id}`)
       .then(response => response.json())
@@ -37,8 +30,6 @@ export default class Main extends Component{
   }
 
   acceptRequest = async (requestId, index) => {
-    // console.log('accepting');
-    // console.log(this.state.mounted, Object.keys(this.props.user).length)
     if (this.state.mounted && Object.keys(this.props.user).length > 0){
       await fetch(`/chef/${this.props.chefId}/requests/accept`, {
         method: 'POST',
@@ -53,6 +44,7 @@ export default class Main extends Component{
       this.setState({ requests, orders });
     }
   }
+
   complete = async (requestId, index) => {
     if (this.state.mounted && Object.keys(this.props.user).length > 0){
       await fetch(`/chef/${this.props.id}/complete`, {
@@ -69,12 +61,11 @@ export default class Main extends Component{
     this.setState({ orders });
   }
 
-
   render(){
     const profile = this.state.profile;
     return(
       <div>
-        <p>Chef Landing - Main</p>
+        <h1 style={{borderBottom:"1px solid gray"}}>Welcome back, {profile.firstName}!</h1>
         <RequestListing chefId={profile._id}
                         accept={this.acceptRequest}
                         setRequests={this.setRequests}

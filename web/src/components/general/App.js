@@ -5,7 +5,7 @@ import localStorage from 'localStorage';
 import Landing from './Landing';
 import NavBar from './NavBar';
 // import User from './User';
-import ConsumerProfile from './../consumer/ConsumerLanding';
+import Profile from './../consumer/UserProfile';
 import MapContainer from '.././maps/MapContainer';
 import CustomerSignup from './../auth/CustomerSignup';
 // import ChefSignup from './../auth/ChefSignup';
@@ -74,7 +74,7 @@ class App extends Component {
               <Login login={this.login} notLand={this.notLand} {...props}/>}/>
 
             <Route path='/user/:id' render={({ match }) =>
-              <ConsumerProfile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
+              <Profile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
 
             <Route path='/meal/:id' render={(props) =>
               <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>
