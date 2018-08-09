@@ -73,8 +73,9 @@ class App extends Component {
             <Route exact path="/auth/login" render={(props) =>
               <Login login={this.login} notLand={this.notLand} {...props}/>}/>
 
-            <Route path='/user/:id' render={({ match }) =>
-              <Profile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
+            <Route path='/user/:id' render={(props) =>
+              <Profile user={this.state.user} notLand={this.notLand}
+                id={props.match.params.id} {...props}/>}/>
 
             <Route path='/meal/:id' render={(props) =>
               <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>
