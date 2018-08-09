@@ -7,6 +7,10 @@ body {
   background-color: white;
 }
 
+.main {
+  margin-left: 5%;
+  margin-right: 5%;
+}
 #getStarted {
   color: white;
   background: #969595
@@ -27,7 +31,9 @@ body {
 }
 #loginButton {
   color: white;
-  background-color: #B02E0C
+  background-color: #B73535;
+  margin: 5px;
+  max-width: 350px;
 }
 
 #loginMessage {

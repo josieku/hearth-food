@@ -68,7 +68,7 @@ export default class Add extends React.Component {
                Add a dish
             </Header>
             <Form size='large'>
-              <Segment stacked>
+              <Segment raised>
                 <Form.Input fluid type="name" icon='window maximize' iconPosition='left' placeholder='Title' onChange={(e)=>this.setState({ title: e.target.value })}/>
                 <Form.Input fluid type="textarea" icon='align justify' iconPosition='left' placeholder='Description' onChange={(e)=>this.setState({ description: e.target.value })}/>
                 <Form.Input fluid type="number" icon='dollar sign' iconPosition='left' placeholder='Price' onChange={(e)=>this.setState({ price: e.target.value })}/>
