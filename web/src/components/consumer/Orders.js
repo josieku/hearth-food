@@ -14,7 +14,7 @@ export default class Main extends Component{
     pending: [],
     scheduled: [],
     history: [],
-    activeItem: "scheduled"
+    activeItem: "Scheduled Orders"
   }
 
   componentDidMount = () => {
@@ -35,10 +35,9 @@ export default class Main extends Component{
   }
 
   segmentDisplay = (item) => {
-    console.log('switched')
-    if(item === "pending") {
+    if(item === "Pending Orders") {
       return <PendingListing pending={this.state.pending} cancel={this.cancel}/>
-    } else if (item === "scheduled") {
+    } else if (item === "Scheduled Orders") {
         return <ScheduledListing scheduled={this.state.scheduled} cancel={this.cancel}/>
     } else {
       return <HistoryListing pastOrders={this.state.history}/>
@@ -46,7 +45,6 @@ export default class Main extends Component{
   };
 
   handleClick = (e, { name }) => {
-    console.log("CLICKED")
     this.setState({activeItem: name})
   }
 
@@ -56,9 +54,9 @@ export default class Main extends Component{
     return(
       <div>
             <Menu fluid tabular>
-              <Menu.Item name="scheduled Orders" active={activeItem === "scheduled"} onClick={this.handleClick} />
-              <Menu.Item name="pending orders" active={activeItem === "pending"} onClick={this.handleClick} />
-              <Menu.Item name="past Orders" active={activeItem === "past"} onClick={this.handleClick} />
+              <Menu.Item name="Scheduled Orders" active={activeItem === "Scheduled Orders"} onClick={this.handleClick} />
+              <Menu.Item name="Pending Orders" active={activeItem === "Pending Orders"} onClick={this.handleClick} />
+              <Menu.Item name="Past Orders" active={activeItem === "Past Orders"} onClick={this.handleClick} />
             </Menu>
             <Segment>
               {this.segmentDisplay(this.state.activeItem)}

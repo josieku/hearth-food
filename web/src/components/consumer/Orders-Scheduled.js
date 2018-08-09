@@ -22,7 +22,7 @@ export default class ScheduledListing extends Component{
         <ul style={{listStyleType: "none"}}>
           {this.props.scheduled.length > 0
             ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind, this.props.cancel))
-            : 'No pending requests, order more!!'}
+            : 'No scheduled requests, order more!!'}
         </ul>
       </div>
     )
