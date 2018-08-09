@@ -33,4 +33,18 @@ router.get('/:id/recent', (req, res) => {
          })
 })
 
+router.post('/:id/edit', (req, res) => {
+  const updates = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    password: req.body.password,
+    email: req.body.email,
+    phone: req.body.phone,
+    picture: req.body.picture
+  }
+
+  User.findByIdAndUpdate(req.params.id, updates)
+      .then(user => {console.log(user); res.json(user)})
+})
+
 export default router;

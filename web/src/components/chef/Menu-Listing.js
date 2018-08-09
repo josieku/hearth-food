@@ -23,8 +23,8 @@ function MenuListItem(item) {
 
 export default class MenuListing extends Component{
   state = {
-    activeItem: this.props.menu[0].title,
-    shownRecipe: this.props.menu[0]
+    activeItem: this.props.menu.length >0 ? this.props.menu[0].title : null,
+    shownRecipe: this.props.menu.length > 0 ? this.props.menu[0] : null
   }
   handleClick = (item) => {
     this.setState({shownRecipe: item, activeItem: item.title})
@@ -37,24 +37,24 @@ export default class MenuListing extends Component{
         <h2>Menu
           <Button><Link to='/dashboard/menu/add'>Add a Dish</Link></Button>
         </h2>
-        <Grid columns={2}>
-          <Grid.Column width={4}>
-            <Menu fluid vertical tabular>
-              {this.props.menu.map(item =>
-                <Menu.Item name={item.title} key={item._id}
-                  active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>
-              )}
-            </Menu>
-          </Grid.Column>
-          <Grid.Column stretched width={12}>
-            <Segment>
-          {/* <ul style={{listStyleType: "none"}}>
-            {this.props.menu.length > 0 ? this.props.menu.map(MenuListItem): 'Empty menu :(  Add dishes now!'}
-          </ul> */}
-          {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
-        </Segment>
-        </Grid.Column>
-        </Grid>
+        { this.props.menu.length > 0
+          ? <Grid columns={2}>
+            <Grid.Column width={4}>
+              <Menu fluid vertical tabular>
+                {this.props.menu.length > 0
+                  ? this.props.menu.map(item =>
+                    <Menu.Item name={item.title} key={item._id}
+                      active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>)
+                  : null}
+              </Menu>
+            </Grid.Column>
+            <Grid.Column stretched width={12}>
+              <Segment>
+                {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
+              </Segment>
+            </Grid.Column>
+          </Grid>
+        : "No meals, add now!" }
       </div>
     )
   }

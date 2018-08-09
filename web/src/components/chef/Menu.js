@@ -27,7 +27,6 @@ export default class Menu extends Component{
 
   saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
-    const availability = "available";
     fetch(`/chef/${this.props.user._id}/menu/add`, {
       method: 'POST',
       headers: {
