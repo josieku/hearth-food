@@ -18,8 +18,8 @@ export default class MealProfile extends Component {
     console.log('mounting');
     fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
-      .then(meal => {
-        this.setState({ meal, chefId: meal.chef._id, times: meal.availability });
+      .then(async meal => {
+        await this.setState({ meal, chefId: meal.chef._id, times: meal.availability });
         console.log(this.state);
       })
   }
@@ -65,8 +65,8 @@ export default class MealProfile extends Component {
         <NavBar user={this.props.user}/>
         <Switch>
           <Route exact path={`/meal/${id}/edit`} render={(props) =>
-            <MealEdit meal={this.state.meal} user={this.props.user}
-              save={this.save} archive={this.archive} {...props}/>}/>
+            <MealEdit meal={this.state.meal} user={this.props.user} save={this.save}
+              id={id} archive={this.archive} {...props}/>}/>
 
           <Route exact path={`/meal/${id}/request`} render={(props) =>
             <MealRequest meal={this.state.meal} user={this.props.user}

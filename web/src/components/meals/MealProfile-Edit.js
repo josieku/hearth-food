@@ -11,8 +11,24 @@ export default class MealEdit extends Component {
   }
 
   componentDidMount(){
-    if (this.props.user._id !== this.state.chef._id){
-      this.props.history.push(`/meal/${this.props.meal._id}`)
+    console.log('in meal edit');
+    if (Object.keys(this.props.meal).length === 0){
+      fetch(`/meal/${this.props.id}`)
+        .then(resp => resp.json())
+        .then(async meal => {
+          console.log('meal', meal)
+          if (this.props.user._id !== meal.chef._id){
+            this.props.history.push(`/meal/${meal._id}`)
+          }
+          await this.setState({
+            title: meal.title,
+            description: meal.description,
+            ingredients: meal.ingredients,
+            price: meal.price,
+            cuisine: meal.cuisine,
+            chef: meal.chef
+          })
+        })
     }
   }
 
