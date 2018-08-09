@@ -20,7 +20,6 @@ export default class PendingListing extends Component{
   render(){
     return(
       <div>
-        <h2>Pending</h2>
         <ul style={{listStyleType: "none"}}>
           {this.props.pending.length > 0
             ? this.props.pending.map((item, ind) => PendingItem(item, ind, this.props.cancel))

@@ -48,9 +48,6 @@ export default class MenuListing extends Component{
           </Grid.Column>
           <Grid.Column stretched width={12}>
             <Segment>
-          {/* <ul style={{listStyleType: "none"}}>
-            {this.props.menu.length > 0 ? this.props.menu.map(MenuListItem): 'Empty menu :(  Add dishes now!'}
-          </ul> */}
           {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
         </Segment>
         </Grid.Column>
