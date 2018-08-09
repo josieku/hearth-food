@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-
-function HistoryItem(item, index) {
+import { Divider, Item } from 'semantic-ui-react'
+function HistoryItem(item, bool) {
   return (
-    <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
-      <p>Chef: {item.chef.firstName}</p>
-      <p>Meal: {item.meal.title}</p>
-      <p>Pickup Time: {item.time}</p>
-      <p>Requests: {item.requests ? item.requests : 'None'}</p>
-    </li>
+    <Item key={item._id} className="request-list-item">
+      <Item.Header>Chef: {item.chef.firstName}</Item.Header>
+      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
+      <Item.Extra>Pickup Time: {item.time}</Item.Extra>
+      <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
+      {bool ? <Divider/> : null}
+    </Item>
   )
 }
 
@@ -16,10 +17,10 @@ export default class HistoryListing extends Component{
   render(){
     return(
       <div>
-        <h2>Previous Orders</h2>
         <ul style={{listStyleType: "none"}}>
-          {this.props.history.length > 0
-            ? this.props.history.map((item, ind) => HistoryItem(item, ind))
+          {this.props.pastOrders.length > 0
+            ? this.props.pastOrders.map((item, ind) =>
+                HistoryItem(item, ind < this.props.pastOrders.length-1))
             : 'No previous orders... Order more!'}
         </ul>
       </div>

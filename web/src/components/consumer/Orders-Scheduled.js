@@ -19,7 +19,6 @@ export default class ScheduledListing extends Component{
   render(){
     return(
       <div>
-        <h2>Scheduled</h2>
         <ul style={{listStyleType: "none"}}>
           {this.props.scheduled.length > 0
             ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind, this.props.cancel))
