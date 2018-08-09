@@ -53,7 +53,7 @@ export default class Menu extends Component{
           <Route exact path='/dashboard/menu/add' render={(props) =>
             <Add save={this.saveDish} {...props}/>}/>
 
-          <Route exact path="/dashboard/menu" render={(props) =>
+          <Route path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id}
                          menu={this.state.menu} {...props}/>}/>
 
