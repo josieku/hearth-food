@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
 
 function OneReview(review){
   return (
@@ -46,7 +47,7 @@ function requestEditButton(user, chef, meal) {
     }
   }
 
-  return <button><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></button>
+  return <Button size="mini"><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></Button>
 }
 
 function timeslots(timeObj) {
@@ -65,23 +66,43 @@ export default class MealView extends Component {
     const user = this.props.user;
     console.log(meal)
     return(
-      <div>
-        <p>Meal Profile</p>
-        {meal.archived ? <h1>This meal has been archived</h1> : null}
-        <h4>{meal.title}</h4>
-        <img src={meal.picture}/>
-        {requestEditButton(user, chef, meal)}
-        <p><strong>Available Times: </strong></p>
-        {this.props.times.map(timeslots)}
-        <p>Price: <strong>{meal.price}</strong></p>
-        <p><strong>Cuisine: </strong></p>
-        <p>{meal.cuisine}</p>
-        <p><strong>Description:</strong></p>
-        <p>{meal.description}</p>
-        <p><strong>Ingredients:</strong></p>
-        <p>{meal.ingredients}</p>
-        <p><strong>Reviews:</strong></p>
-        <Reviews list={meal.reviews}/>
+      <div className="main">
+        <Header as='h2'>Meal Profile</Header>
+        <Segment>
+          <Grid>
+            {meal.archived ? <h1>This meal has been archived</h1> : null}
+            <Grid.Row>
+              <img src={meal.picture}/>
+              <Header as='h3'>{meal.title}</Header>
+              {requestEditButton(user, chef, meal)}
+            </Grid.Row>
+            <Grid.Row>
+              <p><strong>Available Times: </strong></p>
+            </Grid.Row>
+            <Grid.Row>
+              {this.props.times.map(timeslots)}
+            </Grid.Row>
+            <Grid.Row>
+              <p><strong>Price:</strong>{meal.price}</p>
+            </Grid.Row>
+            <Grid.Row>
+              <p><strong>Cuisine: </strong></p>
+              <p>{meal.cuisine}</p>
+            </Grid.Row>
+            <Grid.Row>
+              <p><strong>Description:</strong></p>
+              <p>{meal.description}</p>
+            </Grid.Row>
+            <Grid.Row>
+              <p><strong>Ingredients:</strong></p>
+              <p>{meal.ingredients}</p>
+            </Grid.Row>
+            <Grid.Row>
+              <p><strong>Reviews:</strong></p>
+              <Reviews list={meal.reviews}/>
+            </Grid.Row>
+          </Grid>
+        </Segment>
       </div>
     )
   }
