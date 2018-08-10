@@ -81,17 +81,18 @@ function requestEditButton(user, chef, meal) {
   if (user._id === chef._id){
     return (
       <div>
-        <button><Link to={`/meal/${meal._id}/edit`}>Edit meal</Link></button>
-        <button><Link to={`/meal/${meal._id}/setavailable`}>Set Availability</Link></button>
+        <Button><Link to={`/meal/${meal._id}/edit`}>Edit meal</Link></Button>
+        <Button><Link to={`/meal/${meal._id}/setavailable`}>Set Availability</Link></Button>
       </div>
     )
   }
 
   for (var ind in user.orders){
     if (user.orders[ind]===meal._id){
-      return <button>Cancel request</button>
+      return <Button>Cancel request</Button>
     }
   }
+  return <div><Button size="mini" href='`/meal/${meal._id}/request`' float='right'>Request this meal</Button></div>
 }
 
 function timeslots(timeObj, mealId) {
@@ -117,9 +118,16 @@ export default class MealView extends Component {
     return(
       <div className="main">
         <Segment>
-          <Grid>
+          <Grid columns={2}>
             {meal.archived ? <h1>This meal has been archived</h1> : null}
+            <Grid.Column width={8}>
             <Grid.Row>
+              <Header as='h3' floated='left'>{meal.title}</Header>
+                <Header as='h4' floated='right'><strong>Price:</strong>${meal.price}</Header>
+            <br/>
+            </Grid.Row>
+            <Grid.Row>
+                {requestEditButton(user, chef, meal)}
               <img src={meal.picture}/>
               <Header as='h3'>{meal.title}</Header>
             </Grid.Row>
@@ -144,9 +152,6 @@ export default class MealView extends Component {
               : <p>No available pick up times, check again later</p>
             }
             <Grid.Row>
-              <p><strong>Price:</strong>{meal.price}</p>
-            </Grid.Row>
-            <Grid.Row>
               <p><strong>Cuisine: </strong></p>
               <p>{meal.cuisine}</p>
             </Grid.Row>
@@ -158,12 +163,19 @@ export default class MealView extends Component {
               <p><strong>Ingredients:</strong></p>
               <p>{meal.ingredients}</p>
             </Grid.Row>
+          </Grid.Column>
+          <Grid.Column width={8}>
+            <Grid.Row>
+              <img src={meal.picture}/>
+              <p><strong>Reviews:</strong></p>
+              <Reviews list={meal.reviews}/>
             <AddReview mealId={meal._id} user={user}
               verified={this.props.verified} add={this.props.add}/>
             <Grid.Row>
               <p><strong>Reviews: </strong></p>
               <Reviews list={this.props.reviews}/>
             </Grid.Row>
+          </Grid.Column>
           </Grid>
         </Segment>
       </div>

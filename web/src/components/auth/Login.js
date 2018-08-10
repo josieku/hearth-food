@@ -46,7 +46,7 @@ export default class Login extends React.Component {
 
   render() {
     return(
-      <div className='login-form'>
+      <div className='main'>
         <NavBar user={null}/>
         <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450 }}>
