@@ -20,7 +20,7 @@ export default class Review extends Component {
 
   render(){
     const id = this.props.id
-    console.log(this.state.meal)
+    // console.log(this.state.meal)
     return(
       <div>
         <NavBar user={this.props.user}/>

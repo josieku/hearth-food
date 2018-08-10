@@ -13,13 +13,6 @@ export default class Menu extends Component{
   }
 
   componentDidMount = () => {
-    // if user does not exist, redirects user back to login page
-    // if (Object.keys(this.props.user).length===0){
-    //   this.props.history.push('/auth/login');
-    // } else if (this.props.user._id !== this.props.id){
-    //   this.props.history.goBack();
-    // }
-    // else fetch the profile of the chef
     fetch(`/chef/${this.props.id}`)
       .then(response => response.json())
       .then(profile => this.setState({ profile, menu: profile.menu }))
@@ -45,7 +38,6 @@ export default class Menu extends Component{
   }
 
   render(){
-    console.log('in chef landing');
     const profile = this.state.profile;
     return(
       <div>
@@ -55,7 +47,7 @@ export default class Menu extends Component{
 
           <Route path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id}
-                         menu={this.state.menu} {...props}/>}/>
+                         menu={this.state.menu.filter(item=>!item.archived)} {...props}/>}/>
 
         </Switch>
       </div>

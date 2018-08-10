@@ -223,8 +223,8 @@ var requestsSchema = mongoose.Schema({
     type: String
   },
   time: {
-    type: Date,
-    required: true
+    type: mongoose.Schema.ObjectId,
+    ref: 'Availability'
   },
   accepted: {
     type: Boolean,
@@ -295,6 +295,19 @@ var availabilitySchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  time: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  orders: {
+    type: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Request'
+      }
+    ]
   }
 })
 
