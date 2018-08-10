@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Divider, Item } from 'semantic-ui-react'
+import { Divider, Item } from 'semantic-ui-react';
 function HistoryItem(item, bool) {
   return (
     <Item key={item._id} className="request-list-item">

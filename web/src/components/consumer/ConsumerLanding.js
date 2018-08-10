@@ -24,7 +24,7 @@ export default class ConsumerLanding extends Component{
   render(){
     const user = this.props.user
     return(
-      <div style={{padding: '2%'}}>
+      <div className="main">
         <NavBar user={user} logout={this.props.logout}/>
         <Switch>
           <Route exact path="/dashboard/orders" render={(props)=> <Orders user={user} {...props} />}/>

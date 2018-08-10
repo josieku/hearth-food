@@ -92,7 +92,7 @@ export default class Listings extends Component{
 
   render(){
     return(
-      <div style={{padding: '2%'}}>
+      <div className="main">
         <h1>MEALS</h1>
         <Grid columns={2} padded="vertically">
           <Grid.Column>

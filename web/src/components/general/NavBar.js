@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Menu, Container } from 'semantic-ui-react';
+import { Container, Dropdown, Menu } from 'semantic-ui-react';
 import './../../../public/index.css'
 
 export default class NavBar extends Component {
   state = {
-    activeItem: 'messages',
+    activeItem: 'Dashboard',
   }
-
-  handleItemClick = (e, { name }) => this.setState({activeItem: name});
 
   logout = () => {
     this.props.logout();
@@ -18,49 +16,45 @@ export default class NavBar extends Component {
     const { activeItem } = this.state
     if (role === "consumer") {
       return (
-        <div style={{ marginLeft: '1em'}}>
-          <Menu text id='navBar'>
-            <Container>
-              <Link to="/dashboard" >
-                <Menu.Item name='Dashboard' active={ activeItem === 'dashboard'} />
-              </Link>
-              <Link to="/dashboard/orders" >
-                <Menu.Item name='Orders' active={ activeItem === 'orders'} />
-              </Link>
-              <Link to="/messages">
-                <Menu.Item name='Messages' active={ activeItem === 'messages'} />
-              </Link>
-              <Link to={`/user/${id}`}>
-                <Menu.Item name='Profile' active={ activeItem === 'profile'} />
-              </Link>
-              <Link to='/auth/logout'>
-                <Menu.Item name='Logout' active={ activeItem === 'logout'}/>
-              </Link>
-            </Container>
+        <div>
+          <Menu text>
+          <h2>hearth-EAT</h2>
+          <Menu.Menu text id='navBar' position='right'>
+                <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
+                <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
+                <Menu.Item name='Messages' href='/messages' active={ activeItem === 'Messages'}  onClick={()=>{this.setState({activeItem: 'Messages'})}}/>
+                <Menu.Item>
+              <Dropdown icon={'user'}>
+                <Dropdown.Menu>
+                  <Dropdown.Item><Link to={`/user/${id}`}>Profile</Link></Dropdown.Item>
+                <Dropdown.Item><Link to='/auth/logout'>Logout</Link></Dropdown.Item>
+                <Dropdown.Item></Dropdown.Item>
+              </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>
+          </Menu.Menu>
           </Menu>
         </div>
       )
     } else if (role === "chef") {
       return (
         <div>
-          <Menu text id='navBar'>
-            <Container>
-              <Link to='/dashboard'>
-                <Menu.Item name='Dashboard' active={ activeItem === 'dashboard'} />
-              </Link>
-              <Link to='/dashboard/menu'>
-                <Menu.Item name='Menu' active={ activeItem === 'consumer'} />
-              </Link>
-              <Link to={`/dashboard/history`}>
-                <Menu.Item name='History' active={ activeItem === 'history'} />
-              </Link>
-              <Link to={`/user/${id}`}>
-                <Menu.Item name='Profile' active={ activeItem === 'profile'} />
-              </Link>
-              <Link to='/auth/logout'>
-                <Menu.Item name='Logout'/>
-              </Link>
-            </Container>
+          <Menu text>
+            <h2> hearth-EAT </h2>
+          <Menu.Menu  id='navBar' position='right'>
+                <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'dashboard'}  onClick={this.handleClick}/>
+                <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'consumer'}  onClick={this.handleClick}/>
+                <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'history'}  onClick={this.handleClick}/>
+                <Menu.Item>
+              <Dropdown icon={'user'}>
+                <Dropdown.Menu>
+                <Dropdown.Item><Link to={`/user/${id}`}>Profile</Link></Dropdown.Item>
+                <Dropdown.Item><Link to='/auth/logout'>Logout</Link></Dropdown.Item>
+                <Dropdown.Item></Dropdown.Item>
+              </Dropdown.Menu>
+              </Dropdown>
+            </Menu.Item>
+          </Menu.Menu>
           </Menu>
         </div>
       )
@@ -70,16 +64,16 @@ export default class NavBar extends Component {
           <Menu text id='navBar'>
             <Container>
               <Link to='/'>
-                <Menu.Item name='About' active={ activeItem === 'about'} />
+                <Menu.Item name='About' active={ activeItem === 'about'}  onClick={this.handleClick}/>
               </Link>
               <Link to='/'>
-                <Menu.Item name='Become a Chef' active={ activeItem === 'becomeChef'} />
+                <Menu.Item name='Become a Chef' active={ activeItem === 'becomeChef'}  onClick={this.handleClick}/>
               </Link>
               <Link to='/auth/signup'>
-                <Menu.Item name='Sign up' active={ activeItem === 'signup'} />
+                <Menu.Item name='Sign up' active={ activeItem === 'signup'}  onClick={this.handleClick}/>
               </Link>
               <Link to='/auth/login'>
-                <Menu.Item name='Log In' active={ activeItem === 'logIn'} />
+                <Menu.Item name='Log In' active={ activeItem === 'logIn'}  onClick={this.handleClick}/>
               </Link>
             </Container>
           </Menu>
@@ -88,6 +82,7 @@ export default class NavBar extends Component {
     }
   }
   render(){
+    console.log(this.state.activeItem);
     return (
       <div className="flex-container">
           {this.props.user === null ? this.nav(null, null) : this.nav(this.props.user.role, this.props.user._id)}

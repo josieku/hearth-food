@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Divider, Item } from 'semantic-ui-react';
 
-function ScheduledItem(item, index, cancel) {
+function ScheduledItem(item, bool, index, cancel) {
   return (
-    <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
-      <p>Chef: {item.chef.firstName}</p>
-      <p>Meal: {item.meal.title}</p>
-      <p>Pickup Time: {item.time}</p>
-      <p>Requests: {item.requests ? item.requests : 'None'}</p>
+    <Item key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
+      <Item.Header>Chef: {item.chef.firstName}</Item.Header>
+      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
+      <Item.Extra>Pickup Time: {item.time}</Item.Extra>
+      <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
       {item.accepted
         ? <button disabled>Cancel</button>
         : <button onClick={() => cancel(item._id, index)}>Cancel</button> }
-    </li>
+        {bool ? <Divider/> : null}
+    </Item>
   )
 }
 
@@ -21,7 +23,7 @@ export default class ScheduledListing extends Component{
       <div>
         <ul style={{listStyleType: "none"}}>
           {this.props.scheduled.length > 0
-            ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind, this.props.cancel))
+            ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind < this.props.pastOrders.length-1, ind, this.props.cancel))
             : 'No scheduled requests, order more!!'}
         </ul>
       </div>
