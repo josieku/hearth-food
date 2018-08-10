@@ -14,7 +14,7 @@ export default class ChefLanding extends Component{
   render(){
     const user = this.props.user;
     return(
-      <div>
+      <div className='main'>
         <NavBar user={user} logout={this.props.logout}/>
         <Switch>
           <Route path="/dashboard/menu" render={(props)=> <Menu user={user} {...props} />}/>

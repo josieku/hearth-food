@@ -65,7 +65,7 @@ export default class Main extends Component{
   render(){
     const profile = this.state.profile;
     return(
-      <div style={{marginLeft: '20px', marginRight: '20px'}}>
+      <div>
         <p>Chef Landing - Main</p>
         <Grid columns={2} >
           <Grid.Column width={8} >
@@ -75,7 +75,6 @@ export default class Main extends Component{
               setOrders={this.setOrders}
               orders={this.state.orders} />
             </Grid.Column>
-            <Divider vertical style={{justifyContents: 'center'}}/>
             <Grid.Column width={8}>
               <RequestListing
                 chefId={profile._id}
