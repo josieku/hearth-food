@@ -19,16 +19,24 @@ router.get('/:id', (req, res) => {
   Meal.findById(req.params.id)
       .populate('chef')
       .populate('availability')
-      // .populate('reviews')
+      .populate({ path: 'reviews', populate: { path: 'author'}})
       .exec()
-      .then(meal => {console.log(meal); res.json(meal)})
-      .catch(err => console.error(err))
+      .then(meal => res.json(meal))
+      .catch(err => console.error('get error', err))
 })
 
 router.get('/:id/available', (req, res) => {
-  console.log('fetching available');
   Available.find({ 'meal': req.params.id, 'passed': false })
            .then(available => {console.log(available); res.json(available)})
+})
+
+router.get('/:id/review', (req, res) => {
+  console.log('looking for request');
+  Request.find({ consumer: req.query.user, meal: req.params.id, payment: true, expired: true })
+         .then(request => {
+           console.log('!!! REQUEST !!!', request);
+           res.json(request)
+         });
 })
 
 router.post('/:id/save', (req, res) => {
@@ -46,7 +54,7 @@ router.post('/:id/save', (req, res) => {
       .populate('chef')
       .exec()
       .then(meal => {console.log('!!!!!updated meal!!!!', meal); res.json(meal)})
-      .catch(err => console.error(err))
+      .catch(err => console.error('error here', err))
 })
 
 router.post('/:id/request', (req, res) => {
@@ -142,7 +150,29 @@ router.post('/:id/setavailable', async (req, res) => {
 })
 
 router.post('/:id/review', (req, res) => {
+  const newReview = new Mealreview({
+    meal: req.params.id,
+    body: req.body.content,
+    anonymous: req.body.anon,
+    author: req.body.userId,
+    date: req.body.date,
+    rating: req.body.rating
+  })
 
+  newReview.save().then(review => {
+    Meal.findById(req.params.id)
+        .then(meal => {
+          const reviews = meal.reviews ? meal.reviews.slice() : [];
+          const reviewLength = reviews.length;
+          const overallRating = ((meal.overallRating * reviewLength) + review.rating)/(reviewLength+1);
+
+          reviews.push(review._id);
+          meal.reviews = reviews;
+          meal.overallRating = overallRating;
+          meal.save();
+        })
+    res.json(review);
+  });
 })
 
 router.delete('/:id/setavailable', (req, res) => {
