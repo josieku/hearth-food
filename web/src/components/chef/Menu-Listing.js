@@ -5,8 +5,7 @@ import { Button, Grid, Menu, Segment } from 'semantic-ui-react';
 function MenuListItem(item) {
   return (
     <div className="menu-list-item">
-      {/* <Link to={`/meal/${item._id}`}><p><strong>{item.title}</strong></p></Link> */}
-      <p><strong>{item.title}</strong></p>
+      <Link to={`/meal/${item._id}`}><p><strong>{item.title}</strong></p></Link>
       {item.archived ? <h1>Meal Archived </h1> : null}
       <p>Description: {item.description}</p>
       <p>Ingredients: {item.ingredients}</p>
@@ -15,8 +14,6 @@ function MenuListItem(item) {
       <p>Reviews</p>
       <p>Status: {item.status}</p>
       <Link to={`/meal/${item._id}/edit`}>Edit</Link>
-      {/* <Link to={`/meal/${item.}`}>View orders</Link> */}
-      {/* <Link to={`/meal/${item._id}/archive`}>Archive</Link> */}
     </div>
   )
 }
@@ -35,7 +32,8 @@ export default class MenuListing extends Component{
     return (
       <div>
         <h2>Menu
-          <Button><Link to='/dashboard/menu/add'>Add a Dish</Link></Button>
+          <Link to='/dashboard/menu/add'><Button>Add a Dish</Button></Link>
+          <Link to='/dashboard/menu/archived'><Button>See Archived Meals</Button></Link>
         </h2>
         { this.props.menu.length > 0
           ? <Grid columns={2}>

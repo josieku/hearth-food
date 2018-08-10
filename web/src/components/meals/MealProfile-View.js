@@ -47,14 +47,19 @@ function requestEditButton(user, chef, meal) {
     }
   }
 
-  return <Button size="mini"><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></Button>
+  return <div><Button size="mini"><Link to={`/meal/${meal._id}/request`}>Request this meal</Link></Button></div>
 }
 
-function timeslots(timeObj) {
+function timeslots(timeObj, mealId) {
+  const path=`/meal/${mealId}/request?time=${timeObj.time}`
   return(
-    <div style={{border: "1px solid black"}}>
-      <p>Date: {new Date(timeObj.date).toDateString()}</p>
-      <p>Time: {timeObj.start} to {timeObj.end}</p>
+    <div>
+      <Link to={path}>
+        <Button>
+          <p>{new Date(timeObj.date).toDateString()}</p>
+          <p>{timeObj.start} to {timeObj.end}</p>
+        </Button>
+      </Link>
     </div>
   )
 }
@@ -64,7 +69,7 @@ export default class MealView extends Component {
     const meal = this.props.meal;
     const chef = Object.assign({}, meal.chef);
     const user = this.props.user;
-    console.log(meal)
+    // console.log(meal)
     return(
       <div className="main">
         <Header as='h2'>Meal Profile</Header>
@@ -74,14 +79,24 @@ export default class MealView extends Component {
             <Grid.Row>
               <img src={meal.picture}/>
               <Header as='h3'>{meal.title}</Header>
-              {requestEditButton(user, chef, meal)}
+              <div>
+                {requestEditButton(user, chef, meal)}
+              </div>
             </Grid.Row>
-            <Grid.Row>
-              <p><strong>Available Times: </strong></p>
-            </Grid.Row>
-            <Grid.Row>
-              {this.props.times.map(timeslots)}
-            </Grid.Row>
+            { this.props.times.length > 0
+              ?
+              <div>
+                <Grid.Row>
+                  <p><strong>Available Pick Up Times: </strong></p>
+                </Grid.Row>
+                <Grid.Row>
+                  {meal.archived
+                    ? null
+                    : this.props.times.map(item=>timeslots(item, meal._id))}
+                </Grid.Row>
+              </div>
+              : <p>No available pick up times, check again later</p>
+            }
             <Grid.Row>
               <p><strong>Price:</strong>{meal.price}</p>
             </Grid.Row>

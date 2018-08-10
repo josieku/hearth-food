@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch, Link } from 'react-router-dom';
+import qs from 'query-string';
 
 import MealView from './MealProfile-View';
 import MealEdit from './MealProfile-Edit';
@@ -15,12 +16,10 @@ export default class MealProfile extends Component {
   }
 
   componentDidMount = () => {
-    console.log('mounting');
     fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
       .then(async meal => {
         await this.setState({ meal, chefId: meal.chef._id, times: meal.availability });
-        console.log(this.state);
       })
   }
 
@@ -53,13 +52,23 @@ export default class MealProfile extends Component {
     .then(meal => this.setState({ meal }))
   }
 
-  setAvailability = (times) => {
-    this.setState({ times })
+  setAvailability = async (times) => {
+    const chefId = this.state.chefId;
+    await fetch(`/meal/${this.props.id}/setavailable`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({ times, chefId }),
+    })
+    .then(resp => resp.json())
+    .then(times => { console.log(times); this.setState({ times }) })
   }
 
   render(){
     const id = this.props.id
-    console.log(this.state.meal)
+    // console.log(this.state.meal)
     return(
       <div>
         <NavBar user={this.props.user}/>
@@ -70,7 +79,9 @@ export default class MealProfile extends Component {
 
           <Route exact path={`/meal/${id}/request`} render={(props) =>
             <MealRequest meal={this.state.meal} user={this.props.user}
-              times={this.props.times} {...props}/>}/>
+              times={this.state.times}
+               result={parseInt(qs.parse(props.location.search).time)}
+               {...props}/>}/>
 
           <Route exact path={`/meal/${id}/setavailable`} render={(props) =>
             <MealAvailability meal={this.state.meal} mealId={id}

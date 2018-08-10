@@ -7,6 +7,7 @@ var Meal = require('../models/models').Meal;
 var Request = require('../models/models').Request;
 var User = require('../models/models').User;
 var Available = require('../models/models').Available;
+var Mealreview = require('../models/models').Mealreview;
 
 router.get('/listings', (req, res) => {
   Meal.find({archived: false})
@@ -80,6 +81,14 @@ router.post('/:id/request', (req, res) => {
       meal.orders = tempOrders;
       meal.save();
     })
+
+    Available.findById(req.body.time._id).then(available => {
+      const orders = available.orders.slice();
+      orders.push(saved._id);
+      available.orders = orders;
+      available.save();
+    })
+
   }).then(e => res.send('requested'))
   console.log('meal requested');
 })
@@ -89,36 +98,64 @@ router.post('/:id/archive', (req, res) => {
       .then(archived => res.json(archived))
 })
 
-router.post('/:id/setavailable', (req, res) => {
-  if (req.body.availableId){
-    const updates = {
-      date: req.body.date,
-      start: req.body.start,
-      end: req.body.end
+router.post('/:id/setavailable', async (req, res) => {
+  console.log('times', req.body.times)
+  const availability = await Promise.all(req.body.times.map(async item => {
+    const date= new Date(item.date);
+    const start = item.start.split(':');
+    const timeLong = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+                     parseInt(start[0]), parseInt(start[1]), 0, 0 ).getTime()
+    console.log('itemid', item._id);
+    let final = {};
+    if (item._id || item.availableId){
+      const id = item._id || item.availableId;
+      const updates = {
+        date: item.date,
+        start: item.start,
+        end: item.end,
+        time: timeLong
+      }
+      await Available.findByIdAndUpdate(id, updates, {new: true})
+               .then(available => {final = available});
+    } else {
+      console.log('new item')
+      const tempAvailable = new Available({
+        meal: req.params.id,
+        chef: req.body.chefId,
+        date: item.date,
+        start: item.start,
+        end: item.end,
+        time: timeLong
+      })
+
+      await tempAvailable.save().then(available => {final = available});
     }
-    Available.findByIdAndUpdate(req.body.availableId, updates)
-             .then(available => res.json(available));
+    console.log('final', final)
+    return final
+  }))
 
-  } else{
-    const tempAvailable = new Available({
-      meal: req.body.mealId,
-      chef: req.body.chefId,
-      date: req.body.date,
-      start: req.body.start,
-      end: req.body.end,
-    })
+  await Meal.findByIdAndUpdate(req.params.id, { availability }, {new: true})
+      .populate('availability')
+      .exec()
+      .then(meal => {res.json(meal.availability.filter(item=>item.time > Date.now()))});
 
-    tempAvailable.save().then(available => {
-      Meal.findByIdAndUpdate(req.body.mealId)
-          .then(meal => {
-            const availability = meal.availability.slice();
-            availability.push(available._id);
+})
 
-            meal.availability = availability;
-            meal.save().then(e => res.json(available));
-          })
-    })
-  }
+router.post('/:id/review', (req, res) => {
+
+})
+
+router.delete('/:id/setavailable', (req, res) => {
+  Available.findByIdAndDelete(req.body.availableId)
+           .then(e =>{console.log('deleted'); res.send('deleted')})
+
+  Meal.findById(req.params.id)
+      .then(meal => {
+        const temp = meal.availability;
+        temp.filter(item => item._id!==req.body.availableId);
+        meal.availability = temp;
+        meal.save()
+      })
 })
 
 export default router;
