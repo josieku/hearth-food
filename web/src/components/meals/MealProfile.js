@@ -13,14 +13,52 @@ export default class MealProfile extends Component {
     meal: {},
     chefId: "",
     times: [],
+    verified: false,
+    reviews: []
   }
 
   componentDidMount = () => {
     fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
       .then(async meal => {
-        await this.setState({ meal, chefId: meal.chef._id, times: meal.availability });
+        await this.setState({
+          meal,
+          chefId: meal.chef._id,
+          times: meal.availability,
+          reviews: meal.reviews ? meal.reviews : []
+         });
+        console.log('after mount', this.state)
       })
+
+    fetch(`/meal/${this.props.id}/review?user=${this.props.user._id}`)
+      .then(resp => resp.json())
+      .then(async request => {
+        if (Object.keys(request).length > 0){
+          await this.setState({ verified: true })
+        }
+      })
+  }
+
+  addReview = (content, anon, rating) => {
+    const userId = this.props.user._id;
+    const date = Date.now();
+    fetch(`/meal/${this.props.id}/review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({
+        userId, content, anon, rating, date
+      }),
+    })
+    .then(resp => resp.json())
+    .then(review => {
+      const reviews = this.state.reviews.slice();
+      reviews.push(review);
+      this.setState({ reviews })
+    })
+
   }
 
   save = (title, description, ingredients, price, cuisine) => {
@@ -70,7 +108,7 @@ export default class MealProfile extends Component {
     const id = this.props.id
     // console.log(this.state.meal)
     return(
-      <div>
+      <div className="main">
         <NavBar user={this.props.user}/>
         <Switch>
           <Route exact path={`/meal/${id}/edit`} render={(props) =>
@@ -88,9 +126,9 @@ export default class MealProfile extends Component {
               set={this.setAvailability} user={this.props.user} {...props}/>}/>
 
           <Route path={`/meal/${id}`} render={(props)=>
-            <MealView meal={this.state.meal}
-              times={this.state.times}
-              user={this.props.user} {...props}/> }/>
+            <MealView meal={this.state.meal} reviews={this.state.reviews}
+              times={this.state.times} verified={this.state.verified}
+              user={this.props.user} add={this.addReview} {...props}/> }/>
         </Switch>
       </div>
     )
