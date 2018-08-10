@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Container, Dropdown, Menu } from 'semantic-ui-react';
+import { Dropdown, Header, Menu } from 'semantic-ui-react';
 import './../../../public/index.css'
 
 export default class NavBar extends Component {
@@ -26,9 +26,8 @@ export default class NavBar extends Component {
                 <Menu.Item>
               <Dropdown icon={'user'}>
                 <Dropdown.Menu>
-                  <Dropdown.Item><Link to={`/user/${id}`}>Profile</Link></Dropdown.Item>
-                <Dropdown.Item><Link to='/auth/logout'>Logout</Link></Dropdown.Item>
-                <Dropdown.Item></Dropdown.Item>
+                  <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
+                  <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
               </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
@@ -40,17 +39,16 @@ export default class NavBar extends Component {
       return (
         <div>
           <Menu text>
-            <h2> hearth-EAT </h2>
+            <h2> hearth-COOK </h2>
           <Menu.Menu  id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'dashboard'}  onClick={this.handleClick}/>
                 <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'consumer'}  onClick={this.handleClick}/>
                 <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'history'}  onClick={this.handleClick}/>
                 <Menu.Item>
-              <Dropdown icon={'user'}>
+              <Dropdown icon='user' floating className='icon'>
                 <Dropdown.Menu>
-                <Dropdown.Item><Link to={`/user/${id}`}>Profile</Link></Dropdown.Item>
-                <Dropdown.Item><Link to='/auth/logout'>Logout</Link></Dropdown.Item>
-                <Dropdown.Item></Dropdown.Item>
+                <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
+                <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
               </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
@@ -61,21 +59,14 @@ export default class NavBar extends Component {
     } else {
       return (
         <div>
-          <Menu text id='navBar'>
-            <Container>
-              <Link to='/'>
-                <Menu.Item name='About' active={ activeItem === 'about'}  onClick={this.handleClick}/>
-              </Link>
-              <Link to='/'>
-                <Menu.Item name='Become a Chef' active={ activeItem === 'becomeChef'}  onClick={this.handleClick}/>
-              </Link>
-              <Link to='/auth/signup'>
-                <Menu.Item name='Sign up' active={ activeItem === 'signup'}  onClick={this.handleClick}/>
-              </Link>
-              <Link to='/auth/login'>
-                <Menu.Item name='Log In' active={ activeItem === 'logIn'}  onClick={this.handleClick}/>
-              </Link>
-            </Container>
+          <Menu text>
+            <Header as='h2'>hearth</Header>
+          <Menu.Menu id='navBar' position='right'>
+                <Menu.Item name='About' href='/' active={ activeItem === 'about'}  onClick={this.handleClick}/>
+                <Menu.Item name='Become a Chef' href='/' active={ activeItem === 'becomeChef'}  onClick={this.handleClick}/>
+                <Menu.Item name='Sign up' href='/auth/signup' active={ activeItem === 'signup'}  onClick={this.handleClick}/>
+                <Menu.Item name='Log In' href='/auth/login' active={ activeItem === 'logIn'}  onClick={this.handleClick}/>
+              </Menu.Menu>
           </Menu>
         </div>
       )

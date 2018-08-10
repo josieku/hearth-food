@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Divider, Dropdown, Grid, Item, Search } from "semantic-ui-react";
+import { Button, Divider, Dropdown, Grid, Header, Item, Input, Menu, Search } from "semantic-ui-react";
 
 import NavBar from './../general/NavBar'
 
@@ -56,19 +56,19 @@ class Map extends Component {
   }
 };
 
-function filter(){
-  return (
-    <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
-      <Dropdown.Menu>
-        <Dropdown.Header icon='tags' content='Filter by selection' />
-        <Dropdown.Divider />
-        <Dropdown.Item>Important</Dropdown.Item>
-        <Dropdown.Item>Announcement</Dropdown.Item>
-        <Dropdown.Item>Discussion</Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
-  )
-}
+// function filter(){
+//   return (
+//     <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
+//       <Dropdown.Menu>
+//         <Dropdown.Header icon='tags' content='Filter by selection' />
+//         <Dropdown.Divider />
+//         <Dropdown.Item>Important</Dropdown.Item>
+//         <Dropdown.Item>Announcement</Dropdown.Item>
+//         <Dropdown.Item>Discussion</Dropdown.Item>
+//       </Dropdown.Menu>
+//     </Dropdown>
+//   )
+// }
 export default class Listings extends Component{
   state = {
     listings: [],
@@ -93,24 +93,24 @@ export default class Listings extends Component{
   render(){
     return(
       <div className="main">
-        <h1>MEALS</h1>
         <Grid columns={2} padded="vertically">
           <Grid.Column>
             <Grid.Row>
-              <div id="availableMeals">
-                Available Meals
-                <Search />
+              <Menu  text id="availableMeals">
+                <Menu.Item header>Available Meals</Menu.Item>
+                <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+                <Input placeholder='Search...'/>
                     <Dropdown icon='filter' floating button className='icon'>
                       <Dropdown.Menu>
-                        <Dropdown.Header icon='tags' content='Filter by selection' />
+                        <Dropdown.Header content='Filter by selection' />
                         <Dropdown.Divider />
                         <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: High to Low
                         </Dropdown.Item>
                         <Dropdown.Item onClick={()=>{this.sort("low")}}>Price Low to High</Dropdown.Item>
-                        <Dropdown.Item>Discussion</Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
-              </div>
+                  </Menu.Menu>
+              </Menu>
             </Grid.Row>
             <div id="mealList">
               <MealListings listings={this.state.listings}/>

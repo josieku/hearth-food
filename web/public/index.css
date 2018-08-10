@@ -57,3 +57,9 @@ body {
 .conOrderPageHeader {
   background-color: #B73535
 }
+
+/* Profile View Styling */
+
+#profileDetails {
+  text-align: center;
+}
