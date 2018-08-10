@@ -132,7 +132,7 @@ var mealSchema = mongoose.Schema({
   reviews: {
     type: [
       {
-        ref: 'Review',
+        ref: 'Mealreview',
         type: mongoose.Schema.ObjectId
       }
     ]

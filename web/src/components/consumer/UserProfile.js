@@ -38,7 +38,7 @@ export default class ConsumerProfile extends Component{
 
   render(){
     return(
-      <div className='main'>
+      <div className="main">
         <NavBar user={this.props.user}/>
         <Switch>
           <Route exact path='/user/:id' render={(props) =>
