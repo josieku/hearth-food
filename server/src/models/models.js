@@ -311,12 +311,41 @@ var availabilitySchema = mongoose.Schema({
   }
 })
 
+var notificationSchema = mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Accepted Request', 'Changed Request', 'Declined Request',
+    'Expired Request', 'New Request', 'Request Status', 'Changed Profile',
+    'Archived Meal', 'New Review']
+  },
+  meal: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Meal'
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  seen: {
+    type: Boolean,
+    required: true,
+    default: false
+  }
+})
+
 var User = mongoose.model('User', userSchema);
 var Meal = mongoose.model('Meal', mealSchema);
 var Mealreview = mongoose.model('Mealreview', mealReviewSchema);
 var Userreview = mongoose.model('Userreview', userReviewSchema);
 var Request = mongoose.model('Request', requestsSchema);
 var Available = mongoose.model('Available', availabilitySchema);
+// var Allnotif = mongoose.model('Allnotifications', notifAllSchema);
+var Notification = mongoose.model('Notification', notificationSchema);
 
 module.exports = {
   User: User,
@@ -324,5 +353,6 @@ module.exports = {
   Mealreview: Mealreview,
   Userreview: Userreview,
   Request: Request,
-  Available: Available
+  Available: Available,
+  Notification: Notification,
 }

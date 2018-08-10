@@ -25,6 +25,7 @@ class App extends Component {
       user: user,
       landing: true,
       test: 'testing',
+      notifications: []
     };
   }
 
@@ -32,6 +33,17 @@ class App extends Component {
   login = user => {
     localStorage.setItem('user', JSON.stringify(user));
     const loggedin = Object.assign(user);
+
+    // await fetch(`/user/${this.props.user}/notif`)
+    // .then(resp => resp.json())
+    // .then(notifications =>
+    //   this.setState({
+    //     notifications,
+    //     user: Object.assign(user),
+    //     landing: false,
+    //     testing: 'passed'
+    //    }))
+
     this.setState({
       user: Object.assign(user),
       landing: false,

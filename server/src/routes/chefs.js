@@ -6,12 +6,13 @@ const router = Router();
 var User = require('../models/models').User;
 var Meal = require('../models/models').Meal;
 var Request = require('../models/models').Request;
+var Notification = require('../models/models').Notification;
 
 router.get('/:id', (req, res) => {
   User.findOne({role:'chef', _id: req.params.id })
       .populate('requests')
       .exec()
-      .then(user => {console.log(user); res.json(user)})
+      .then(user => res.json(user))
       .catch(err => console.error(err))
 })
 
@@ -30,7 +31,7 @@ router.get('/:id/orders', (req, res) => {
          .populate('consumer')
          .populate('meal')
          .exec()
-         .then(orders => {console.log('orders', orders); res.json(orders)})
+         .then(orders => res.json(orders))
 })
 
 router.get('/:id/history', (req, res) => {
@@ -76,24 +77,50 @@ router.post('/:id/menu/add', (req,res) => {
 router.post('/:id/requests/accept', (req, res) => {
   Request
     .findByIdAndUpdate(req.body.requestId, {accepted: true}, {new: true})
-    .then(request => res.send('request approved'))
+    .populate('meal')
+    .exec()
+    .then(request => {
+      const newNotif = new Notification({
+        type: 'Accepted Request',
+        meal: request.meal._id,
+        content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
+        user: request.consumer,
+        seen: false
+      })
+
+      newNotif.save()
+
+      res.send('request approved');
+    })
 })
 
 router.post('/:id/complete', (req,res) => {
   Request.findByIdAndUpdate(req.body.requestId, { completed: true, expired: true })
-         .then(request => res.json(request))
-})
+         .then(request => {
+           const newNotif = new Notification({
+             type: 'Accepted Request',
+             meal: request.meal._id,
+             content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
+             user: request.consumer,
+             seen: false
+           })
 
-router.post('/:id/changeMode', (req,res) => {
-  User.findById(req.params.id)
-         .then(user => {
-           if (user.role === "chef"){
-             user.role = "consumer";
-           } else if (user.role === "consumer") {
-             user.role = "chef";
-           }
-           user.save().then(user => res.json(user))
+           newNotif.save()
+
+           res.json(request)
          })
 })
+
+// router.post('/:id/changeMode', (req,res) => {
+//   User.findById(req.params.id)
+//          .then(user => {
+//            if (user.role === "chef"){
+//              user.role = "consumer";
+//            } else if (user.role === "consumer") {
+//              user.role = "chef";
+//            }
+//            user.save().then(user => res.json(user))
+//          })
+// })
 
 export default router;

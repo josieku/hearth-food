@@ -8,6 +8,7 @@ var Request = require('../models/models').Request;
 var User = require('../models/models').User;
 var Available = require('../models/models').Available;
 var Mealreview = require('../models/models').Mealreview;
+var Notification = require('../models/models').Notification;
 
 router.get('/listings', (req, res) => {
   Meal.find({archived: false})
@@ -53,7 +54,10 @@ router.post('/:id/save', (req, res) => {
   Meal.findByIdAndUpdate(req.params.id, changes, {new: true})
       .populate('chef')
       .exec()
-      .then(meal => {console.log('!!!!!updated meal!!!!', meal); res.json(meal)})
+      .then(meal => {
+        console.log('!!!!!updated meal!!!!', meal);
+        res.json(meal);
+      })
       .catch(err => console.error('error here', err))
 })
 
@@ -68,7 +72,8 @@ router.post('/:id/request', (req, res) => {
     accepted: false
   })
 
-  newRequest.save().then(saved => {
+  newRequest.save().then(async saved => {
+    let mealTitle;
     User.findById(req.body.consumer).then(consumer => {
       const tempOrders = consumer.orders.slice();
       tempOrders.push(saved._id);
@@ -83,7 +88,8 @@ router.post('/:id/request', (req, res) => {
       chef.save();
     })
 
-    Meal.findById(req.body.meal).then(meal => {
+    await Meal.findById(req.body.meal).then(meal => {
+      mealTitle = meal.title;
       const tempOrders = meal.orders.slice();
       tempOrders.push(saved._id);
       meal.orders = tempOrders;
@@ -97,23 +103,44 @@ router.post('/:id/request', (req, res) => {
       available.save();
     })
 
+    const newNotif = new Notification({
+      type: 'New Request',
+      meal: saved._id,
+      content: `New request for ${mealTitle}.`,
+      user: saved.chef,
+      seen: false
+    })
+
+    await newNotif.save()
   }).then(e => res.send('requested'))
   console.log('meal requested');
 })
 
 router.post('/:id/archive', (req, res) => {
   Meal.findByIdAndUpdate(req.params.id, {archived: true}, {new: true})
-      .then(archived => res.json(archived))
+      .then(archived => {
+        const newNotif = new Notification({
+          type: 'Archived Meal',
+          meal: req.params.id,
+          content: `You have recently archived ${archived.title}.`,
+          user: archived.chef,
+          seen: false
+        })
+
+        newNotif.save()
+
+        res.json(archived);
+      })
 })
 
 router.post('/:id/setavailable', async (req, res) => {
-  console.log('times', req.body.times)
+  // console.log('times', req.body.times)
   const availability = await Promise.all(req.body.times.map(async item => {
     const date= new Date(item.date);
     const start = item.start.split(':');
     const timeLong = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
                      parseInt(start[0]), parseInt(start[1]), 0, 0 ).getTime()
-    console.log('itemid', item._id);
+    // console.log('itemid', item._id);
     let final = {};
     if (item._id || item.availableId){
       const id = item._id || item.availableId;
@@ -126,7 +153,7 @@ router.post('/:id/setavailable', async (req, res) => {
       await Available.findByIdAndUpdate(id, updates, {new: true})
                .then(available => {final = available});
     } else {
-      console.log('new item')
+      // console.log('new item')
       const tempAvailable = new Available({
         meal: req.params.id,
         chef: req.body.chefId,
@@ -138,7 +165,7 @@ router.post('/:id/setavailable', async (req, res) => {
 
       await tempAvailable.save().then(available => {final = available});
     }
-    console.log('final', final)
+    // console.log('final', final)
     return final
   }))
 
@@ -170,6 +197,17 @@ router.post('/:id/review', (req, res) => {
           meal.reviews = reviews;
           meal.overallRating = overallRating;
           meal.save();
+
+          const newNotif = new Notification({
+            type: 'New Review',
+            meal: req.params.id,
+            content: `You wrote a review for ${meal.title}.`,
+            user: req.body.userId,
+            seen: false
+          })
+
+          newNotif.save()
+
         })
     res.json(review);
   });

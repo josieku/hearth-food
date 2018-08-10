@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const User = require('.././models/models').User
+const User = require('.././models/models').User;
+const Notification = require('.././models/models').Notification;
 var mongoose = require('mongoose');
 var connect = process.env.MONGODB_URI;
 mongoose.connect(connect);
@@ -32,7 +33,18 @@ router.post('/signup', function(req,res) {
     picture: req.body.file
   })
   user.save()
-  .then(save =>res.json(save))
+  .then(save =>{
+    const newNotif = new Notification({
+      type: 'Changed Profile',
+      content: `Welcome to hearth, ${save.firstName}!  Please enjoy using our services.`,
+      user: save._id,
+      seen: false,
+    })
+
+    newNotif.save();
+
+    res.json(save)
+  })
   .catch(err => console.log("Error!:"+ err))
 })
 

@@ -6,12 +6,13 @@ const router = Router();
 var User = require('../models/models').User;
 var Meal = require('../models/models').Meal;
 var Request = require('../models/models').Request;
+var Notification = require('../models/models').Notification;
 
 router.get('/:id', (req, res) => {
   User.findById(req.params.id)
       .populate('orders')
       .exec()
-      .then(user => {console.log(user); res.json(user)})
+      .then(user => res.json(user))
       .catch(err => console.error(err))
 })
 
@@ -33,6 +34,12 @@ router.get('/:id/recent', (req, res) => {
          })
 })
 
+router.get('/:id/notif', (req, res) => {
+  Notification.find({ user: req.params.id })
+       .populate('meal')
+       .then(notifications => res.json(notifications));
+})
+
 router.post('/:id/edit', (req, res) => {
   const updates = {
     firstName: req.body.firstName,
@@ -44,7 +51,21 @@ router.post('/:id/edit', (req, res) => {
   }
 
   User.findByIdAndUpdate(req.params.id, updates)
-      .then(user => {console.log(user); res.json(user)})
+      .then(user => res.json(user))
+})
+
+router.post('/:id/notif/markallread', async (req, res) => {
+  await Promise.all(req.body.unseen.map(item => {
+    Notification.findByIdAndUpdate(item, { seen: true })
+                .populate('meal')
+                .then(notification => notification);
+  }))
+
+  console.log('done promise')
+
+  Notification.find({ user: req.params.id })
+              .then(notifications => res.json(notifications))
+
 })
 
 export default router;
