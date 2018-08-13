@@ -1,23 +1,22 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Grid, Menu, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 
 import Edit from './../meals/MealProfile-Edit';
 
 function MenuListItem(item) {
   return (
-    <div className="menu-list-item">
-      <Link to={`/meal/${item._id}`}><p><strong>{item.title}</strong></p></Link>
-      {item.archived ? <h1>Meal Archived </h1> : null}
-      <p>Description: {item.description}</p>
-      <p>Ingredients: {item.ingredients}</p>
-      <p>Price: {item.price}</p>
-      <p>Number of reviews: {item.reviews.length}</p>
-      <p>Reviews</p>
-      <p>Status: {item.status}</p>
-      <Link to={`/meal/${item._id}/edit`}><Button>Edit</Button></Link>
+    <Item className="menu-list-item">
+      <Header href={`/meal/${item._id}`}><p><strong>{item.title}</strong></p></Header>
+      {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
+      <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
+      <Item.Content><strong>Ingredients: </strong>{item.ingredients}</Item.Content>
+      <Item.Content><strong>Price: </strong>{item.price}</Item.Content>
+      <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
+      <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
+      <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
       <Link to={`/meal/${item._id}/setavailable`}><Button>Set Availability</Button></Link>
-    </div>
+    </Item>
   )
 }
 
@@ -34,12 +33,13 @@ export default class MenuListing extends Component{
     // console.log(this.props.menu)
     return (
       <div>
-        <h2>Menu
-          <Link to='/dashboard/menu/add'><Button>Add a Dish</Button></Link>
-          <Link to='/dashboard/menu/archived'><Button>See Archived Meals</Button></Link>
-        </h2>
+        <Header as='h2' id='menuHeader'>Menu <br/>
+          <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
+          <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
+        </Header>
         { this.props.menu.length > 0
-          ? <Grid columns={2}>
+          ? <Segment basic style={{backgroundColor: 'red'}}>
+          <Grid columns={2}>
             <Grid.Column width={4}>
               <Menu fluid vertical tabular>
                 {this.props.menu.length > 0
@@ -50,11 +50,12 @@ export default class MenuListing extends Component{
               </Menu>
             </Grid.Column>
             <Grid.Column stretched width={12}>
-              <Segment>
+              <Segment attached>
                 {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
               </Segment>
             </Grid.Column>
           </Grid>
+        </Segment>
         : "No meals, add now!" }
       </div>
     )
