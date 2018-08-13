@@ -54,7 +54,7 @@ export default class Login extends React.Component {
               Log in to hearth{/* <Image src='/logo.png' /> Log-in to your account */}
             </Header>
             <Form size='large' id="loginForm">
-              <Segment stacked>
+              <Segment raised>
                 <Form.Input
                   fluid icon='user'
                   iconPosition='left'

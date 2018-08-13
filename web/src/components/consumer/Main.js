@@ -58,10 +58,35 @@ class Map extends Component {
 
 function recentCondense(item){
   return (
-    <div key={item._id} style={{border: "1px solid black"}}>
-      <p><strong>Title: </strong>{item.meal.title}</p>
-      <p><strong>Description: </strong>{item.meal.description}</p>
+    // <div key={item._id} style={{border: "1px solid black"}}>
+    //   <p><strong>Title: </strong>{item.meal.title}</p>
+    //   <p><strong>Description: </strong>{item.meal.description}</p>
+      <div id="listItem" key={item.meal._id}>
+        <Item>
+          <Grid columns={2}>
+            <Grid.Column width={12}>
+              <Item.Content>
+                <Link to={`/meal/${item.meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
+                <Item.Header><h2>{item.meal.title}</h2></Item.Header>
+              </Link>
+              <Item.Meta><h4>Description</h4></Item.Meta>
+              <Item.Description>{item.meal.description}</Item.Description>
+              <Item.Extra><h4>Ingredients</h4></Item.Extra>
+              <Item.Extra>{item.meal.ingredients}</Item.Extra>
+            </Item.Content>
+          </Grid.Column>
+          <Grid.Column width={4}>
+            <Item.Content>
+              <Item.Extra><h4>Price per plate</h4></Item.Extra>
+              <Item.Extra>${item.meal.price}</Item.Extra>
+            </Item.Content>
+            <Button size='mini'>Request Again</Button>
+          </Grid.Column>
+        </Grid>
+      </Item>
+      <Divider />
     </div>
+    // </div>
   )
 }
 
@@ -97,7 +122,7 @@ export default class Listings extends Component{
         <Grid columns={2} padded="vertically">
           <Grid.Column>
             <Grid.Row>
-              <Menu  text id="availableMeals">
+              <Menu text id="availableMeals">
                 <Menu.Item header>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                 <Input placeholder='Search...'/>
@@ -121,9 +146,9 @@ export default class Listings extends Component{
               <div id="mapDiv">
                 <Map listings={this.state.listings}/>
               </div>
-              <div id="recentMealHeader">
-                Recent Meals
-              </div>
+              <Menu text id="availableMeals">
+                <Menu.Item header>Recent Meals</Menu.Item>
+              </Menu>
               <div id="listOfRecents">
                 {this.state.recents.map(recentCondense)}
               </div>
