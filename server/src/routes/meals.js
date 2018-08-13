@@ -93,7 +93,7 @@ router.post('/:id/request', (req, res) => {
       const tempOrders = meal.orders.slice();
       tempOrders.push(saved._id);
       meal.orders = tempOrders;
-      meal.save();
+      meal.save()
     })
 
     Available.findById(req.body.time._id).then(available => {
@@ -103,15 +103,20 @@ router.post('/:id/request', (req, res) => {
       available.save();
     })
 
+    let str = `New request for ${mealTitle} on `
+    str += `${new Date(req.body.time.date).toDateString()} at ${req.body.time.start}.`
+
     const newNotif = new Notification({
       type: 'New Request',
-      meal: saved._id,
-      content: `New request for ${mealTitle}.`,
-      user: saved.chef,
-      seen: false
+      meal: req.body.meal,
+      content: str,
+      user: req.body.chef,
+      seen: false,
+      time: Date.now(),
     })
 
-    await newNotif.save()
+    newNotif.save()
+
   }).then(e => res.send('requested'))
   console.log('meal requested');
 })
@@ -124,7 +129,8 @@ router.post('/:id/archive', (req, res) => {
           meal: req.params.id,
           content: `You have recently archived ${archived.title}.`,
           user: archived.chef,
-          seen: false
+          seen: false,
+          time: Date.now()
         })
 
         newNotif.save()
@@ -203,7 +209,8 @@ router.post('/:id/review', (req, res) => {
             meal: req.params.id,
             content: `You wrote a review for ${meal.title}.`,
             user: req.body.userId,
-            seen: false
+            seen: false,
+            time: Date.now()
           })
 
           newNotif.save()

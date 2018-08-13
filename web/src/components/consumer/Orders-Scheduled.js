@@ -19,11 +19,12 @@ function ScheduledItem(item, bool, index, cancel) {
 
 export default class ScheduledListing extends Component{
   render(){
+    console.log(this.props.scheduled.length)
     return(
       <div>
         <ul style={{listStyleType: "none"}}>
           {this.props.scheduled.length > 0
-            ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind < this.props.pastOrders.length-1, ind, this.props.cancel))
+            ? this.props.scheduled.map((item, ind) => ScheduledItem(item, ind < this.props.scheduled.length-1, ind, this.props.cancel))
             : 'No scheduled requests, order more!!'}
         </ul>
       </div>

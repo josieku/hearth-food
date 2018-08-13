@@ -12,16 +12,19 @@ export default class NavBar extends Component {
     this.props.logout();
   }
 
-  nav = (role, id) => {
+  nav = (role, id, stateNotifs) => {
     const { activeItem } = this.state
+    const notifications = stateNotifs ? stateNotifs : []
+    const notifs = notifications.filter(item=> !item.seen).length;
     if (role === "consumer") {
       return (
         <div>
           <Menu text>
           <h2>hearth-EAT</h2>
-          <Menu.Menu text id='navBar' position='right'>
+          <Menu.Menu text="true" id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
+                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'notificaitons'}  onClick={this.handleClick}/>
                 <Menu.Item name='Messages' href='/messages' active={ activeItem === 'Messages'}  onClick={()=>{this.setState({activeItem: 'Messages'})}}/>
                 <Menu.Item>
               <Dropdown icon={'user'}>
@@ -44,6 +47,7 @@ export default class NavBar extends Component {
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'dashboard'}  onClick={this.handleClick}/>
                 <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'consumer'}  onClick={this.handleClick}/>
                 <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'history'}  onClick={this.handleClick}/>
+                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'notificaitons'}  onClick={this.handleClick}/>
                 <Menu.Item>
               <Dropdown icon='user' floating className='icon'>
                 <Dropdown.Menu>
@@ -76,7 +80,9 @@ export default class NavBar extends Component {
     console.log(this.state.activeItem);
     return (
       <div className="flex-container">
-          {this.props.user === null ? this.nav(null, null) : this.nav(this.props.user.role, this.props.user._id)}
+          {this.props.user === null
+            ? this.nav(null, null, this.props.notifications)
+            : this.nav(this.props.user.role, this.props.user._id, this.props.notifications)}
       </div>
     )
   }

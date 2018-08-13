@@ -39,6 +39,7 @@ router.post('/signup', function(req,res) {
       content: `Welcome to hearth, ${save.firstName}!  Please enjoy using our services.`,
       user: save._id,
       seen: false,
+      time: Date.now()
     })
 
     newNotif.save();

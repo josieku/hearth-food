@@ -92,7 +92,8 @@ function requestEditButton(user, chef, meal) {
       return <Button>Cancel request</Button>
     }
   }
-  return <div><Button size="mini" href='`/meal/${meal._id}/request`' float='right'>Request this meal</Button></div>
+  return null
+  // return <div><Button size="mini" href='`/meal/${meal._id}/request`' float='right'>Request this meal</Button></div>
 }
 
 function timeslots(timeObj, mealId) {
@@ -126,12 +127,13 @@ export default class MealView extends Component {
                 <Header as='h4' floated='right'><strong>Price:</strong>${meal.price}</Header>
             <br/>
             </Grid.Row>
-            <Grid.Row>
+            {/* <Grid.Row>
                 {requestEditButton(user, chef, meal)}
               <img src={meal.picture}/>
               <Header as='h3'>{meal.title}</Header>
-            </Grid.Row>
+            </Grid.Row> */}
             <Grid.Row>
+              <br/>
               <p>Rating: {meal.overallRating}</p>
             </Grid.Row>
             <Grid.Row>
@@ -167,12 +169,15 @@ export default class MealView extends Component {
           <Grid.Column width={8}>
             <Grid.Row>
               <img src={meal.picture}/>
-              <p><strong>Reviews:</strong></p>
-              <Reviews list={meal.reviews}/>
-            <AddReview mealId={meal._id} user={user}
-              verified={this.props.verified} add={this.props.add}/>
+            </Grid.Row>
+            <Grid.Row>
+              <AddReview mealId={meal._id} user={user}
+                verified={this.props.verified} add={this.props.add}/>
+            </Grid.Row>
             <Grid.Row>
               <p><strong>Reviews: </strong></p>
+            </Grid.Row>
+            <Grid.Row>
               <Reviews list={this.props.reviews}/>
             </Grid.Row>
           </Grid.Column>

@@ -13,13 +13,22 @@ export default class ChefLanding extends Component{
     notifications: []
   }
 
+  componentDidMount = e => {
+    fetch(`/user/${this.props.user._id}/notif`)
+    .then(resp => resp.json())
+    .then(notifications => {
+      console.log('notifs', notifications);
+      this.setState({ notifications })
+    })
+  }
+
   updateNotifications = (unseen) => {
     fetch(`/user/${this.props.user._id}/notif/markallread`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      credentials: 'same-origin',
       body: JSON.stringify({ unseen }),
     })
       .then(resp => resp.json())
@@ -28,20 +37,11 @@ export default class ChefLanding extends Component{
       })
   }
 
-  componentDidMount = e => {
-    fetch(`/user/${this.props.user._id}/notif`)
-    .then(resp => resp.json())
-    .then(notifications => this.setState({ notifications }))
-  }
-
-
-
   render(){
     const user = this.props.user;
-    console.log('notifs', this.state.notifications)
     return(
       <div className='main'>
-        <NavBar user={user} logout={this.props.logout}/>
+        <NavBar user={user} notifications={this.state.notifications} logout={this.props.logout}/>
         <Switch>
           <Route path="/dashboard/menu" render={(props)=>
             <Menu user={user} {...props} />}/>

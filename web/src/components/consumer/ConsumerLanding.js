@@ -10,7 +10,17 @@ import Notifications from './Notifications';
 
 export default class ConsumerLanding extends Component{
   state = {
-    notifications: []
+    notifications: [],
+  }
+
+  componentDidMount = e => {
+    if (Object.keys(this.props.user).length === 0 || this.props.user.role === "chef"){
+      this.props.history.push('/')
+    } else {
+      fetch(`/user/${this.props.user._id}/notif`)
+      .then(resp => resp.json())
+      .then(notifications => this.setState({ notifications }))
+    }
   }
 
   validateLogin = async () =>{
@@ -34,16 +44,6 @@ export default class ConsumerLanding extends Component{
       })
   }
 
-  componentDidMount = e => {
-    if (Object.keys(this.props.user).length === 0 || this.props.user.role === "chef"){
-      this.props.history.push('/')
-    } else {
-      fetch(`/user/${this.props.user._id}/notif`)
-      .then(resp => resp.json())
-      .then(notifications => this.setState({ notifications }))
-    }
-  }
-
   render(){
     const user = this.props.user
     return(
@@ -57,8 +57,8 @@ export default class ConsumerLanding extends Component{
             <Notifications user={user} update={this.updateNotifications}
               notifications={this.state.notifications} {...props} />}/>
 
-          <Route exact path="/dashboard"
-            render={(props)=> <Listings user={user} {...props} />}/>
+          <Route exact path="/dashboard" render={(props)=>
+            <Listings user={user} recents={this.state.recents} {...props} />}/>
           {/* <Route exact path='/user/:id' render={({ match }) =>
             <Profile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/> */}
         </Switch>
