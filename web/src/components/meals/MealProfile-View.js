@@ -171,6 +171,7 @@ export default class MealView extends Component {
               <Reviews list={meal.reviews}/>
             <AddReview mealId={meal._id} user={user}
               verified={this.props.verified} add={this.props.add}/>
+            </Grid.Row>
             <Grid.Row>
               <p><strong>Reviews: </strong></p>
               <Reviews list={this.props.reviews}/>
