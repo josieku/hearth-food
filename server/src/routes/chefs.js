@@ -18,16 +18,25 @@ router.get('/:id', (req, res) => {
 })
 
 router.get('/:id/requests', (req, res) => {
-  Request.find({'chef': req.params.id, 'accepted': 'false'})
+  Request.find({'chef': req.params.id, 'accepted': 'false', 'expired': 'false'})
          .populate('chef')
          .populate('consumer')
+         .populate('time')
          .populate('meal')
          .exec()
          .then(requests => res.json(requests));
 })
 
 router.get('/:id/orders', (req, res) => {
-  Request.find({'chef': req.params.id, 'accepted': 'true', 'completed': 'false'})
+  const conditions = {
+    'chef': req.params.id,
+    'accepted': 'true',
+    'completed': 'false',
+    'expired': 'false',
+    'cancelled': 'false'
+  }
+
+  Request.find(conditions)
          .populate('chef')
          .populate('consumer')
          .populate({path:'meal', populate:{path:'availability'}})
@@ -105,6 +114,32 @@ router.post('/:id/requests/complete', (req,res) => {
              type: 'Accepted Request',
              meal: request.meal._id,
              content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
+             user: request.consumer,
+             seen: false,
+             time: Date.now()
+           })
+
+           newNotif.save()
+
+           res.json(request)
+         })
+})
+
+router.post('/:id/requests/decline', (req,res) => {
+  const updates = {
+    expired: true,
+    cancelled: true,
+    declineComment: req.body.comment
+  }
+
+  Request.findByIdAndUpdate(req.body.requestId, updates)
+         .populate('meal')
+         .exec()
+         .then(request => {
+           const newNotif = new Notification({
+             type: 'Declined Request',
+             meal: request.meal._id,
+             content: `Your ${request.meal.title} meal request has been declined.  The chef said: ${req.body.comment}`,
              user: request.consumer,
              seen: false,
              time: Date.now()

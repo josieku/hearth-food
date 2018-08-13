@@ -22,16 +22,28 @@ export default class Main extends Component{
     fetch(`/user/${this.props.user._id}/orders`)
     .then(response => response.json())
     .then(orders => this.setState({
-      pending: orders.filter(item => !item.accepted || !item.payment),
+      pending: orders.filter(item => !item.accepted && !item.expired || !item.payment && !item.expired ),
       scheduled: orders.filter(item => item.accepted && item.payment && !item.expired),
       history: orders.filter(item => item.expired)
     }))
   }
 
-  cancel = () => {
+  cancel = (requestId, index) => {
     // cancel request function
     // updates request to cancel = true
     // append previous version to new updated version
+    fetch(`/user/${this.props.user._id}/request/cancel`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({ requestId }),
+    })
+    .then(resp => resp.json())
+    .then(saved => {
+
+    })
   }
 
   segmentDisplay = (item) => {

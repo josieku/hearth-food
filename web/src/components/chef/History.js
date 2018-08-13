@@ -7,7 +7,17 @@ function HistoryItem(item) {
       <p>Customer: {item.consumer.firstName}</p>
       <p>Meal: {item.meal.title}</p>
       <p>Time: {item.time.date}</p>
-      <p>Status: <strong>{item.completed ? <span>Done!</span>:<span>Expired...</span>}</strong></p>
+      <p>Status:
+        {item.completed
+          ? <span style={{fontWeight: "bold"}}>Done!</span>
+          : item.declineComment
+          ? <span>
+              <span style={{fontWeight: "bold"}}> Declined. </span>
+              <span style={{fontStyle:"italic"}}>Reasoning: `{item.declineComment}`</span>
+            </span>
+          : <span>Expired...</span>
+        }
+      </p>
       <p>Additional requests: {item.requests ? item.requests : 'None'}</p>
     </li>
   )

@@ -82,6 +82,23 @@ export default class Main extends Component{
     this.setState({ orders });
   }
 
+  decline = (requestId, comment, index) => {
+    console.log('declining')
+    if (this.state.mounted && Object.keys(this.props.user).length > 0){
+      fetch(`/chef/${this.props.id}/requests/decline`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ requestId, comment }),
+      })
+    }
+    const requests = this.state.requests.slice();
+    requests.splice(index, 1);
+    this.setState({ requests });
+  }
+
   render(){
     const profile = this.state.profile;
     return(
@@ -101,6 +118,7 @@ export default class Main extends Component{
                 chefId={profile._id}
                 accept={this.acceptRequest}
                 setRequests={this.setRequests}
+                decline={this.decline}
                 requests={this.state.requests}/>
               </Grid.Column>
             </Grid>
