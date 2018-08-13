@@ -6,7 +6,7 @@ function HistoryItem(item) {
     <li key={item._id} className="history-list-item" style={{border:"1px solid black"}}>
       <p>Customer: {item.consumer.firstName}</p>
       <p>Meal: {item.meal.title}</p>
-      <p>Time: {item.time}</p>
+      <p>Time: {item.time.date}</p>
       <p>Status: <strong>{item.completed ? <span>Done!</span>:<span>Expired...</span>}</strong></p>
       <p>Additional requests: {item.requests ? item.requests : 'None'}</p>
     </li>

@@ -46,14 +46,31 @@ export default class Main extends Component{
     }
   }
 
+  makeChanges = async (requestId, index) => {
+    //make changes to request
+    if (this.state.mounted && Object.keys(this.props.user).length > 0){
+      await fetch(`/chef/${this.props.chefId}/requests/edit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ requestId }),
+      })
+      const requests = this.state.requests.slice();
+      const accepted = requests.splice(index, 1)[0];
+      const orders = this.state.orders.slice();
+      orders.push(Object.create(accepted));
+      this.setState({ requests, orders });
+    }
+  }
+
   complete = async (requestId, index) => {
     if (this.state.mounted && Object.keys(this.props.user).length > 0){
-      await fetch(`/chef/${this.props.id}/complete`, {
+      await fetch(`/chef/${this.props.id}/requests/complete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'same-origin', // <- this is mandatory to deal with cookies
+        credentials: 'same-origin', 
         body: JSON.stringify({ requestId }),
       })
     }
@@ -69,10 +86,12 @@ export default class Main extends Component{
         <Grid columns={2} >
           <Grid.Column width={8} >
             <OrderListing
+              changes={this.makeChanges}
               chefId={profile._id}
               complete={this.complete}
               setOrders={this.setOrders}
-              orders={this.state.orders} />
+              orders={this.state.orders}
+            />
             </Grid.Column>
             <Grid.Column width={8}>
               <RequestListing

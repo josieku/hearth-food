@@ -224,7 +224,7 @@ var requestsSchema = mongoose.Schema({
   },
   time: {
     type: mongoose.Schema.ObjectId,
-    ref: 'Availability'
+    ref: 'Available'
   },
   accepted: {
     type: Boolean,
@@ -329,6 +329,10 @@ var notificationSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
+    required: true
+  },
+  time: {
+    type: Number,
     required: true
   },
   seen: {
