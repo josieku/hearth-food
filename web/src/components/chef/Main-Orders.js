@@ -15,7 +15,7 @@ function OrderItem(item, index, complete, change) {
       <Button>Message Customer</Button>
       {item.payment
         ? <button disabled>Make Changes to Request</button>
-        : <EditModal request={item}/> }
+        : <EditModal request={item} ind={index} change={change}/> }
       {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null}
       <Divider />
     </Item>
@@ -24,11 +24,13 @@ function OrderItem(item, index, complete, change) {
 
 class EditModal extends Component {
   state = {
-    time: this.props.request.time.time
+    // time: this.props.request.time.time,
+    time: this.props.request.time,
+    modalOpen: false
   }
 
   chosenTime = () => {
-    const chosen = this.props.request.meal.availability.find(item=> item.time === this.state.time);
+    const chosen = this.props.request.meal.availability.find(item=> item.time === this.state.time.time);
     if (chosen){
       return <div>
               <span>{new Date(chosen.date).toDateString()} at {chosen.start}</span>
@@ -39,31 +41,42 @@ class EditModal extends Component {
 
   timeslots = (timeObj) => {
     return(
-      <Button key={timeObj._id} onClick={()=>this.setState({ time: timeObj.time })}>
+      <Button key={timeObj._id} onClick={()=>this.setState({ time: timeObj })}>
         <p>{new Date(timeObj.date).toDateString()}</p>
         <p>{timeObj.start} to {timeObj.end}</p>
       </Button>
     )
   }
 
+  save = () => {
+    if (this.state.time.time !== this.props.request.time.time){
+      // console.log('changing');
+      // console.log('availability!!!!', this.props.request.meal.availability);
+      this.props.change(this.props.request._id, this.props.index, this.state.time);
+    }
+    this.setState({ modalOpen: false })
+  }
+
   render(){
     const request = this.props.request;
-    console.log(request);
     return (
-      <Modal trigger={<Button>Make Changes to Request</Button>}>
-        <Modal.Content>
-          <Modal.Description>
-            Pickup time:
-            {this.state.time
-              ? this.chosenTime()
-              : this.props.request.meal.availability.map(this.timeslots)}
-            {this.state.time
-              ? <Button onClick={()=>this.setState({ time: null })}>Save</Button>
-              : null
-            }
-          </Modal.Description>
-        </Modal.Content>
-      </Modal>
+      <div>
+        <Button onClick={()=>this.setState({modalOpen: true})}>Make Changes to Request</Button>
+        <Modal open={this.state.modalOpen}>
+          <Modal.Content>
+            <Modal.Description>
+              Pickup time:
+              {this.state.time
+                ? this.chosenTime()
+                : this.props.request.meal.availability.map(this.timeslots)}
+              {this.state.time
+                ? <Button onClick={this.save}>Save</Button>
+                : null
+              }
+            </Modal.Description>
+          </Modal.Content>
+        </Modal>
+      </div>
     )
   }
 }

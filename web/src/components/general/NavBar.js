@@ -77,7 +77,7 @@ export default class NavBar extends Component {
     }
   }
   render(){
-    console.log(this.state.activeItem);
+    // console.log(this.state.activeItem);
     return (
       <div className="flex-container">
           {this.props.user === null

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 
+import Edit from './../meals/MealProfile-Edit';
+
 function MenuListItem(item) {
   return (
     <Item className="menu-list-item">
@@ -13,6 +15,7 @@ function MenuListItem(item) {
       <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
       <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
       <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
+      <Link to={`/meal/${item._id}/setavailable`}><Button>Set Availability</Button></Link>
     </Item>
   )
 }
@@ -27,7 +30,7 @@ export default class MenuListing extends Component{
   }
   render(){
     const { activeItem } = this.state
-    console.log(this.props.menu)
+    // console.log(this.props.menu)
     return (
       <div>
         <Header as='h2' id='menuHeader'>Menu <br/>

@@ -26,7 +26,7 @@ router.get('/:id/orders', (req,res) => {
 })
 
 router.get('/:id/recent', (req, res) => {
-  console.log('recents')
+  // console.log('recents')
   Request.find({ 'consumer': req.params.id })
          .populate('meal')
          .populate('time')
@@ -45,6 +45,20 @@ router.get('/:id/recent', (req, res) => {
          })
 })
 
+router.get('/:id/toreview', (req, res) => {
+  Request.find({ 'consumer': req.params.id, 'expired': true, 'review': false })
+         .then(requests => {
+           requests = requests.sort((a,b)=>a.time.time-b.time.time);
+           const end = requests.length;
+           if ((end - 3) < 0){
+             res.json(requests)
+           } else{
+             const list = requests.slice(end-3);
+             res.json(list);
+           }
+         })
+})
+
 router.get('/:id/notif', (req, res) => {
   Notification.find({ user: req.params.id })
        .populate('meal')
@@ -53,6 +67,28 @@ router.get('/:id/notif', (req, res) => {
          console.log('!!!notifications!!!', notifications)
          res.json(notifications)
        });
+})
+
+router.get('/:id/mostordered', (req,res) => {
+  Request.find({ 'consumer': req.params.id })
+         .then(requests => {
+           if (requests.length > 0){
+             const mostLiked = {};
+             for (let i in requests){
+               if (mostLiked[requests[i]["meal"]]){
+                 mostLiked[requests[i]["meal"]]++
+               } else{
+                 mostLiked[requests[i]["meal"]] = 1;
+               }
+             }
+             const sorted = Object.keys(mostLiked).sort((a,b)=>mostLiked[a]-mostLiked[b])
+             const most = sorted.pop();
+             Meal.findById(most)
+                 .then(meal => res.json(meal));
+           } else {
+             res.json({});
+           }
+         })
 })
 
 router.post('/:id/edit', (req, res) => {

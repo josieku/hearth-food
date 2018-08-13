@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Image, Message, Segment, Modal } from 'semantic-ui-react';
 
 export default class MealEdit extends Component {
   state = {
@@ -8,11 +8,11 @@ export default class MealEdit extends Component {
     ingredients: this.props.meal.ingredients,
     price: this.props.meal.price,
     cuisine: this.props.meal.cuisine,
-    chef: Object.assign({}, this.props.meal.chef)
+    chef: Object.assign({}, this.props.meal.chef),
+    modalOpen: true,
   }
 
   componentDidMount(){
-    console.log('in meal edit');
     if (Object.keys(this.props.meal).length === 0){
       fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
@@ -42,7 +42,18 @@ export default class MealEdit extends Component {
       price: '',
       cuisine: ''
     })
-    this.props.history.push(`/meal/${this.props.meal._id}`)
+    this.props.history.push(`/dashboard/menu`)
+  }
+
+  cancel = e => {
+    this.setState({
+      title: '',
+      description: '',
+      ingredients: '',
+      price: '',
+      cuisine: ''
+    })
+    this.props.history.push(`/dashboard/menu`)
   }
 
   archive = e => {
@@ -54,7 +65,7 @@ export default class MealEdit extends Component {
       price: '',
       cuisine: ''
     })
-    this.props.history.push(`/chef/${this.state.chef._id}`)
+    this.props.history.push(`/dashboard/menu`)
   }
 
   componentWillUnmount(){
@@ -80,23 +91,24 @@ export default class MealEdit extends Component {
             height: 100%;
           }
         `}</style>
-        <Grid style={{height: '100%', justifyContent: 'center'}} verticalAlign='middle'>
-          <Grid.Column style={{maxWidth: 450}}>
-              <Header as="h2" textAlign="center">Meal Edit</Header>
-              <Form size='large'>
-                <Segment stacked>
-                Meal Name: <Form.Input fluid placeholder="Title" value={meal.title} onChange={e => this.setState({title: e.target.value})}/>
-                Description: <Form.Input fluid placeholder="Description" value={meal.description} onChange={e => this.setState({description: e.target.value})}/>
-                Ingredients: <Form.Input fluid placeholder="Ingredients" value={meal.ingredients} onChange={e => this.setState({ingredients: e.target.value})}/>
-                Cost per meal: <Form.Input fluid placeholder="Price USD" value={meal.price} onChange={e => this.setState({price: e.target.value})}/>
-                Type of food: <Form.Input fluid placeholder="Cuisine" value={meal.cuisine} onChange={e => this.setState({cuisine: e.target.value})}/>
-              </Segment>
-              </Form>
-                <Button id="loginButton" fluid size="large" onClick={this.save}>Save</Button>
-                <Button id="loginButton" fluid size="large" onClick={this.archive}>Archive Meal</Button>
-              {/* <Reviews list={this.state.meals.reviews}/> */}
-          </Grid.Column>
-        </Grid>
+          <Grid style={{height: '100%', justifyContent: 'center'}} verticalAlign='middle'>
+            <Grid.Column style={{maxWidth: 450}}>
+                <Header as="h2" textAlign="center">Edit Meal</Header>
+                <Form size='large'>
+                  <Segment stacked>
+                  Meal Name: <Form.Input fluid placeholder="Title" value={meal.title} onChange={e => this.setState({title: e.target.value})}/>
+                  Description: <Form.Input fluid placeholder="Description" value={meal.description} onChange={e => this.setState({description: e.target.value})}/>
+                  Ingredients: <Form.Input fluid placeholder="Ingredients" value={meal.ingredients} onChange={e => this.setState({ingredients: e.target.value})}/>
+                  Cost per meal: <Form.Input fluid placeholder="Price USD" value={meal.price} onChange={e => this.setState({price: e.target.value})}/>
+                  Type of food: <Form.Input fluid placeholder="Cuisine" value={meal.cuisine} onChange={e => this.setState({cuisine: e.target.value})}/>
+                </Segment>
+                </Form>
+                  <Button id="loginButton" fluid size="large" onClick={this.save}>Save</Button>
+                  <Button id="loginButton" fluid size="large" onClick={this.cancel}>Cancel</Button>
+                  <Button id="loginButton" fluid size="large" onClick={this.archive}>Archive Meal</Button>
+                {/* <Reviews list={this.state.meals.reviews}/> */}
+            </Grid.Column>
+          </Grid>
       </div>
     )
   }
