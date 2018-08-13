@@ -7,7 +7,7 @@ function ScheduledItem(item, bool, index, cancel) {
     <Item key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
       <Item.Header>Chef: {item.chef.firstName}</Item.Header>
       <Item.Extra>Meal: {item.meal.title}</Item.Extra>
-      <Item.Extra>Pickup Time: {item.time}</Item.Extra>
+      <Item.Extra>Pickup Time: {item.time.date}</Item.Extra>
       <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
       {item.accepted
         ? <button disabled>Cancel</button>
@@ -19,7 +19,6 @@ function ScheduledItem(item, bool, index, cancel) {
 
 export default class ScheduledListing extends Component{
   render(){
-    console.log(this.props.scheduled.length)
     return(
       <div>
         <ul style={{listStyleType: "none"}}>
