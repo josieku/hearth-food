@@ -4,7 +4,12 @@ body {
 }
 
 .App {
-  background-color: #F7F2F2;
+  background-color: white;
+}
+
+.main {
+  margin-left: 3%;
+  margin-right: 3%;
 }
 
 #getStarted {
@@ -27,7 +32,9 @@ body {
 }
 #loginButton {
   color: white;
-  background-color: #B02E0C
+  background-color: #B73535;
+  margin: 5px;
+  max-width: 350px;
 }
 
 #loginMessage {
@@ -39,17 +46,21 @@ body {
 }
 
 #availableMeals {
-
+  background-color: #B73535;
+  font-size: medium;
+}
+/* Chef Landing Styling */
+#chefLandingHeader {
+  background-color: #B73535
 }
 
-#mapDiv {
-
+/* Consumer Orders Page Styling */
+.conOrderPageHeader {
+  background-color: #B73535
 }
 
-#recentMealHeader {
+/* Profile View Styling */
 
-}
-
-#listOfRecents {
-
+#profileDetails {
+  text-align: center;
 }

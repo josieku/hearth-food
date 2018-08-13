@@ -41,7 +41,8 @@ var userSchema = mongoose.Schema({
   },
   preferences:{
     type: [],
-    default: []
+    default: [],
+    required: true
   },
   rating: {
     type: Number,
@@ -110,9 +111,12 @@ var mealSchema = mongoose.Schema({
     required: true
   },
   availability:{
-    type: String,
-    required: true,
-    default: ""
+    type: [
+      {
+        ref: 'Available',
+        type: mongoose.Schema.ObjectId
+      }
+    ]
   },
   price: {
     type: Number,
@@ -128,7 +132,7 @@ var mealSchema = mongoose.Schema({
   reviews: {
     type: [
       {
-        ref: 'Review',
+        ref: 'Mealreview',
         type: mongoose.Schema.ObjectId
       }
     ]
@@ -219,8 +223,8 @@ var requestsSchema = mongoose.Schema({
     type: String
   },
   time: {
-    type: Date,
-    required: true
+    type: mongoose.Schema.ObjectId,
+    ref: 'Available'
   },
   accepted: {
     type: Boolean,
@@ -241,6 +245,100 @@ var requestsSchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  cancelled: {
+    type: Boolean,
+    default: false
+  },
+  changed: {
+    type: Boolean,
+    default: false
+  },
+  changes: {
+    type: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Request'
+      }
+    ]
+  },
+  delivery: {
+    type: Boolean,
+    default: false,
+  }
+})
+
+var availabilitySchema = mongoose.Schema({
+  meal: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Meal',
+    required: true
+  },
+  chef: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  start: {
+    type: String,
+    required: true,
+  },
+  end: {
+    type: String,
+    required: true,
+  },
+  passed: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  time: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  orders: {
+    type: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Request'
+      }
+    ]
+  }
+})
+
+var notificationSchema = mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Accepted Request', 'Changed Request', 'Declined Request',
+    'Expired Request', 'New Request', 'Request Status', 'Changed Profile',
+    'Archived Meal', 'New Review']
+  },
+  meal: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Meal'
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  time: {
+    type: Number,
+    required: true
+  },
+  seen: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 })
 
@@ -249,11 +347,16 @@ var Meal = mongoose.model('Meal', mealSchema);
 var Mealreview = mongoose.model('Mealreview', mealReviewSchema);
 var Userreview = mongoose.model('Userreview', userReviewSchema);
 var Request = mongoose.model('Request', requestsSchema);
+var Available = mongoose.model('Available', availabilitySchema);
+// var Allnotif = mongoose.model('Allnotifications', notifAllSchema);
+var Notification = mongoose.model('Notification', notificationSchema);
 
 module.exports = {
   User: User,
   Meal: Meal,
   Mealreview: Mealreview,
   Userreview: Userreview,
-  Request: Request
+  Request: Request,
+  Available: Available,
+  Notification: Notification,
 }

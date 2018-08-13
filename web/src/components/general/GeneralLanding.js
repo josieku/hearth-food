@@ -36,7 +36,7 @@ const HomepageHeading = ({ mobile }) => (
     />
     <Header
       as='h2'
-      content='Skip the groceries and meal prep with us!'
+      content='Skip the cooking.  Eat Homemade.'
       inverted
       style={{
         fontSize: mobile ? '1.5em' : '1.7em',

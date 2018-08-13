@@ -13,43 +13,31 @@ export default class Menu extends Component{
   }
 
   componentDidMount = () => {
-    // if user does not exist, redirects user back to login page
-    // if (Object.keys(this.props.user).length===0){
-    //   this.props.history.push('/auth/login');
-    // } else if (this.props.user._id !== this.props.id){
-    //   this.props.history.goBack();
-    // }
-    // else fetch the profile of the chef
     fetch(`/chef/${this.props.id}`)
       .then(response => response.json())
-      .then(profile => this.setState({ profile }))
+      .then(profile => this.setState({ profile, menu: profile.menu }))
   }
 
   saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
-    const availability = "available";
-    // console.log('saving', title, description, ingredients, price)
     fetch(`/chef/${this.props.user._id}/menu/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef, availability }),
+      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef }),
     })
     .then(resp => resp.json())
     .then(saved => {
-      // console.log(saved);
       const menu = this.state.menu.slice();
       menu.push(saved);
-      // console.log('menu', menu);
       this.setState({ menu })
       this.props.history.push(`/dashboard/menu`)
     })
   }
 
   render(){
-    console.log('in chef landing');
     const profile = this.state.profile;
     return(
       <div>
@@ -57,9 +45,9 @@ export default class Menu extends Component{
           <Route exact path='/dashboard/menu/add' render={(props) =>
             <Add save={this.saveDish} {...props}/>}/>
 
-          <Route exact path="/dashboard/menu" render={(props) =>
+          <Route path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id}
-                         menu={this.state.menu} {...props}/>}/>
+                         menu={this.state.menu.filter(item=>!item.archived)} {...props}/>}/>
 
         </Switch>
       </div>

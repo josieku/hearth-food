@@ -5,7 +5,7 @@ import localStorage from 'localStorage';
 import Landing from './Landing';
 import NavBar from './NavBar';
 // import User from './User';
-import ConsumerProfile from './../consumer/ConsumerLanding';
+import Profile from './../consumer/UserProfile';
 import MapContainer from '.././maps/MapContainer';
 import CustomerSignup from './../auth/CustomerSignup';
 // import ChefSignup from './../auth/ChefSignup';
@@ -25,6 +25,7 @@ class App extends Component {
       user: user,
       landing: true,
       test: 'testing',
+      notifications: []
     };
   }
 
@@ -32,6 +33,17 @@ class App extends Component {
   login = user => {
     localStorage.setItem('user', JSON.stringify(user));
     const loggedin = Object.assign(user);
+
+    // await fetch(`/user/${this.props.user}/notif`)
+    // .then(resp => resp.json())
+    // .then(notifications =>
+    //   this.setState({
+    //     notifications,
+    //     user: Object.assign(user),
+    //     landing: false,
+    //     testing: 'passed'
+    //    }))
+
     this.setState({
       user: Object.assign(user),
       landing: false,
@@ -62,10 +74,8 @@ class App extends Component {
               <GeneralLanding user={this.state.user} landing={this.landing}/>}/>
 
             <Route path="/dashboard" render={(props) =>
-              <Landing user={this.state.user}
-                       landing={this.landing}
-                       notLand={this.notLand}
-                       logout={this.props.logout} {...props}/>}/>
+              <Landing user={this.state.user} landing={this.landing}
+                 notLand={this.notLand} logout={this.props.logout} {...props}/>}/>
 
             <Route path="/map" component={MapContainer}/>
 
@@ -75,8 +85,9 @@ class App extends Component {
             <Route exact path="/auth/login" render={(props) =>
               <Login login={this.login} notLand={this.notLand} {...props}/>}/>
 
-            <Route path='/user/:id' render={({ match }) =>
-              <ConsumerProfile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/>
+            <Route path='/user/:id' render={(props) =>
+              <Profile user={this.state.user} notLand={this.notLand}
+                id={props.match.params.id} {...props}/>}/>
 
             <Route path='/meal/:id' render={(props) =>
               <MealProfile id={props.match.params.id} notLand={this.notLand} user={this.state.user} {...props}/>}/>

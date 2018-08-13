@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Switch, Link } from 'react-router-dom';
+import qs from 'query-string';
 
 import MealView from './MealProfile-View';
 import MealEdit from './MealProfile-Edit';
@@ -10,16 +11,54 @@ import MealAvailability from './MealProfile-SetAvailability';
 export default class MealProfile extends Component {
   state = {
     meal: {},
+    chefId: "",
+    times: [],
+    verified: false,
+    reviews: []
   }
 
-  componentDidMount = e => {
-    console.log('mounting');
+  componentDidMount = () => {
     fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
-      .then(meal => {
-        this.setState({ meal });
-        console.log(this.props);
+      .then(async meal => {
+        await this.setState({
+          meal,
+          chefId: meal.chef._id,
+          times: meal.availability,
+          reviews: meal.reviews ? meal.reviews : []
+         });
+        console.log('after mount', this.state)
       })
+
+    fetch(`/meal/${this.props.id}/review?user=${this.props.user._id}`)
+      .then(resp => resp.json())
+      .then(async request => {
+        if (Object.keys(request).length > 0){
+          await this.setState({ verified: true })
+        }
+      })
+  }
+
+  addReview = (content, anon, rating) => {
+    const userId = this.props.user._id;
+    const date = Date.now();
+    fetch(`/meal/${this.props.id}/review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({
+        userId, content, anon, rating, date
+      }),
+    })
+    .then(resp => resp.json())
+    .then(review => {
+      const reviews = this.state.reviews.slice();
+      reviews.push(review);
+      this.setState({ reviews })
+    })
+
   }
 
   save = (title, description, ingredients, price, cuisine) => {
@@ -51,41 +90,45 @@ export default class MealProfile extends Component {
     .then(meal => this.setState({ meal }))
   }
 
-  setAvailability = availability => {
-    fetch(`/meal/${this.props.id}/setavailable`, {
+  setAvailability = async (times) => {
+    const chefId = this.state.chefId;
+    await fetch(`/meal/${this.props.id}/setavailable`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'same-origin',
-      body: JSON.stringify({ availability }),
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({ times, chefId }),
     })
     .then(resp => resp.json())
-    .then(meal => this.setState({ meal }))
+    .then(times => { console.log(times); this.setState({ times }) })
   }
 
   render(){
     const id = this.props.id
+    // console.log(this.state.meal)
     return(
-      <div>
+      <div className="main">
         <NavBar user={this.props.user}/>
         <Switch>
           <Route exact path={`/meal/${id}/edit`} render={(props) =>
-            <MealEdit meal={this.state.meal} user={this.props.user}
-              save={this.save} archive={this.archive} {...props}/>}/>
+            <MealEdit meal={this.state.meal} user={this.props.user} save={this.save}
+              id={id} archive={this.archive} {...props}/>}/>
 
           <Route exact path={`/meal/${id}/request`} render={(props) =>
-            <MealRequest meal={this.state.meal}
-              user={this.props.user} {...props}/>}/>
+            <MealRequest meal={this.state.meal} user={this.props.user}
+              times={this.state.times}
+               result={parseInt(qs.parse(props.location.search).time)}
+               {...props}/>}/>
 
           <Route exact path={`/meal/${id}/setavailable`} render={(props) =>
-            <MealAvailability meal={this.state.meal}
-              set={this.setAvailability}
-              user={this.props.user} {...props}/>}/>
+            <MealAvailability meal={this.state.meal} mealId={id}
+              set={this.setAvailability} user={this.props.user} {...props}/>}/>
 
           <Route path={`/meal/${id}`} render={(props)=>
-            <MealView meal={this.state.meal}
-              user={this.props.user} {...props}/> }/>
+            <MealView meal={this.state.meal} reviews={this.state.reviews}
+              times={this.state.times} verified={this.state.verified}
+              user={this.props.user} add={this.addReview} {...props}/> }/>
         </Switch>
       </div>
     )

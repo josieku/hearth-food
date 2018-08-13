@@ -1,17 +1,20 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Button, Divider, Grid, Item, Menu, Segment } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept) {
   return (
-    <li key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
-      <p>Customer: {item.consumer.firstName}</p>
-      <p>Meal: {item.meal.title}</p>
-      <p>Time: {item.time}</p>
-      <p>Requests: {item.requests ? item.requests : 'None'}</p>
+    <Item key={item._id} className="request-list-item">
+      <Item.Header>Customer: {item.consumer.firstName}</Item.Header>
+      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
+      <Item.Extra>Date: {new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
+      <Item.Extra>Time: {item.time.start} to {item.time.end}</Item.Extra>
+      <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
       {item.accepted
         ? <button disabled>Accept</button>
         : <button onClick={() => accept(item._id, index)}>Accept</button> }
-    </li>
+        <Divider />
+    </Item>
   )
 }
 
@@ -19,12 +22,12 @@ export default class RequestListing extends Component{
   render(){
     return(
       <div>
-        <h2>Requests</h2>
-        <ul style={{listStyleType: "none"}}>
+        <Grid.Column>
+        <h2 id="chefLandingHeader">Requests</h2>
           {this.props.requests.length > 0
             ? this.props.requests.map((item, ind) => RequestItem(item, ind, this.props.accept))
             : 'No requests, start sharing your dishes!'}
-        </ul>
+      </Grid.Column>
       </div>
     )
   }
