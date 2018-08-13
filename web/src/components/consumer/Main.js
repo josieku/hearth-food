@@ -130,9 +130,9 @@ export default class Listings extends Component{
                       <Dropdown.Menu>
                         <Dropdown.Header content='Filter by selection' />
                         <Dropdown.Divider />
-                        <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: High to Low
+                        <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{this.sort("low")}}>Price Low to High</Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </Menu.Menu>
