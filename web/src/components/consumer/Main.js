@@ -102,7 +102,10 @@ export default class Listings extends Component{
     console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => this.setState({ listings }));
+    .then(listings => {
+      console.log(listings)
+      this.setState({ listings })
+    });
 
     fetch(`/user/${this.props.user._id}/recent`)
     .then(resp => resp.json())
@@ -149,7 +152,7 @@ export default class Listings extends Component{
               <Grid.Row>
                 <div id="mapDiv">
                   {/* <Map listings={this.state.listings}/> */}
-                  <MapContainer location={this.props.user.location} />
+                  <MapContainer location={this.props.user.location} places={this.state.listings}/>
                 </div>
               </Grid.Row>
               {/* <div id="recentMealHeader">

@@ -2,14 +2,16 @@ const _ = require("lodash");
 import React from 'react';
 import ReactDOM from 'react-dom'
 import {geolocated} from 'react-geolocated';
-const { compose, withProps, lifecycle, defaultProps } = require("recompose");
+const { compose, withProps, lifecycle, defaultProps, withStateHandlers } = require("recompose");
 const {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker,
+  InfoWindow
 } = require("react-google-maps");
 import SearchBox from "react-google-maps/lib/components/places/SearchBox"
+const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
 import { Circle } from "react-google-maps";
 
@@ -68,18 +70,21 @@ var MapWithLocation = compose(
           refs.searchBox = ref;
         },
         onPlacesChanged: () => {
-          places = refs.searchBox.getPlaces()
+          places = self.props.places
           if (places) {
             var bounds = self.state.circleBounds
             console.log(places, bounds)
-            var places2 = places.filter(place => {
-              var dist = measure(place.geometry.location.lat(), place.geometry.location.lng(), self.state.center.lat, self.state.center.lng)
-              return (dist < self.state.radius)
-            });
-            const nextMarkers = places2.map(place => ({
-              position: place.geometry.location,
-              name: place.name
+            const places2 = places.map(place => ({
+              position: place.chef.location,
+              name: place.title,
+              distance: measure(place.chef.location.lat, place.chef.location.lng, self.props.location.lat, self.props.location.lng)
             }));
+            console.log(places2)
+            var nextMarkers = places2.filter(place => {
+              console.log(place.distance)
+              return (place.distance < self.state.radius)
+            });
+            console.log(nextMarkers)
             const nextCenter = _.get(nextMarkers, '0.position', self.state.center);
 
             self.setState({
@@ -186,16 +191,23 @@ var MapWithLocation = compose(
             }}
           />
         </SearchBox>
-        {props.markers.map((marker, index) =>
-          <MarkerWithLabel
-            key={index}
-            position={marker.position}
-            labelAnchor={new window.google.maps.Point(0, 0)}
-            labelStyle={{backgroundColor: "orange", fontSize: "18px", padding: "16px"}}
-          >
-            <div>{marker.name}</div>
-          </MarkerWithLabel>
-        )}
+        {props.markers.map((marker, index) => {
+          var distance = measure(marker.position.lat, marker.position.lng, props.location.lat, props.location.lng)
+          console.log(distance)
+          return (
+            <MarkerWithLabel
+              key={index}
+              position={marker.position}
+              labelAnchor={new window.google.maps.Point(0, 0)}
+              labelStyle={{backgroundColor: "orange", fontSize: "18px", padding: "16px"}}
+            >
+              <div>
+                {marker.name} <br />
+                {distance} meters away!
+              </div>
+            </MarkerWithLabel>
+          )
+        })}
       </GoogleMap>
     )
   });

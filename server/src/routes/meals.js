@@ -12,7 +12,11 @@ var Notification = require('../models/models').Notification;
 
 router.get('/listings', (req, res) => {
   Meal.find({archived: false})
-      .then(meals => {console.log('meals', meals); res.json(meals)})
+      .populate('chef')
+      .exec()
+      .then(meals => {
+        console.log('meals', meals);
+        res.json(meals)})
 })
 
 router.get('/:id', (req, res) => {
