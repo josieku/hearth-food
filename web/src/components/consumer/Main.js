@@ -102,7 +102,10 @@ export default class Listings extends Component{
     console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => this.setState({ listings }));
+    .then(listings => {
+      console.log(listings)
+      this.setState({ listings })
+    });
 
     fetch(`/user/${this.props.user._id}/recent`)
     .then(resp => resp.json())
