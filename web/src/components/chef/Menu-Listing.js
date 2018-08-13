@@ -35,13 +35,13 @@ export default class MenuListing extends Component{
           <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
         </Header>
         { this.props.menu.length > 0
-          ? <Segment basic style={{backgroundColor: 'red'}}>
+          ? <Segment basic>
           <Grid columns={2}>
             <Grid.Column width={4}>
               <Menu fluid vertical tabular>
                 {this.props.menu.length > 0
                   ? this.props.menu.map(item =>
-                    <Menu.Item name={item.title} key={item._id}
+                    <Menu.Item color='red' name={item.title} key={item._id}
                       active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>)
                   : null}
               </Menu>
