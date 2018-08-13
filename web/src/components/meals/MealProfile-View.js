@@ -169,6 +169,10 @@ export default class MealView extends Component {
           <Grid.Column width={8}>
             <Grid.Row>
               <img src={meal.picture}/>
+              <p><strong>Reviews:</strong></p>
+              <Reviews list={meal.reviews}/>
+            <AddReview mealId={meal._id} user={user}
+              verified={this.props.verified} add={this.props.add}/>
             </Grid.Row>
             <Grid.Row>
               <AddReview mealId={meal._id} user={user}
