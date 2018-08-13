@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Form, Grid, Item, Menu, Segment, Modal } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Input, Item, Menu, Modal } from 'semantic-ui-react';
 
 
 function OrderItem(item, index, complete, change) {
@@ -85,7 +85,24 @@ export default class OrderListing extends Component{
   render(){
     return(
       <div>
-        <h2 id="chefLandingHeader">Orders</h2>
+        <Grid.Row>
+          <Menu text id="availableMeals">
+            <Menu.Item header>Orders</Menu.Item>
+            <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+            <Input placeholder='Search...'/>
+                <Dropdown icon='filter' floating button className='icon'>
+                  <Dropdown.Menu>
+                    <Dropdown.Header content='Filter by selection' />
+                    <Dropdown.Divider />
+                    <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Menu.Menu>
+          </Menu>
+        </Grid.Row>
+        {/* <h2 id="chefLandingHeader">Orders</h2> */}
           {this.props.orders.length > 0
             ? this.props.orders.map((item, ind) =>
               OrderItem(item, ind, this.props.complete, this.props.changes))

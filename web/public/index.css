@@ -63,8 +63,8 @@ body {
   color: white;
 
 }
-#menuHeader {
-  
+#chefMenu {
+  background-color: #EBE9E9;
 }
 /* Consumer Orders Page Styling */
 .conOrderPageHeader {
@@ -72,7 +72,11 @@ body {
 }
 
 /* Profile View Styling */
-
 #profileDetails {
   text-align: center;
+}
+
+/* Notifications styles */
+#notificationHead {
+  background-color: #EBE9E9;
 }

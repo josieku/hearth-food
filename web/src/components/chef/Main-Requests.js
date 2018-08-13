@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Item, Menu, Segment } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Input, Item, Menu } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept) {
   return (
@@ -23,7 +23,23 @@ export default class RequestListing extends Component{
     return(
       <div>
         <Grid.Column>
-        <h2 id="chefLandingHeader">Requests</h2>
+          <Grid.Row>
+            <Menu text id="availableMeals">
+              <Menu.Item header>Requests</Menu.Item>
+              <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+              <Input placeholder='Search...'/>
+                  <Dropdown icon='filter' floating button className='icon'>
+                    <Dropdown.Menu>
+                      <Dropdown.Header content='Filter by selection' />
+                      <Dropdown.Divider />
+                      <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Menu.Menu>
+            </Menu>
+          </Grid.Row>
           {this.props.requests.length > 0
             ? this.props.requests.map((item, ind) => RequestItem(item, ind, this.props.accept))
             : 'No requests, start sharing your dishes!'}
