@@ -251,14 +251,13 @@ var requestsSchema = mongoose.Schema({
     default: false
   },
   changes: {
-    type: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Request'
-      }
-    ]
+    type: [],
   },
   delivery: {
+    type: Boolean,
+    default: false,
+  },
+  review: {
     type: Boolean,
     default: false,
   }

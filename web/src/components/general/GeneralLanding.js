@@ -70,22 +70,22 @@ class DesktopContainer extends Component {
       )
       else return (
         <div>
-          <Button inverted={!fixed}>
-            <Link to='/auth/login' style={{textDecoration: 'none', color: 'white'}}>Log in</Link>
+          <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }} href='/auth/login'>
+            Log in
           </Button>
-          <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-            <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
+          <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }} href='/auth/signup'>
+            Sign Up
           </Button>
         </div>
       )
     }
     else return (
       <div>
-        <Button inverted={!fixed}>
-          <Link to='/auth/login' style={{textDecoration: 'none', color: 'white'}}>Log in</Link>
+        <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }} href='/auth/login'>
+          Log in
         </Button>
-        <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }}>
-          <Link to='/auth/signup' style={{textDecoration: 'none', color: 'white'}}>Sign Up</Link>
+        <Button inverted={!fixed} primary={fixed} style={{ marginLeft: '0.5em' }} href='/auth/signup'>
+          Sign Up
         </Button>
       </div>
     )

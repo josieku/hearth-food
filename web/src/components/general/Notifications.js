@@ -9,15 +9,14 @@ export default class Notifications extends Component{
 
   mark = (e) => {
     e.preventDefault()
-    console.log('marking');
+    // console.log('marking');
     const unseen = this.props.notifications.filter(item => !item.seen);
-    console.log('unseen', unseen);
-    console.log(this.props.update)
+    // console.log('unseen', unseen);
+    // console.log(this.props.update)
     this.props.update(unseen);
   }
 
   notifListing = (item) => {
-    // console.log(item);
     return (
       <li key={item._id} className={`notification-${item.seen}`} style={{border:"1px solid black"}}>
         <p>Type: {item.type}</p>
@@ -56,14 +55,6 @@ export default class Notifications extends Component{
         }
         <ul style={{listStyleType: "none"}}>
           {this.renderNotifs(this.state.unread)}
-          {/* {this.props.notifications.length > 0
-            ? this.props.notifications
-                .filter(item => {
-                  if (this.state.unread){ return !item.seen }
-                  else {return item}
-                })
-                .map(this.notifListing)
-            : 'No notifications'} */}
         </ul>
       </div>
     )

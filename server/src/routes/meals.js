@@ -32,10 +32,10 @@ router.get('/:id/available', (req, res) => {
 })
 
 router.get('/:id/review', (req, res) => {
-  console.log('looking for request');
-  Request.find({ consumer: req.query.user, meal: req.params.id, payment: true, expired: true })
+  Request.find({ consumer: req.query.user, meal: req.params.id,
+                 payment: true, expired: true, review: false })
          .then(request => {
-           console.log('!!! REQUEST !!!', request);
+           // console.log('!!! REQUEST !!!', request);
            res.json(request)
          });
 })
@@ -69,7 +69,7 @@ router.post('/:id/request', (req, res) => {
     meal: req.body.meal,
     requests: req.body.requests,
     time: req.body.time,
-    accepted: false
+    accepted: false,
   })
 
   newRequest.save().then(async saved => {
@@ -214,8 +214,10 @@ router.post('/:id/review', (req, res) => {
           })
 
           newNotif.save()
-
         })
+
+    Request.findByIdAndUpdate(req.params.requestId, {review: true})
+           .then(req=> console.log('reviewed for this request'))
     res.json(review);
   });
 })

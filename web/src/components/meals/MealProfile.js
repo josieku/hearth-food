@@ -14,7 +14,8 @@ export default class MealProfile extends Component {
     chefId: "",
     times: [],
     verified: false,
-    reviews: []
+    reviews: [],
+    requestId: "",
   }
 
   componentDidMount = () => {
@@ -34,12 +35,12 @@ export default class MealProfile extends Component {
       .then(resp => resp.json())
       .then(async request => {
         if (Object.keys(request).length > 0){
-          await this.setState({ verified: true })
+          await this.setState({ verified: true, requestId: request._id })
         }
       })
   }
 
-  addReview = (content, anon, rating) => {
+  addReview = (content, anon, rating, requestId) => {
     const userId = this.props.user._id;
     const date = Date.now();
     fetch(`/meal/${this.props.id}/review`, {
@@ -49,7 +50,7 @@ export default class MealProfile extends Component {
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({
-        userId, content, anon, rating, date
+        userId, content, anon, rating, date, requestId
       }),
     })
     .then(resp => resp.json())
@@ -128,7 +129,8 @@ export default class MealProfile extends Component {
           <Route path={`/meal/${id}`} render={(props)=>
             <MealView meal={this.state.meal} reviews={this.state.reviews}
               times={this.state.times} verified={this.state.verified}
-              user={this.props.user} add={this.addReview} {...props}/> }/>
+              requestId={this.state.requestId} user={this.props.user}
+              add={this.addReview} {...props}/> }/>
         </Switch>
       </div>
     )

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Dropdown, Header, Menu } from 'semantic-ui-react';
+import { Dropdown, Header, Menu, Segment } from 'semantic-ui-react';
 import './../../../public/index.css'
 
 export default class NavBar extends Component {
@@ -24,7 +24,7 @@ export default class NavBar extends Component {
           <Menu.Menu text="true" id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
-                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'notificaitons'}  onClick={this.handleClick}/>
+                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
                 <Menu.Item name='Messages' href='/messages' active={ activeItem === 'Messages'}  onClick={()=>{this.setState({activeItem: 'Messages'})}}/>
                 <Menu.Item>
               <Dropdown icon={'user'}>
@@ -35,7 +35,7 @@ export default class NavBar extends Component {
               </Dropdown>
             </Menu.Item>
           </Menu.Menu>
-          </Menu>
+        </Menu>
         </div>
       )
     } else if (role === "chef") {
@@ -44,10 +44,10 @@ export default class NavBar extends Component {
           <Menu text>
             <h2> hearth-COOK </h2>
           <Menu.Menu  id='navBar' position='right'>
-                <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'dashboard'}  onClick={this.handleClick}/>
-                <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'consumer'}  onClick={this.handleClick}/>
-                <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'history'}  onClick={this.handleClick}/>
-                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'notificaitons'}  onClick={this.handleClick}/>
+                <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
+                <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'Consumer'}  onClick={()=>{this.setState({activeItem: 'Consumer'})}}/>
+                <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'History'}  onClick={()=>{this.setState({activeItem: 'History'})}}/>
+                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
                 <Menu.Item>
               <Dropdown icon='user' floating className='icon'>
                 <Dropdown.Menu>
@@ -66,10 +66,10 @@ export default class NavBar extends Component {
           <Menu text>
             <Header as='h2'>hearth</Header>
           <Menu.Menu id='navBar' position='right'>
-                <Menu.Item name='About' href='/' active={ activeItem === 'about'}  onClick={this.handleClick}/>
-                <Menu.Item name='Become a Chef' href='/' active={ activeItem === 'becomeChef'}  onClick={this.handleClick}/>
-                <Menu.Item name='Sign up' href='/auth/signup' active={ activeItem === 'signup'}  onClick={this.handleClick}/>
-                <Menu.Item name='Log In' href='/auth/login' active={ activeItem === 'logIn'}  onClick={this.handleClick}/>
+                <Menu.Item name='About' href='/' active={ activeItem === 'About'}  onClick={()=>{this.setState({activeItem: 'About'})}}/>
+                <Menu.Item name='Become a Chef' href='/' active={ activeItem === 'BecomeChef'}  onClick={()=>{this.setState({activeItem: 'BecomeChef'})}}/>
+                <Menu.Item name='Sign up' href='/auth/signup' active={ activeItem === 'Signup'}  onClick={()=>{this.setState({activeItem: 'Signup'})}}/>
+                <Menu.Item name='Log In' href='/auth/login' active={ activeItem === 'LogIn'}  onClick={()=>{this.setState({activeItem: 'Login'})}}/>
               </Menu.Menu>
           </Menu>
         </div>
@@ -77,7 +77,7 @@ export default class NavBar extends Component {
     }
   }
   render(){
-    console.log(this.state.activeItem);
+    // console.log(this.state.activeItem);
     return (
       <div className="flex-container">
           {this.props.user === null
