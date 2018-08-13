@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
+var geo = window.navigator.geolocation
 
 class CustomerSignup extends React.Component {
   state = {
@@ -9,10 +10,25 @@ class CustomerSignup extends React.Component {
     password: '',
     email: '',
     repeat: '',
-    file: ''
+    file: '',
+    location: '',
   };
 
-  componentDidMount(){ this.props.notLand() }
+  componentDidMount(){
+    this.props.notLand()
+    var self = this
+    geo.getCurrentPosition(function(position) {
+      if (position) {
+        console.log(position)
+        self.setState({
+          location: {lat: position.coords.latitude, lng: position.coords.longitude}
+        })
+      } else {
+        console.log('boo')
+      }
+    })
+  }
+
 
   handleFile = (e) => {
     var _this = this
@@ -43,7 +59,8 @@ class CustomerSignup extends React.Component {
         phone: this.state.phone,
         repeat: this.state.repeat,
         email: this.state.email,
-        file: this.state.file
+        file: this.state.file,
+        location: this.state.location
       }),
     })
     .then((resp)=>{
@@ -61,11 +78,13 @@ class CustomerSignup extends React.Component {
       password: '',
       email: '',
       repeat: '',
+      location: ''
     })
     this.props.history.push('/auth/login')
   }
 
   render() {
+    console.log(this.state.location)
     return(
       <div className='login-form'>
         <style>{`

@@ -8,7 +8,7 @@ import ConsumerLanding from "./../consumer/ConsumerLanding";
 export default class Landing extends Component{
   constructor(props){
     super(props);
-    const user = this.props.location.state ? this.props.location.state.user : this.props.user
+    const user = this.props.user
     this.state = { user  }
   }
 

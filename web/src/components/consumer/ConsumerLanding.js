@@ -9,6 +9,9 @@ import Profile from './UserProfile';
 import Notifications from './Notifications';
 
 export default class ConsumerLanding extends Component{
+  constructor(props) {
+    super(props)
+  }
   state = {
     notifications: [],
   }
