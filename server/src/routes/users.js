@@ -26,18 +26,33 @@ router.get('/:id/orders', (req,res) => {
 })
 
 router.get('/:id/recent', (req, res) => {
+  console.log('recents')
   Request.find({ 'consumer': req.params.id })
+         .populate('meal')
+         .populate('time')
+         .exec()
          .then(requests => {
+           requests = requests.sort((a,b)=>a.time.time-b.time.time);
            const end = requests.length;
-           const list = requests.slice(end-3);
-           res.json(list);
+           if ((end - 3) < 0){
+             console.log(requests);
+             res.json(requests)
+           } else{
+             const list = requests.slice(end-3);
+             console.log(list);
+             res.json(list);
+           }
          })
 })
 
 router.get('/:id/notif', (req, res) => {
   Notification.find({ user: req.params.id })
        .populate('meal')
-       .then(notifications => res.json(notifications));
+       .exec()
+       .then(notifications => {
+         console.log('!!!notifications!!!', notifications)
+         res.json(notifications)
+       });
 })
 
 router.post('/:id/edit', (req, res) => {

@@ -29,7 +29,8 @@ router.get('/:id/orders', (req, res) => {
   Request.find({'chef': req.params.id, 'accepted': 'true', 'completed': 'false'})
          .populate('chef')
          .populate('consumer')
-         .populate('meal')
+         .populate({path:'meal', populate:{path:'availability'}})
+         .populate('time')
          .exec()
          .then(orders => res.json(orders))
 })
@@ -39,6 +40,7 @@ router.get('/:id/history', (req, res) => {
          .populate('chef')
          .populate('consumer')
          .populate('meal')
+         .populate('time')
          .exec()
          .then(history => res.json(history))
 })
@@ -85,7 +87,8 @@ router.post('/:id/requests/accept', (req, res) => {
         meal: request.meal._id,
         content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
         user: request.consumer,
-        seen: false
+        seen: false,
+        time: Date.now()
       })
 
       newNotif.save()
@@ -94,7 +97,7 @@ router.post('/:id/requests/accept', (req, res) => {
     })
 })
 
-router.post('/:id/complete', (req,res) => {
+router.post('/:id/requests/complete', (req,res) => {
   Request.findByIdAndUpdate(req.body.requestId, { completed: true, expired: true })
          .then(request => {
            const newNotif = new Notification({
@@ -102,7 +105,8 @@ router.post('/:id/complete', (req,res) => {
              meal: request.meal._id,
              content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
              user: request.consumer,
-             seen: false
+             seen: false,
+             time: Date.now()
            })
 
            newNotif.save()
@@ -110,6 +114,14 @@ router.post('/:id/complete', (req,res) => {
            res.json(request)
          })
 })
+
+// router.post('/:id/requests/edit', (req, res) => {
+//   const updates = {
+//     accepted: req.body.accepted,
+//
+//   }
+//   Request.findByIdAndUpdate(req.body.requestId, )
+// })
 
 // router.post('/:id/changeMode', (req,res) => {
 //   User.findById(req.params.id)

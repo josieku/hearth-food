@@ -56,28 +56,29 @@ class Map extends Component {
   }
 };
 
-// function filter(){
-//   return (
-//     <Dropdown text='Filter' icon='filter' floating labeled button className='icon'>
-//       <Dropdown.Menu>
-//         <Dropdown.Header icon='tags' content='Filter by selection' />
-//         <Dropdown.Divider />
-//         <Dropdown.Item>Important</Dropdown.Item>
-//         <Dropdown.Item>Announcement</Dropdown.Item>
-//         <Dropdown.Item>Discussion</Dropdown.Item>
-//       </Dropdown.Menu>
-//     </Dropdown>
-//   )
-// }
+function recentCondense(item){
+  return (
+    <div key={item._id} style={{border: "1px solid black"}}>
+      <p><strong>Title: </strong>{item.meal.title}</p>
+      <p><strong>Description: </strong>{item.meal.description}</p>
+    </div>
+  )
+}
+
 export default class Listings extends Component{
   state = {
     listings: [],
+    recents: []
   }
 
   componentDidMount = e => {
     fetch('/meal/listings')
     .then(resp => resp.json())
     .then(listings => this.setState({ listings }));
+
+    fetch(`/user/${this.props.user._id}/recent`)
+    .then(resp => resp.json())
+    .then(recents => this.setState({ recents }))
   }
 
   sort = indicator => {
@@ -124,7 +125,7 @@ export default class Listings extends Component{
                 Recent Meals
               </div>
               <div id="listOfRecents">
-                List of Recent Meals
+                {this.state.recents.map(recentCondense)}
               </div>
             </Grid.Column>
           </Grid>

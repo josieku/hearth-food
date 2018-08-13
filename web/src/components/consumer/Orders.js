@@ -38,7 +38,8 @@ export default class Main extends Component{
     if(item === "Pending Orders") {
       return <PendingListing pending={this.state.pending} cancel={this.cancel}/>
     } else if (item === "Scheduled Orders") {
-        return <ScheduledListing scheduled={this.state.scheduled} cancel={this.cancel}/>
+        return <ScheduledListing scheduled={this.state.scheduled} cancel={this.cancel}
+                    />
     } else {
       return <HistoryListing pastOrders={this.state.history}/>
     }
