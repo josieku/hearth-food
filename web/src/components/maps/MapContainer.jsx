@@ -33,7 +33,7 @@ var MapWithLocation = compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyDM7lCbSzaudr_c9xSve0RiF7Zl5UX2rac&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `100%`, width: '50%', position: 'absolute', right: '0' }} />,
+    containerElement: <div style={{ height: '500px', width: '500px'}} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({

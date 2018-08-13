@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Button, Divider, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 
 export default class Notifications extends Component{
   state = {
@@ -18,12 +19,22 @@ export default class Notifications extends Component{
 
   notifListing = (item) => {
     return (
-      <li key={item._id} className={`notification-${item.seen}`} style={{border:"1px solid black"}}>
-        <p>Type: {item.type}</p>
-        <p>Time: {new Date(item.time).toString()}</p>
-        {item.meal ? <p>Meal: {item.meal.title}</p>: null}
-        <p>{item.content}</p>
-      </li>
+      <Grid columns={2}>
+        <Grid.Row>
+          <Grid.Column width={13}>
+            <Item key={item._id} id={`notification-${item.seen}`}>
+              <Item.Content><strong>Type: </strong>{item.type}</Item.Content>
+              <Item.Content><strong>Time: </strong>{new Date(item.time).toString()}</Item.Content>
+              {item.meal ? <Item.Content><strong>Meal: </strong>{item.meal.title}</Item.Content>: null}
+              <Item.Content>{item.content}</Item.Content>
+            </Item>
+          </Grid.Column>
+          <Grid.Column width={3} verticalAlign='middle'>
+            <Button size='mini' id='redButton' icon='trash alternate'></Button>
+          </Grid.Column>
+        </Grid.Row>
+          <Divider />
+      </Grid>
     )
   }
 
@@ -41,18 +52,22 @@ export default class Notifications extends Component{
   render(){
     return(
       <div>
-        <h2>Notifications</h2>
-        <button onClick={this.mark}>
-          Mark all as read
-        </button>
-        { this.state.unread
-          ? <button onClick={()=>this.setState({ unread: false })}>
-            See all notifications
-            </button>
-          : <button onClick={()=>this.setState({ unread: true })}>
-            See unread notifications
-          </button>
-        }
+        <Menu text fluid id="notificationHead">
+          <Menu.Item header>Notifications</Menu.Item>
+          <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+            <Button onClick={this.mark} id="redButton">
+              Mark all as read
+            </Button>
+            { this.state.unread
+              ? <Button onClick={()=>this.setState({ unread: false })} size="mini" id="redButton">
+                See all notifications
+              </Button>
+              : <Button onClick={()=>this.setState({ unread: true })} size="mini" id="redButton">
+                See unread notifications
+              </Button>
+            }
+          </Menu.Menu>
+        </Menu>
         <ul style={{listStyleType: "none"}}>
           {this.renderNotifs(this.state.unread)}
         </ul>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
+import { Button, Dropdown, Grid, Header, Input, Item, Menu, Segment } from 'semantic-ui-react';
 
 import Edit from './../meals/MealProfile-Edit';
 
@@ -15,7 +15,7 @@ function MenuListItem(item) {
       <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
       <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
       <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
-      <Link to={`/meal/${item._id}/setavailable`}><Button>Set Availability</Button></Link>
+      <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Set Availability</Button>
     </Item>
   )
 }
@@ -30,13 +30,26 @@ export default class MenuListing extends Component{
   }
   render(){
     const { activeItem } = this.state
-    // console.log(this.props.menu)
+    console.log("RESD", this.props.menu[0]);
     return (
       <div>
-        <Header as='h2' id='menuHeader'>Menu <br/>
-          <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
-          <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
-        </Header>
+          <Menu text id="chefMenu">
+            <Menu.Item header>Your Menu</Menu.Item>
+            <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+            <Input placeholder='Search...'/>
+                <Dropdown icon='filter' floating button className='icon'>
+                  <Dropdown.Menu>
+                    <Dropdown.Header content='Filter by selection' />
+                    <Dropdown.Divider />
+                    <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
+                <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
+              </Menu.Menu>
+          </Menu>
         { this.props.menu.length > 0
           ? <Segment basic>
           <Grid columns={2}>
