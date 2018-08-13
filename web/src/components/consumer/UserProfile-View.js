@@ -3,11 +3,35 @@ import { Link } from 'react-router-dom';
 import { Grid, Header, Image, Segment} from 'semantic-ui-react';
 import NavBar from './../general/NavBar'
 
+function ToReviewListing(item){
+  return(
+    <div>
+
+    </div>
+  )
+}
+
 export default class ProfileView extends Component{
+  state = {
+    toReview: [],
+    mostOrdered: {},
+  }
+
+  componentDidMount = () => {
+    fetch(`/user/${this.props.user._id}/toreview`)
+      .then(resp => resp.json())
+      .then(toReview => this.setState({ toReview }))
+
+    fetch(`/user/${this.props.user._id}/mostordered`)
+      .then(resp => resp.json())
+      .then(mostOrdered => this.setState({ mostOrdered }))
+  }
+
+
   render(){
     const profile = this.props.profile;
     const self = this.props.user;
-    const preferences = profile.preferences ? profile.preferences : []
+    const preferences = profile.preferences ? profile.preferences : [];
     return(
       <div>
         <Grid columns={2}>
@@ -29,18 +53,24 @@ export default class ProfileView extends Component{
             </div>
             </Grid.Column>
             <Grid.Column width={12}>
-              <Grid.Row>
-                  <Header as='h3' floated='left'>Most Ordered Food:</Header>
-                  <p>Implemented later</p>
-                  <br/>
-              </Grid.Row>
+              {Object.keys(this.state.mostOrdered).length > 0
+                ? <Grid.Row>
+                    <Header as='h3' floated='left'>Most Ordered Food:</Header>
+                    <br/>
+                  </Grid.Row>
+                : null
+              }
               <Grid.Row>
                   <Header as='h3' floated='left'>Favorite Chef:</Header>
                   <p>Implemented later </p>
               </Grid.Row>
-              <Grid.Row style={{border: '2px solid blue'}}>
-                <Header as='h3'> Review your recent meals </Header>
-              </Grid.Row>
+              {this.state.toReview.length > 0
+                ? <Grid.Row style={{border: '2px solid blue'}}>
+                    <Header as='h3'> Review your recent meals </Header>
+                    {this.state.toReview.map(ToReviewListing)}
+                  </Grid.Row>
+                : null
+              }
               <Grid.Row style={{border: '2px solid red'}}>
                 <Header as='h3'>Share your meals with friends!</Header>
               </Grid.Row>

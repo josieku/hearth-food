@@ -11,6 +11,7 @@ var Notification = require('../models/models').Notification;
 router.get('/:id', (req, res) => {
   User.findOne({role:'chef', _id: req.params.id })
       .populate('requests')
+      .populate('menu')
       .exec()
       .then(user => res.json(user))
       .catch(err => console.error(err))
@@ -62,11 +63,11 @@ router.post('/:id/menu/add', (req,res) => {
   newMeal.save()
          .then(saved => {
            console.log(saved);
-           User.findOne({role:'chef', _id: req.params.id })
+           User.findOne({role:'chef', "_id": req.params.id })
                .then(user => {
-                 console.log(user);
+                 // console.log(user);
                  var menuList = user.menu.slice();
-                 console.log(menuList)
+                 console.log('!!menu!!', menuList)
                  menuList.push(saved._id);
                  user.menu = menuList;
                  user.save();
@@ -115,13 +116,45 @@ router.post('/:id/requests/complete', (req,res) => {
          })
 })
 
-// router.post('/:id/requests/edit', (req, res) => {
-//   const updates = {
-//     accepted: req.body.accepted,
-//
-//   }
-//   Request.findByIdAndUpdate(req.body.requestId, )
-// })
+router.post('/:id/requests/edit', (req, res) => {
+  const updates = {
+    time: req.body.time
+  }
+
+  Request.findById(req.body.requestId)
+         .populate('chef')
+         .populate('consumer')
+         .populate({path:'meal', populate:{path:'availability'}})
+         .populate('time')
+         .exec()
+         .then(request => {
+           let str = `The pick up time of your requested meal of ${request.meal.title}`
+           str += ` has changed from ${new Date(request.time.date).toDateString()} at ${request.time.start}`
+           str += ` to ${new Date(req.body.time.date).toDateString()} at ${req.body.time.start}.`
+
+           const newNotif = new Notification({
+             type: 'Changed Request',
+             meal: request.meal._id,
+             content: str,
+             user: request.consumer._id,
+             seen: false,
+             time: Date.now(),
+           })
+
+           newNotif.save()
+
+           const changes = request.changes ? request.changes.slice() : [];
+           changes.push({
+             old: request.time,
+             new: req.body.time,
+             date: Date.now()
+           })
+           request.changes = changes;
+           request.time = req.body.time;
+           request.save().then(req => res.json(req))
+
+         })
+})
 
 // router.post('/:id/changeMode', (req,res) => {
 //   User.findById(req.params.id)

@@ -3,24 +3,25 @@ import { Route, Link, Switch } from 'react-router-dom';
 
 import Add from './Menu-Add';
 import MenuListing from './Menu-Listing';
+// import Edit from './Menu-Edit';
 // import SetAvailability from './Menu-SetAvailability';
 
 export default class Menu extends Component{
   state = {
     profile: this.props.user,
-    menu: this.props.user.menu,
+    menu: [],
     open: false,
   }
 
   componentDidMount = () => {
-    fetch(`/chef/${this.props.id}`)
+    fetch(`/chef/${this.props.user._id}`)
       .then(response => response.json())
       .then(profile => this.setState({ profile, menu: profile.menu }))
   }
 
   saveDish = (title, description, ingredients, price, cuisine) => {
     const chef = this.state.profile._id;
-    fetch(`/chef/${this.props.user._id}/menu/add`, {
+    fetch(`/chef/${chef}/menu/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -33,6 +34,7 @@ export default class Menu extends Component{
       const menu = this.state.menu.slice();
       menu.push(saved);
       this.setState({ menu })
+      console.log('menu', this.state.menu)
       this.props.history.push(`/dashboard/menu`)
     })
   }

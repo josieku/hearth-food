@@ -6,7 +6,7 @@ import NavBar from './../general/NavBar';
 import Listings from './Main';
 import Orders from './Orders';
 import Profile from './UserProfile';
-import Notifications from './Notifications';
+import Notifications from './../general/Notifications';
 
 export default class ConsumerLanding extends Component{
   state = {
@@ -21,6 +21,21 @@ export default class ConsumerLanding extends Component{
       .then(resp => resp.json())
       .then(notifications => this.setState({ notifications }))
     }
+
+    let intervalId = this.getNotifs();
+    this.setState({ intervalId });
+  }
+
+  fetchNotifs = () => {
+    fetch(`/user/${this.props.user._id}/notif`)
+    .then(resp => resp.json())
+    .then(notifications => {
+      this.setState({ notifications })
+    })
+  }
+
+  getNotifs = () => {
+    return setInterval(this.fetchNotifs, 30000);
   }
 
   validateLogin = async () =>{

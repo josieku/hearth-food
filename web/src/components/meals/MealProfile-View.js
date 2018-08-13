@@ -36,7 +36,7 @@ class AddReview extends Component {
   }
 
   send = () => {
-    this.props.add(this.state.content, this.state.anonymous, this.state.rating);
+    this.props.add(this.state.content, this.state.anonymous, this.state.rating, this.props.requestId);
     this.setState({
       content: "",
       anonymous: false,
@@ -115,7 +115,6 @@ export default class MealView extends Component {
     const meal = this.props.meal;
     const chef = Object.assign({}, meal.chef);
     const user = this.props.user;
-    // console.log(meal)
     return(
       <div className="main">
         <Segment>
@@ -171,8 +170,8 @@ export default class MealView extends Component {
               <img src={meal.picture}/>
             </Grid.Row>
             <Grid.Row>
-              <AddReview mealId={meal._id} user={user}
-                verified={this.props.verified} add={this.props.add}/>
+              <AddReview mealId={meal._id} user={user} add={this.props.add}
+                requestId={this.props.requestId} verified={this.props.verified} />
             </Grid.Row>
             <Grid.Row>
               <p><strong>Reviews: </strong></p>

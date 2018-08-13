@@ -6,20 +6,35 @@ import Menu from './Menu';
 import History from './History';
 // import Messages from './ChefLanding-Message';
 import NavBar from './../general/NavBar';
-import Notifications from './../consumer/Notifications';
+import Notifications from './../general/Notifications';
 
 export default class ChefLanding extends Component{
   state = {
-    notifications: []
+    notifications: [],
+    intervalId: "",
   }
 
   componentDidMount = e => {
     fetch(`/user/${this.props.user._id}/notif`)
     .then(resp => resp.json())
     .then(notifications => {
-      console.log('notifs', notifications);
       this.setState({ notifications })
     })
+
+    let intervalId = this.getNotifs();
+    this.setState({ intervalId })
+  }
+
+  fetchNotifs = () => {
+    fetch(`/user/${this.props.user._id}/notif`)
+    .then(resp => resp.json())
+    .then(notifications => {
+      this.setState({ notifications })
+    })
+  }
+
+  getNotifs = () => {
+    return setInterval(this.fetchNotifs, 30000);
   }
 
   updateNotifications = (unseen) => {
@@ -55,7 +70,6 @@ export default class ChefLanding extends Component{
 
           <Route exact path="/dashboard" render={(props)=>
             <Main user={user} id={user._id} {...props} />}/>
-
 
           {/* <Route path="/messages" render={(props)=> <Messages user={user} {...props} />}/> */}
         </Switch>

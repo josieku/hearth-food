@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Grid, Menu, Segment } from 'semantic-ui-react';
 
+import Edit from './../meals/MealProfile-Edit';
+
 function MenuListItem(item) {
   return (
     <div className="menu-list-item">
@@ -13,7 +15,8 @@ function MenuListItem(item) {
       <p>Number of reviews: {item.reviews.length}</p>
       <p>Reviews</p>
       <p>Status: {item.status}</p>
-      <Link to={`/meal/${item._id}/edit`}>Edit</Link>
+      <Link to={`/meal/${item._id}/edit`}><Button>Edit</Button></Link>
+      <Link to={`/meal/${item._id}/setavailable`}><Button>Set Availability</Button></Link>
     </div>
   )
 }
@@ -28,7 +31,7 @@ export default class MenuListing extends Component{
   }
   render(){
     const { activeItem } = this.state
-    console.log(this.props.menu)
+    // console.log(this.props.menu)
     return (
       <div>
         <h2>Menu
