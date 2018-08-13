@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, Divider, Dropdown, Grid, Header, Item, Input, Menu, Search } from "semantic-ui-react";
 
 import NavBar from './../general/NavBar'
+import MapContainer from '.././maps/MapContainer'
 
 function Listing(meal){
   return (
@@ -46,15 +47,16 @@ class MealListings extends Component {
   }
 };
 
-class Map extends Component {
-  render(){
-    return (
-      <div style = {{border:"1px solid black"}}>
-        <p>this is where the map goes</p>
-      </div>
-    )
-  }
-};
+// class Map extends Component {
+//   constructor(props)
+//   render(){
+//     return (
+//       <div style = {{border:"1px solid black"}}>
+//         <MapContainer />
+//       </div>
+//     )
+//   }
+// };
 
 function recentCondense(item){
   return (
@@ -97,6 +99,7 @@ export default class Listings extends Component{
   }
 
   componentDidMount = e => {
+    console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
     .then(listings => this.setState({ listings }));
@@ -143,15 +146,18 @@ export default class Listings extends Component{
             </div>
           </Grid.Column>
             <Grid.Column>
-              <div id="mapDiv">
-                <Map listings={this.state.listings}/>
-              </div>
-              <Menu text id="availableMeals">
-                <Menu.Item header>Recent Meals</Menu.Item>
-              </Menu>
-              <div id="listOfRecents">
+              <Grid.Row>
+                <div id="mapDiv">
+                  {/* <Map listings={this.state.listings}/> */}
+                  <MapContainer location={this.props.user.location} />
+                </div>
+              </Grid.Row>
+              {/* <div id="recentMealHeader">
+                Recent Meals
+              </div> */}
+              {/* <div id="listOfRecents">
                 {this.state.recents.map(recentCondense)}
-              </div>
+              </div> */}
             </Grid.Column>
           </Grid>
         </div>

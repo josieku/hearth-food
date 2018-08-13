@@ -15,7 +15,7 @@ app.use(session({ secret: "tractor",
 // store: new MongoStore({mongooseConnection: require('mongoose').connection}),
 })); //secret string is used to hash the cookie
 app.use(bodyParser.urlencoded({ extended: false })); //doesn't matter if the body is json or not
-app.use(bodyParser.json()) // turning post requests into json objects
+app.use(bodyParser.json({limit: '50mb'})) // turning post requests into json objects
 app.use(passport.initialize());
 app.use(passport.session());
 

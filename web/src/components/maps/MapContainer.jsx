@@ -35,18 +35,18 @@ var MapWithLocation = compose(
     mapElement: <div style={{ height: `100%` }} />,
   }),
   lifecycle({
-    componentDidMount() {
-      var self = this
-      geo.getCurrentPosition(function(position) {
-        if (position) {
-          self.setState({
-            center: {lat: position.coords.latitude, lng: position.coords.longitude}
-          })
-        } else {
-          console.log('boo')
-        }
-      })
-    },
+    // componentDidMount() {
+    //   var self = this
+    //   geo.getCurrentPosition(function(position) {
+    //     if (position) {
+    //       self.setState({
+    //         center: {lat: position.coords.latitude, lng: position.coords.longitude}
+    //       })
+    //     } else {
+    //       console.log('boo')
+    //     }
+    //   })
+    // },
     componentWillMount() {
       const refs = {}
       var places;
@@ -68,7 +68,6 @@ var MapWithLocation = compose(
           refs.searchBox = ref;
         },
         onPlacesChanged: () => {
-          debugger;
           places = refs.searchBox.getPlaces()
           if (places) {
             var bounds = self.state.circleBounds
@@ -97,7 +96,6 @@ var MapWithLocation = compose(
             self.setState({
               circleBounds: refs.circle.getBounds()
             }, () => {
-              debugger;
               if (refs.searchBox) {
                 setTimeout(() => {
                   foo.onPlacesChanged()
@@ -135,15 +133,16 @@ var MapWithLocation = compose(
   withScriptjs,
   withGoogleMap
   )((props) => {
+    console.log(props)
     return (
       <GoogleMap
         ref={props.onMapMounted}
         defaultZoom={15}
-        center={props.center}
+        center={props.location}
         onBoundsChanged={props.onBoundsChanged}
       >
         <MarkerWithLabel
-          position={props.center}
+          position={props.location}
           labelAnchor={new window.google.maps.Point(0, 0)}
           labelStyle={{backgroundColor: "purple", fontSize: "28px", padding: "16px"}}
         >
@@ -158,7 +157,7 @@ var MapWithLocation = compose(
             fillColor: '#FF0000',
             fillOpacity: 0.35
           }}
-          center={props.center}
+          center={props.location}
           radius={props.radius}
         >
         </Circle>

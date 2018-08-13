@@ -37,7 +37,7 @@ var userSchema = mongoose.Schema({
     default: "https://img1.cookinglight.timeinc.net/sites/default/files/styles/4_3_horizontal_-_1200x900/public/image/2017/01/main/pristine-sunny-side-up-eggs.jpg?itok=4GSTJDNE"
   },
   location:{
-    type: String
+    type: Object
   },
   preferences:{
     type: [],
@@ -140,10 +140,6 @@ var mealSchema = mongoose.Schema({
   overallRating:{
     type: Number,
     default: 0,
-  },
-  location: {
-    type: String,
-    required: true
   },
   orders: {
     type: [
