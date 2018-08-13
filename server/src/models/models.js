@@ -260,6 +260,9 @@ var requestsSchema = mongoose.Schema({
   review: {
     type: Boolean,
     default: false,
+  },
+  declineComment: {
+    type: String,
   }
 })
 

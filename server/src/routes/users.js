@@ -21,6 +21,7 @@ router.get('/:id/orders', (req,res) => {
          .populate('chef')
          .populate('consumer')
          .populate('meal')
+         .populate('time')
          .exec()
          .then(requests => res.json(requests))
 })
@@ -89,6 +90,16 @@ router.get('/:id/mostordered', (req,res) => {
              res.json({});
            }
          })
+})
+
+router.post('/:id/request/cancel', (req,res) => {
+  Request.findByIdAndUpdate(req.body.requestId, { cancelled: true, expired: true }, {new: true})
+         .populate('chef')
+         .populate('consumer')
+         .populate('meal')
+         .populate('time')
+         .exec()
+         .then(request => res.json(request) )
 })
 
 router.post('/:id/edit', (req, res) => {
