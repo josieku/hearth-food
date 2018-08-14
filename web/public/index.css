@@ -20,6 +20,9 @@ body {
 #navBar {
   font-size: 20px;
 }
+#searchInHeader{
+  margin: 5px
+}
 
 /* Landing page styling */
 #mainPageMenu {
@@ -36,7 +39,6 @@ body {
   color: white;
   background-color: #B73535;
   margin: 5px;
-  max-width: 350px;
 }
 
 #loginMessage {
@@ -61,10 +63,15 @@ body {
 #redButton {
   background-color: #B73535;
   color: white;
-
+  margin: 5px;
 }
 #chefMenu {
   background-color: #D6D4D4;
+}
+
+/* Add and Edit a dish form styling */
+#addDishButtons {
+  margin-left: 25%;
 }
 /* Consumer Orders Page Styling */
 .conOrderPageHeader {
@@ -79,4 +86,10 @@ body {
 /* Notifications styles */
 #notificationHead {
   background-color: #D6D4D4;
+}
+#notification-true {
+  color: grey;
+}
+#notification-false {
+  font-weight: bold;
 }

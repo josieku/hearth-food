@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Item, Menu, Segment, TextArea, Modal } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Input, Item, Menu, TextArea, Modal } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept, decline) {
   return (
@@ -54,11 +54,11 @@ export default class RequestListing extends Component{
       <div>
         <Grid.Column>
           <Grid.Row>
-            <Menu text id="availableMeals">
+            <Menu text id="header">
               <Menu.Item header>Requests</Menu.Item>
               <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-              <Input placeholder='Search...'/>
-                  <Dropdown icon='filter' floating button className='icon'>
+                <Input id='searchInHeader' icon='search' placeholder='Search...'/>
+                  <Dropdown icon='filter' floating button className='icon' id='redButton'>
                     <Dropdown.Menu>
                       <Dropdown.Header content='Filter by selection' />
                       <Dropdown.Divider />
