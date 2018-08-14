@@ -16,10 +16,11 @@ function OrderItem(item, index, complete, change) {
       <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
   </Grid.Column>
   <Grid.Column textAlign='right' width={6}>
-    {item.payment
+    {/* {item.payment
       ? <button disabled>Change pickup time</button>
-      : <EditModal request={item} ind={index} change={change}/> }
-      {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null}
+      : <EditModal request={item} ind={index} change={change}/> } */}
+    <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
+    <Button>Cancel</Button>
   </Grid.Column>
   </Grid>
   <Divider />

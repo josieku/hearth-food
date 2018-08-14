@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
+import flatpickr from "flatpickr";
 
 class TimeSlot extends Component {
   edit = e => {
@@ -74,49 +75,7 @@ class AddTime extends Component {
       start: "",
       end: ""
     })
-    //
-    // if (!this.props.availableId){
-    //   console.log('no id');
-    //   fetch(`/meal/${this.props.mealId}/setavailable`, {
-    //           method: 'POST',
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //           },
-    //           credentials: 'same-origin',
-    //           body: JSON.stringify({
-    //             mealId: this.props.mealId,
-    //             chefId: this.props.chefId,
-    //             date: this.state.date,
-    //             start: this.state.start,
-    //             end: this.state.end,
-    //           }),
-    //         })
-    //   .then(resp => resp.json())
-    //   .then(available => this.props.save(this.props.ind, available))
-    // } else {
-    //   console.log('has an id')
-    //   fetch(`/meal/${this.props.mealId}/setavailable`, {
-    //           method: 'POST',
-    //           headers: {
-    //             'Content-Type': 'application/json',
-    //           },
-    //           credentials: 'same-origin',
-    //           body: JSON.stringify({
-    //             availableId: this.props.id,
-    //             date: this.state.date,
-    //             start: this.state.start,
-    //             end: this.state.end,
-    //           }),
-    //         })
-    //   .then(resp => resp.json())
-    //   .then(available => this.props.save(this.props.ind, available))
-    // }
   }
-
-  // durationChange = (duration) => {
-  //   this.setState( duration );
-  //   this.handleStart( this.state.start )
-  // }
 
   cancel = e => {
     e.preventDefault();
@@ -129,7 +88,7 @@ class AddTime extends Component {
   }
 
   render(){
-    const today = new Date().getFullYear() + "-" + (new Date().getMonth()+1) + "-" + new Date().getDate()
+    const today = new Date().getFullYear() + "-" + (new Date().getMonth()+1) + "-" + new Date().getDate();
     return(
       <div>
         <form>
@@ -141,9 +100,6 @@ class AddTime extends Component {
             <label>End time</label>
             <input type="time" name="end" value={this.state.end}
               onChange={(e)=>this.setState({ end: e.target.value })}/>
-            {/* <label>Duration</label>
-            <input type="text" name="duration" value={this.state.duration}
-              onChange={(e)=> this.durationChange(e.target.value) }/> */}
             {this.props.date
               ? <button onClick={this.done}>Save</button>
               : <button onClick={this.done}>Done</button> }
@@ -166,7 +122,6 @@ export default class SetAvailability extends Component {
   }
 
   componentDidMount = () => {
-    console.log("mounting setavailability")
     fetch(`/meal/${this.props.mealId}/available`)
       .then(resp => resp.json())
       .then(available => {
@@ -202,9 +157,6 @@ export default class SetAvailability extends Component {
       available.splice(ind, 1);
       this.setState({ available });
     })
-    // const available = this.state.available.slice();
-    // available.splice(ind, 1);
-    // this.setState({ available });
   }
 
   edit = async (date, start, end, ind, availableId) => {
@@ -216,7 +168,7 @@ export default class SetAvailability extends Component {
     const available = this.state.available.slice();
     if (ind !== null){
       available.splice(ind, 1, timeObj);
-    }else{
+    } else{
       available.push(timeObj);
     }
     this.setState({

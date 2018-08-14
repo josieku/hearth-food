@@ -4,7 +4,7 @@ import { Divider, Item } from 'semantic-ui-react';
 
 function ScheduledItem(item, bool, index, cancel) {
   return (
-    <Item key={item._id} className="request-list-item" style={{border:"1px solid black"}}>
+    <Item key={item._id} className="request-list-item">
       <Item.Header>Chef: {item.chef.firstName}</Item.Header>
       <Item.Extra>Meal: {item.meal.title}</Item.Extra>
       <Item.Extra>Pickup Time: {item.time.date}</Item.Extra>
