@@ -153,6 +153,10 @@ var mealSchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  recipe: {
+    type: String,
+    required: true
   }
 })
 

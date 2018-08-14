@@ -66,7 +66,8 @@ router.post('/:id/menu/add', (req,res) => {
     cuisine: req.body.cuisine,
     chef: req.body.chef,
     picture: req.body.picture,
-    availability: req.body.availability
+    availability: req.body.availability,
+    recipe: req.body.recipe,
   })
 
   newMeal.save()
