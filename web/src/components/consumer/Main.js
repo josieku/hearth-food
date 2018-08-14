@@ -52,22 +52,8 @@ class MealListings extends Component {
   }
 };
 
-// class Map extends Component {
-//   constructor(props)
-//   render(){
-//     return (
-//       <div style = {{border:"1px solid black"}}>
-//         <MapContainer />
-//       </div>
-//     )
-//   }
-// };
-
 function recentCondense(item){
   return (
-    // <div key={item._id} style={{border: "1px solid black"}}>
-    //   <p><strong>Title: </strong>{item.meal.title}</p>
-    //   <p><strong>Description: </strong>{item.meal.description}</p>
     <div id="listItem" key={item.meal._id}>
       <Item>
         <Grid columns={2}>
@@ -93,7 +79,6 @@ function recentCondense(item){
     </Item>
     <Divider />
   </div>
-  // </div>
 )
 }
 

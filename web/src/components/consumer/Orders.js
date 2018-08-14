@@ -22,8 +22,8 @@ export default class Main extends Component{
     fetch(`/user/${this.props.user._id}/orders`)
     .then(response => response.json())
     .then(orders => this.setState({
-      pending: orders.filter(item => !item.accepted && !item.expired || !item.payment && !item.expired ),
-      scheduled: orders.filter(item => item.accepted && item.payment && !item.expired),
+      pending: orders.filter(item => !item.accepted && !item.expired ),
+      scheduled: orders.filter(item => item.accepted && !item.expired),
       history: orders.filter(item => item.expired)
     }))
   }

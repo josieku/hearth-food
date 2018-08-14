@@ -25,7 +25,7 @@ export default class MealProfile extends Component {
         await this.setState({
           meal,
           chefId: meal.chef._id,
-          times: meal.availability,
+          times: meal.availability.filter(item=>!item.passed),
           reviews: meal.reviews ? meal.reviews : []
          });
         console.log('after mount', this.state)
