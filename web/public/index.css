@@ -11,16 +11,15 @@ body {
   margin-left: 3%;
   margin-right: 3%;
 }
-
+/* Landing Page Styles */
 #getStarted {
   color: white;
   background: #969595
 }
-
+/* General Styling */
 #navBar {
   font-size: 20px;
 }
-
 
 /* Landing page styling */
 #mainPageMenu {
@@ -41,17 +40,18 @@ body {
 }
 
 #loginMessage {
-  background-color: #EBE9E9;
+  background-color: #D6D4D4;
 }
 /* Consumer Landing Styling */
-#mealList {
-  margin-top: 50px;
-}
 
-#availableMeals {
-  background-color: #B73535;
+#header {
+  background-color: #D6D4D4;
   font-size: medium;
 }
+.smallHeader {
+  color: #B73535
+}
+
 /* Chef Landing Styling */
 #chefLandingHeader {
   background-color: #B73535
@@ -64,7 +64,7 @@ body {
 
 }
 #chefMenu {
-  background-color: #EBE9E9;
+  background-color: #D6D4D4;
 }
 /* Consumer Orders Page Styling */
 .conOrderPageHeader {
@@ -78,5 +78,5 @@ body {
 
 /* Notifications styles */
 #notificationHead {
-  background-color: #EBE9E9;
+  background-color: #D6D4D4;
 }

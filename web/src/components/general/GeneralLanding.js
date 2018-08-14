@@ -264,7 +264,7 @@ const HomepageLayout = () => (
         </Grid.Row>
       </Grid>
     </Segment>
-    <Segment style={{ padding: '0em' }} vertical>
+    {/* <Segment style={{ padding: '0em' }} vertical>
       <Grid celled='internally' columns='equal' stackable>
         <Grid.Row textAlign='center'>
           <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
@@ -272,19 +272,19 @@ const HomepageLayout = () => (
               "What a Company"
             </Header>
             <p style={{ fontSize: '1.33em' }}>That is what they all say about us</p>
-          </Grid.Column>
-          <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}>
-            <Header as='h3' style={{ fontSize: '2em' }}>
+          </Grid.Column> */}
+          {/* <Grid.Column style={{ paddingBottom: '5em', paddingTop: '5em' }}> */}
+            {/* <Header as='h3' style={{ fontSize: '2em' }}>
               "I shouldn't have gone with their competitor."
-            </Header>
-            <p style={{ fontSize: '1.33em' }}>
+            </Header> */}
+            {/* <p style={{ fontSize: '1.33em' }}>
               {/* <Image avatar src='/images/avatar/large/nan.jpg' /> */}
-              <b>Nan</b> Chief Fun Officer Acme Toys
-            </p>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </Segment>
+              {/* <b>Nan</b> Chief Fun Officer Acme Toys */}
+            {/* </p> */}
+          {/* </Grid.Column> */}
+        {/* </Grid.Row> */}
+      {/* </Grid> */}
+    {/* </Segment> */}
     <Segment style={{ padding: '8em 0em' }} vertical>
       <Container text>
         <Header as='h3' style={{ fontSize: '2em' }}>
@@ -295,17 +295,6 @@ const HomepageLayout = () => (
         </p>
           <Link to="/auth/signup" style={{textDecoration: 'none', color: 'white'}}><Button size='huge'>Cook With Us</Button></Link>
         <Divider/>
-        <Header as='h3' style={{ fontSize: '2em' }}>
-          Did We Tell You About Our Bananas?
-        </Header>
-        <p style={{ fontSize: '1.33em' }}>
-          Yes I know you probably disregarded the earlier boasts as non-sequitur filler content, but
-          it's really true. It took years of gene splicing and combinatory DNA research, but our
-          bananas can really dance.
-        </p>
-        <Button as='a' size='large'>
-          I'm Still Quite Interested
-        </Button>
       </Container>
     </Segment>
     <Segment inverted vertical style={{ padding: '5em 0em' }}>
@@ -317,25 +306,15 @@ const HomepageLayout = () => (
               <List link inverted>
                 <List.Item as='a'>Sitemap</List.Item>
                 <List.Item as='a'>Contact Us</List.Item>
-                <List.Item as='a'>Religious Ceremonies</List.Item>
-                <List.Item as='a'>Gazebo Plans</List.Item>
-              </List>
-            </Grid.Column>
-            <Grid.Column width={3}>
-              <Header inverted as='h4' content='Services' />
-              <List link inverted>
-                <List.Item as='a'>Banana Pre-Order</List.Item>
-                <List.Item as='a'>DNA FAQ</List.Item>
-                <List.Item as='a'>How To Access</List.Item>
-                <List.Item as='a'>Favorite X-Men</List.Item>
               </List>
             </Grid.Column>
             <Grid.Column width={7}>
               <Header as='h4' inverted>
-                Footer Header
+                Our Mission
               </Header>
               <p>
-                Extra space for a call to action inside the footer that could help re-engage users.
+                hearth strives to provide affordable home cooked meals to students across their universities. We want to create a community of people sharing their
+                recipes with their peers.
               </p>
             </Grid.Column>
           </Grid.Row>
