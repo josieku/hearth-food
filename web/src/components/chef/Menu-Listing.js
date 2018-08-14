@@ -7,7 +7,7 @@ import Edit from './../meals/MealProfile-Edit';
 function MenuListItem(item) {
   return (
     <Item className="menu-list-item">
-      <Header href={`/meal/${item._id}`}><p><strong>{item.title}</strong></p></Header>
+      <Header href={`/meal/${item._id}`}>{item.title}</Header>
       {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
       <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
       <Item.Content><strong>Ingredients: </strong>{item.ingredients}</Item.Content>
@@ -16,6 +16,8 @@ function MenuListItem(item) {
       <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
       <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
       <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Set Availability</Button>
+      <Header >Recipe</Header>
+      <Item.Content>{item.recipe}</Item.Content>
     </Item>
   )
 }

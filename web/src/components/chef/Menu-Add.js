@@ -9,6 +9,7 @@ export default class Add extends React.Component {
     price: 0,
     cuisine: "",
     picture: null,
+    recipe: ""
   }
 
   handleFile = (e) => {
@@ -30,13 +31,15 @@ export default class Add extends React.Component {
       this.state.description,
       this.state.ingredients,
       parseInt(this.state.price),
-      this.state.cuisine);
+      this.state.cuisine,
+      this.state.recipe);
       this.setState({
         title: "",
         description: "",
         ingredients: "",
         price:0,
-        cuisine: ""
+        cuisine: "",
+        recipe: ""
       })
     }
 
@@ -47,7 +50,8 @@ export default class Add extends React.Component {
         description: "",
         ingredients: "",
         price:0,
-        cuisine: ""
+        cuisine: "",
+        recipe: "",
       })
       this.props.history.push('/dashboard/menu')
     }
@@ -74,8 +78,10 @@ export default class Add extends React.Component {
                     <Form.Input fluid label="Price per dish" type="number" icon='dollar sign' iconPosition='left' placeholder='Price' onChange={(e)=>this.setState({ price: e.target.value })} required/>
                     <Form.TextArea label="Ingredients" placeholder='List out the ingredients in the dish ...' onChange={(e)=>this.setState({ ingredients: e.target.value })} required/>
                     <Form.Input fluid label="Cuisine" type="name" icon='key' iconPosition='left' placeholder='Cuisine' onChange={(e)=>this.setState({ cuisine: e.target.value })} required/>
+                    <Form.TextArea  label="Recipe" placeholder='Insert a Recipe' onChange={(e)=>this.setState({ recipe: e.target.value })} required/>
+
                     {/* <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Confirm Password' onChange={(e)=>this.setState({ repeat: e.target.value })}  required/> */}
-                    <Form.Input fluid label="Dish Picture" type="file" icon='camera retro' iconPosition='left' placeholder='Picture' onChange={(e)=>{this.handleFile(e)}} required/>
+                    <Form.Input fluid label="Dish Picture" type="file" icon='camera retro' iconPosition='left' placeholder='Picture' onChange={(e)=>{this.handleFile(e)}} />
                     <Image src={this.state.file}  required/>
                     <div id="addDishButtons">
                       <Button id="loginButton" size='large' onClick={this.save}> Save </Button>

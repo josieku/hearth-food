@@ -25,7 +25,7 @@ export default class Menu extends Component{
       }))
   }
 
-  saveDish = (title, description, ingredients, price, cuisine) => {
+  saveDish = (title, description, ingredients, price, cuisine, recipe) => {
     const chef = this.state.profile._id;
     fetch(`/chef/${chef}/menu/add`, {
       method: 'POST',
@@ -33,7 +33,7 @@ export default class Menu extends Component{
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef }),
+      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef, recipe }),
     })
     .then(resp => resp.json())
     .then(saved => {
