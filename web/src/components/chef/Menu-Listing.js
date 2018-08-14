@@ -25,18 +25,21 @@ export default class MenuListing extends Component{
     activeItem: this.props.menu.length >0 ? this.props.menu[0].title : null,
     shownRecipe: this.props.menu.length > 0 ? this.props.menu[0] : null
   }
+
   handleClick = (item) => {
     this.setState({shownRecipe: item, activeItem: item.title})
+    console.log(this.state.shownRecipe);
   }
+
   render(){
     const { activeItem } = this.state
-    console.log("RESD", this.props.menu[0]);
+    console.log('shownrecipe', this.state.shownRecipe, this.props.menu[0])
     return (
       <div>
           <Menu text id="chefMenu">
             <Menu.Item header>Your Menu</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-            <Input placeholder='Search...'/>
+            <Input placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                 <Dropdown icon='filter' floating button className='icon'>
                   <Dropdown.Menu>
                     <Dropdown.Header content='Filter by selection' />

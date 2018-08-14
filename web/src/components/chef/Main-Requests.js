@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Item, Menu, Segment, TextArea, Modal } from 'semantic-ui-react';
+import { Button, Divider, Grid, Item, Menu, Segment, TextArea, Modal, Dropdown, Input } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept, decline) {
   return (
@@ -57,14 +57,23 @@ export default class RequestListing extends Component{
             <Menu text id="availableMeals">
               <Menu.Item header>Requests</Menu.Item>
               <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-              <Input placeholder='Search...'/>
+              <Input placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                   <Dropdown icon='filter' floating button className='icon'>
                     <Dropdown.Menu>
                       <Dropdown.Header content='Filter by selection' />
                       <Dropdown.Divider />
-                      <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                      <Dropdown.Item onClick={()=>{this.props.sort("high")}}>
+                        Price: Low to High
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.props.sort("low")}}>
+                        Price: High to Low
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.props.sort("earliest")}}>
+                        Pickup Time: Earliest to Latest
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.props.sort("latest")}}>
+                        Pickup Time: Latest to Earliest
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Menu.Menu>

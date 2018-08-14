@@ -65,7 +65,7 @@ router.get('/:id/notif', (req, res) => {
        .populate('meal')
        .exec()
        .then(notifications => {
-         console.log('!!!notifications!!!', notifications)
+         notifications = notifications.sort((a,b)=>b.time - a.time)
          res.json(notifications)
        });
 })
@@ -90,6 +90,32 @@ router.get('/:id/mostordered', (req,res) => {
              res.json({});
            }
          })
+})
+
+router.get('/:id/charges', (req, res) => {
+  const conditions = {
+    'consumer': req.params.id,
+    'accepted': 'true'
+  }
+  Request.find(conditions)
+         .populate('chef')
+         .populate('meal')
+         .populate('time')
+         .exec()
+         .then(requests => res.json(requests))
+})
+
+router.get('/:id/paycheck', (req, res) => {
+  const conditions = {
+    'chef': req.params.id,
+    'accepted': 'true',
+  }
+  Request.find(conditions)
+         .populate('consumer')
+         .populate('meal')
+         .populate('time')
+         .exec()
+         .then(requests => res.json(requests))
 })
 
 router.post('/:id/request/cancel', (req,res) => {
@@ -128,6 +154,11 @@ router.post('/:id/notif/markallread', async (req, res) => {
   Notification.find({ user: req.params.id })
               .then(notifications => res.json(notifications))
 
+})
+
+router.post('/:id/notif/delete', async (req, res) => {
+  Notification.findByIdAndDelete(req.body.notifId)
+              .then(e => res.send('deleted'))
 })
 
 export default router;

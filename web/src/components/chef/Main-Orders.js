@@ -10,13 +10,14 @@ function OrderItem(item, index, complete, change) {
       <Item.Extra>Meal: {item.meal.title}</Item.Extra>
       <Item.Extra>Date: {new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
       <Item.Extra>Time: {item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra>Status: <strong>{item.payment ? <span>Ready to cook!</span> : <span>Awaiting payment...</span>}</strong></Item.Extra>
+      <Item.Extra>Status: <strong><span>Ready to cook!</span></strong></Item.Extra>
       <Item.Extra>Additional requests: {item.requests ? item.requests : 'None'}</Item.Extra>
       <Button>Message Customer</Button>
-      {item.payment
+      <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
+      {/* {item.payment
         ? <button disabled>Make Changes to Request</button>
-        : <EditModal request={item} ind={index} change={change}/> }
-      {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null}
+        : <EditModal request={item} ind={index} change={change}/> } */}
+      {/* {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null} */}
       <Divider />
     </Item>
   )
@@ -50,8 +51,6 @@ class EditModal extends Component {
 
   save = () => {
     if (this.state.time.time !== this.props.request.time.time){
-      // console.log('changing');
-      // console.log('availability!!!!', this.props.request.meal.availability);
       this.props.change(this.props.request._id, this.props.index, this.state.time);
     }
     this.setState({ modalOpen: false })
@@ -89,14 +88,23 @@ export default class OrderListing extends Component{
           <Menu text id="availableMeals">
             <Menu.Item header>Orders</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-            <Input placeholder='Search...'/>
+            <Input placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                 <Dropdown icon='filter' floating button className='icon'>
                   <Dropdown.Menu>
                     <Dropdown.Header content='Filter by selection' />
                     <Dropdown.Divider />
-                    <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                    <Dropdown.Item onClick={()=>{this.props.sort("high")}}>
+                      Price: Low to High
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("low")}}>
+                      Price: High to Low
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("earliest")}}>
+                      Pickup Time: Earliest to Latest
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("latest")}}>
+                      Pickup Time: Latest to Earliest
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </Menu.Menu>

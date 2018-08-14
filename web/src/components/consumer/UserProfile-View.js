@@ -45,11 +45,19 @@ export default class ProfileView extends Component{
               {preferences.length < 1
                 ? " None"
                 : <ul>{preferences.map((pref, ind) => <li key={ind}>{pref}</li>)}</ul> }
-              </p>
-              {self._id === profile._id
-                ? <Link to={`/user/${self._id}/edit`}><button>Edit Profile</button></Link>
-                : null
-              }
+            </p>
+            {self._id === profile._id
+              ? <Link to={`/user/${self._id}/edit`}><button>Edit Profile</button></Link>
+              : null
+            }
+            {self._id === profile._id && self.role === "consumer"
+              ? <Link to={`/user/${self._id}/pay`}><button>See recent charges</button></Link>
+              : null
+            }
+            {self._id === profile._id && self.role === "chef"
+              ? <Link to={`/user/${self._id}/paycheck`}><button>See Paycheck</button></Link>
+              : null
+            }
             </div>
             </Grid.Column>
             <Grid.Column width={12}>
