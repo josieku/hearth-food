@@ -32,7 +32,7 @@ function Listing(meal){
             <Item.Extra>{meal.cuisine}</Item.Extra>
             <Item.Extra><h4>Distance from you</h4></Item.Extra>
             <Item.Extra>{meal.distance}</Item.Extra>
-            <Button id="redButton" href="/meal/${meal._id}" size='mini' >Request</Button>
+            <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
           </Item.Content>
         </Grid.Column>
       </Grid>
@@ -87,7 +87,7 @@ function recentCondense(item){
             <Item.Extra><h4>Price per plate</h4></Item.Extra>
             <Item.Extra>${item.meal.price}</Item.Extra>
           </Item.Content>
-          <Button size='mini'>Request Again</Button>
+          <Button size='mini' id="redButton">Request Again</Button>
         </Grid.Column>
       </Grid>
     </Item>
@@ -136,7 +136,7 @@ export default class Listings extends Component{
               <Menu text id="header">
                 <Menu.Item header>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-                  <Input placeholder='Search...'/>
+                  <Input id='searchInHeader' icon='search' placeholder='Search...'/>
                   <Dropdown icon='filter' floating button className="icon" id="redButton">
                     <Dropdown.Menu>
                       <Dropdown.Header content='Filter by selection' />
