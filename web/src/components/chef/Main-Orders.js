@@ -6,20 +6,24 @@ import { Button, Divider, Dropdown, Grid, Input, Item, Menu, Modal } from 'seman
 function OrderItem(item, index, complete, change) {
   return (
     <Item key={item._id} className="order-list-item">
-      <Item.Header>Customer: {item.consumer.firstName}</Item.Header>
-      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
-      <Item.Extra>Date: {new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
-      <Item.Extra>Time: {item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra>Status: <strong><span>Ready to cook!</span></strong></Item.Extra>
-      <Item.Extra>Additional requests: {item.requests ? item.requests : 'None'}</Item.Extra>
-      <Button>Message Customer</Button>
-      <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
-      {/* {item.payment
-        ? <button disabled>Make Changes to Request</button>
-        : <EditModal request={item} ind={index} change={change}/> } */}
-      {/* {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null} */}
-      <Divider />
-    </Item>
+    <Grid>
+      <Grid.Column width={6}>
+      <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
+      <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
+      <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
+      <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
+      <Item.Extra><strong>Status: {item.payment ? <span>Ready to cook!</span> : <span>Awaiting payment...</span>}</strong></Item.Extra>
+      <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
+  </Grid.Column>
+  <Grid.Column textAlign='right' width={6}>
+    {item.payment
+      ? <button disabled>Change pickup time</button>
+      : <EditModal request={item} ind={index} change={change}/> }
+      {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null}
+  </Grid.Column>
+  </Grid>
+  <Divider />
+</Item>
   )
 }
 
@@ -60,7 +64,7 @@ class EditModal extends Component {
     const request = this.props.request;
     return (
       <div>
-        <Button onClick={()=>this.setState({modalOpen: true})}>Make Changes to Request</Button>
+        <Button id="redButton" size='mini' onClick={()=>this.setState({modalOpen: true})}>Make Changes to Request</Button>
         <Modal open={this.state.modalOpen}>
           <Modal.Content>
             <Modal.Description>
@@ -85,11 +89,11 @@ export default class OrderListing extends Component{
     return(
       <div>
         <Grid.Row>
-          <Menu text id="availableMeals">
+          <Menu text id="header">
             <Menu.Item header>Orders</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-            <Input placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-                <Dropdown icon='filter' floating button className='icon'>
+              <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
+                <Dropdown icon='filter' floating button className='icon' id='redButton'>
                   <Dropdown.Menu>
                     <Dropdown.Header content='Filter by selection' />
                     <Dropdown.Divider />

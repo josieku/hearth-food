@@ -36,44 +36,44 @@ export default class MenuListing extends Component{
     console.log('shownrecipe', this.state.shownRecipe, this.props.menu[0])
     return (
       <div>
-          <Menu text id="chefMenu">
-            <Menu.Item header>Your Menu</Menu.Item>
-            <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-            <Input placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-                <Dropdown icon='filter' floating button className='icon'>
-                  <Dropdown.Menu>
-                    <Dropdown.Header content='Filter by selection' />
-                    <Dropdown.Divider />
-                    <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
-                    </Dropdown.Item>
-                    <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
-                <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
-              </Menu.Menu>
-          </Menu>
+        <Menu text id="chefMenu">
+          <Menu.Item header>Your Menu</Menu.Item>
+          <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+            <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
+            <Dropdown icon='filter' floating button className="icon" id="redButton">
+              <Dropdown.Menu>
+                <Dropdown.Header content='Filter by selection' />
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                </Dropdown.Item>
+                <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
+            <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
+          </Menu.Menu>
+        </Menu>
         { this.props.menu.length > 0
           ? <Segment basic>
-          <Grid columns={2}>
-            <Grid.Column width={4}>
-              <Menu fluid vertical tabular>
-                {this.props.menu.length > 0
-                  ? this.props.menu.map(item =>
-                    <Menu.Item color='red' name={item.title} key={item._id}
-                      active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>)
-                  : null}
-              </Menu>
-            </Grid.Column>
-            <Grid.Column stretched width={12}>
-              <Segment attached>
-                {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
-              </Segment>
-            </Grid.Column>
-          </Grid>
-        </Segment>
-        : "No meals, add now!" }
-      </div>
-    )
-  }
-}
+            <Grid columns={2}>
+              <Grid.Column width={4}>
+                <Menu fluid vertical tabular>
+                  {this.props.menu.length > 0
+                    ? this.props.menu.map(item =>
+                      <Menu.Item color='red' name={item.title} key={item._id}
+                        active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>)
+                        : null}
+                      </Menu>
+                    </Grid.Column>
+                    <Grid.Column stretched width={12}>
+                      <Segment attached>
+                        {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
+                      </Segment>
+                    </Grid.Column>
+                  </Grid>
+                </Segment>
+                : "No meals, add now!" }
+              </div>
+            )
+          }
+        }
