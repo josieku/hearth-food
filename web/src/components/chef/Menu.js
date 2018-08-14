@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
+import Fuse from 'fuse.js'
 
 import Add from './Menu-Add';
 import MenuListing from './Menu-Listing';
@@ -10,13 +11,18 @@ export default class Menu extends Component{
   state = {
     profile: this.props.user,
     menu: [],
+    menuOriginal: [],
     open: false,
   }
 
   componentDidMount = () => {
     fetch(`/chef/${this.props.user._id}`)
       .then(response => response.json())
-      .then(profile => this.setState({ profile, menu: profile.menu }))
+      .then(profile => this.setState({
+        profile,
+        menu: profile.menu,
+        menuOriginal: profile.menu
+      }))
   }
 
   saveDish = (title, description, ingredients, price, cuisine) => {
@@ -39,6 +45,23 @@ export default class Menu extends Component{
     })
   }
 
+  searchMenu = (input) => {
+    console.log(this.state.menuOriginal)
+    if (input.length > 0){
+      var options = {
+        keys: ['title',
+               'description',
+               'ingredients'],
+        threshold: 0.4
+      };
+      var fuse = new Fuse(this.state.menuOriginal, options);
+      const menu = fuse.search(input);
+      this.setState({ menu });
+    } else {
+      this.setState({ menu: this.state.menuOriginal })
+    }
+  }
+
   render(){
     const profile = this.state.profile;
     return(
@@ -48,7 +71,7 @@ export default class Menu extends Component{
             <Add save={this.saveDish} {...props}/>}/>
 
           <Route path="/dashboard/menu" render={(props) =>
-            <MenuListing id={profile._id}
+            <MenuListing id={profile._id} search={this.searchMenu}
                          menu={this.state.menu.filter(item=>!item.archived)} {...props}/>}/>
 
         </Switch>

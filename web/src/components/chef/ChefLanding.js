@@ -37,6 +37,22 @@ export default class ChefLanding extends Component{
     return setInterval(this.fetchNotifs, 30000);
   }
 
+  deleteNotif = (notifId, index) => {
+    fetch(`/user/${this.props.user._id}/notif/delete`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({ notifId }),
+    })
+      .then(e => {
+        const notifications = this.state.notifications.slice();
+        notifications.splice(index, 1);
+        this.setState({ notifications });
+      })
+  }
+
   updateNotifications = (unseen) => {
     fetch(`/user/${this.props.user._id}/notif/markallread`, {
       method: 'POST',
@@ -66,10 +82,12 @@ export default class ChefLanding extends Component{
 
           <Route exact path="/dashboard/notifications" render={(props)=>
             <Notifications user={user} update={this.updateNotifications}
-              notifications={this.state.notifications} {...props} />}/>
+              notifications={this.state.notifications} delete={this.deleteNotif}
+              {...props} />}/>
 
           <Route exact path="/dashboard" render={(props)=>
-            <Main user={user} id={user._id} {...props} />}/>
+            <Main user={user} id={user._id} updateNotifs={this.updateNotifications}
+              notifications={this.state.notifications} {...props}/>}/>
 
           {/* <Route path="/messages" render={(props)=> <Messages user={user} {...props} />}/> */}
         </Switch>

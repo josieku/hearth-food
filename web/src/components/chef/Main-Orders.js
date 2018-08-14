@@ -55,8 +55,6 @@ class EditModal extends Component {
 
   save = () => {
     if (this.state.time.time !== this.props.request.time.time){
-      // console.log('changing');
-      // console.log('availability!!!!', this.props.request.meal.availability);
       this.props.change(this.props.request._id, this.props.index, this.state.time);
     }
     this.setState({ modalOpen: false })
@@ -94,14 +92,23 @@ export default class OrderListing extends Component{
           <Menu text id="header">
             <Menu.Item header>Orders</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-              <Input id='searchInHeader' icon='search' placeholder='Search...'/>
+              <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                 <Dropdown icon='filter' floating button className='icon' id='redButton'>
                   <Dropdown.Menu>
                     <Dropdown.Header content='Filter by selection' />
                     <Dropdown.Divider />
-                    <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                    <Dropdown.Item onClick={()=>{this.props.sort("high")}}>
+                      Price: Low to High
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("low")}}>
+                      Price: High to Low
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("earliest")}}>
+                      Pickup Time: Earliest to Latest
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("latest")}}>
+                      Pickup Time: Latest to Earliest
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </Menu.Menu>
