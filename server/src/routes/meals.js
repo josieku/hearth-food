@@ -57,7 +57,8 @@ router.post('/:id/save', (req, res) => {
     description: req.body.description,
     ingredients: req.body.ingredients,
     price: req.body.price,
-    cuisine: req.body.cuisine
+    cuisine: req.body.cuisine,
+    picture: req.body.picture
   }
 
   Meal.findByIdAndUpdate(req.params.id, changes, {new: true})

@@ -62,7 +62,7 @@ export default class MealProfile extends Component {
 
   }
 
-  save = (title, description, ingredients, price, cuisine) => {
+  save = (title, description, ingredients, price, cuisine, picture) => {
     fetch(`/meal/${this.props.id}/save`, {
       method: 'POST',
       headers: {
@@ -70,7 +70,7 @@ export default class MealProfile extends Component {
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({
-        title, description, ingredients, price, cuisine
+        title, description, ingredients, price, cuisine, picture
       }),
     })
     .then(resp => resp.json())
