@@ -48,7 +48,11 @@ function Listing(meal, user){
             <Item.Extra><h4>Cuisine</h4></Item.Extra>
             <Item.Extra>{meal.cuisine}</Item.Extra>
             <Item.Extra><h4>Distance from you</h4></Item.Extra>
+<<<<<<< HEAD
+            <Item.Extra>{distance}</Item.Extra>
+=======
             <Item.Extra>{meal.distance}</Item.Extra>
+>>>>>>> 9576fce3179fbcd47b404a4adb775e6ffb407054
             <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
           </Item.Content>
         </Grid.Column>
