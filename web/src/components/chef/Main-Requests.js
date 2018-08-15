@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Dropdown, Grid, Input, Item, Menu, TextArea, Modal } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Input, Item, Menu, TextArea, Modal, Loader } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept, decline) {
   return (
@@ -79,10 +79,13 @@ export default class RequestListing extends Component{
                 </Menu.Menu>
             </Menu>
           </Grid.Row>
-          {this.props.requests.length > 0
+          {this.props.loading
+            ? <Loader active inline='centered'/>
+            : this.props.requests.length > 0
             ? this.props.requests.map((item, ind) =>
                 RequestItem(item, ind, this.props.accept, this.open))
-            : 'No requests, start sharing your dishes!'}
+            : 'No requests, start sharing your dishes!'
+          }
           {this.state.item
             ? <Modal open={this.state.open}>
               <Modal.Header>Decline Request</Modal.Header>

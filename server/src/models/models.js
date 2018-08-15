@@ -310,8 +310,19 @@ var availabilitySchema = mongoose.Schema({
         ref: 'Request'
       }
     ]
-  }
+  },
+  recurring: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  // expireAt: {
+  //   type: Date,
+  //   required: true
+  // }
 })
+
+// availabilitySchema.index({ 'expireAt': 1 }, { expireAfterSeconds: 0 })
 
 var notificationSchema = mongoose.Schema({
   type: {
@@ -341,8 +352,15 @@ var notificationSchema = mongoose.Schema({
     type: Boolean,
     required: true,
     default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+    expires: 604800000,
   }
 })
+
+
 
 var User = mongoose.model('User', userSchema);
 var Meal = mongoose.model('Meal', mealSchema);
@@ -352,6 +370,7 @@ var Request = mongoose.model('Request', requestsSchema);
 var Available = mongoose.model('Available', availabilitySchema);
 // var Allnotif = mongoose.model('Allnotifications', notifAllSchema);
 var Notification = mongoose.model('Notification', notificationSchema);
+
 
 module.exports = {
   User: User,

@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Dropdown, Header, Menu, Segment } from 'semantic-ui-react';
+import { Dropdown, Header, Menu, Segment, Image, Icon } from 'semantic-ui-react';
 import './../../../public/index.css'
+
+function NotifCondense(item){
+  return(
+    <Dropdown.Item>{item.content}<span style={{color:'gray'}}>{new Date(item.time).toString}</span></Dropdown.Item>
+  )
+}
 
 export default class NavBar extends Component {
   state = {
@@ -14,8 +20,10 @@ export default class NavBar extends Component {
 
   nav = (role, id, stateNotifs) => {
     const { activeItem } = this.state
-    const notifications = stateNotifs ? stateNotifs : []
-    const notifs = notifications.filter(item=> !item.seen).length;
+    const notifications = stateNotifs ? stateNotifs.filter(item=>!item.seen) : []
+    const notifs = notifications.length;
+    const user = this.props.user;
+    const notifIcon = notifs > 0 ? "bell" : "bell outline";
     if (role === "consumer") {
       return (
         <div>
@@ -24,15 +32,23 @@ export default class NavBar extends Component {
           <Menu.Menu text="true" id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
-                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
-                <Menu.Item name='Messages' href='/messages' active={ activeItem === 'Messages'}  onClick={()=>{this.setState({activeItem: 'Messages'})}}/>
+                <Menu.Item icon={notifIcon} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                {/* <Dropdown icon={notifIcon} floating className='icon' direction='right'>
+                  <Dropdown.Menu>
+                    <Dropdown.Header content='Unseen notifications' />
+                    {notifications.map(NotifCondense)}
+                    <Dropdown.Item>Discussion</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown> */}
+                {/* <Menu.Item name='Messages' href='/messages' active={ activeItem === 'Messages'}  onClick={()=>{this.setState({activeItem: 'Messages'})}}/> */}
                 <Menu.Item>
-              <Dropdown icon={'user'}>
-                <Dropdown.Menu>
-                  <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
-                  <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
-              </Dropdown.Menu>
-              </Dropdown>
+                <Dropdown icon={'user'}>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
+                    <Dropdown.Item href={`/user/${id}/pay`}>Payment</Dropdown.Item>
+                    <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
             </Menu.Item>
           </Menu.Menu>
         </Menu>
@@ -47,13 +63,14 @@ export default class NavBar extends Component {
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'Consumer'}  onClick={()=>{this.setState({activeItem: 'Consumer'})}}/>
                 <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'History'}  onClick={()=>{this.setState({activeItem: 'History'})}}/>
-                <Menu.Item name={`Notifications ${notifs}`} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                <Menu.Item icon={notifIcon} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
                 <Menu.Item>
               <Dropdown icon='user' floating className='icon'>
                 <Dropdown.Menu>
-                <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
-                <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
-              </Dropdown.Menu>
+                  <Dropdown.Item href={`/user/${id}`}><Icon name='user'/> Profile</Dropdown.Item>
+                  <Dropdown.Item href={`/user/${id}/paycheck`}><Icon name='dollar sign'/> Paycheck</Dropdown.Item>
+                  <Dropdown.Item href='/auth/logout'><Icon name='sign out'/> Logout</Dropdown.Item>
+                </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>
           </Menu.Menu>

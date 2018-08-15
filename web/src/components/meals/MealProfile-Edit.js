@@ -8,6 +8,7 @@ export default class MealEdit extends Component {
     ingredients: this.props.meal.ingredients,
     price: this.props.meal.price,
     cuisine: this.props.meal.cuisine,
+    file: this.props.meal.picture,
     chef: Object.assign({}, this.props.meal.chef),
     modalOpen: true,
   }
@@ -27,20 +28,23 @@ export default class MealEdit extends Component {
           ingredients: meal.ingredients,
           price: meal.price,
           cuisine: meal.cuisine,
-          chef: meal.chef
+          chef: meal.chef,
+          file: meal.picture
         })
       })
     }
   }
 
   save = e => {
-    this.props.save(this.state.title, this.state.description, this.state.ingredients, this.state.price, this.state.cuisine)
+    this.props.save(this.state.title, this.state.description,
+      this.state.ingredients, this.state.price, this.state.cuisine, this.state.file)
     this.setState({
       title: '',
       description: '',
       ingredients: '',
       price: '',
-      cuisine: ''
+      cuisine: '',
+      file: ''
     })
     this.props.history.push(`/dashboard/menu`)
   }
@@ -51,7 +55,8 @@ export default class MealEdit extends Component {
       description: '',
       ingredients: '',
       price: '',
-      cuisine: ''
+      cuisine: '',
+      file: ''
     })
     this.props.history.push(`/dashboard/menu`)
   }
@@ -63,7 +68,8 @@ export default class MealEdit extends Component {
       description: '',
       ingredients: '',
       price: '',
-      cuisine: ''
+      cuisine: '',
+      file: ''
     })
     this.props.history.push(`/dashboard/menu`)
   }
@@ -74,8 +80,22 @@ export default class MealEdit extends Component {
       description: '',
       ingredients: '',
       price: '',
-      cuisine: ''
+      cuisine: '',
+      file: '',
     })
+  }
+
+  handleFile = (e) => {
+    var _this = this
+    console.log(e.target.value)
+    var fReader = new FileReader();
+    fReader.readAsDataURL(e.target.files[0]);
+    fReader.onloadend = function(event){
+      // console.log(event.target.result);
+      _this.setState({
+        file: event.target.result
+      })
+    }
   }
 
   render(){
@@ -101,6 +121,8 @@ export default class MealEdit extends Component {
                   <Form.TextArea label="Ingredients" fluid placeholder="Ingredients" value={meal.ingredients} onChange={e => this.setState({ingredients: e.target.value})} required/>
                   <Form.Input  label="Price per dish" fluid placeholder="Price USD" value={meal.price} onChange={e => this.setState({price: e.target.value})} required/>
                   <Form.Input label="Cuisine" fluid placeholder="Cuisine" value={meal.cuisine} onChange={e => this.setState({cuisine: e.target.value})} required/>
+                  <Form.Input fluid label="Dish Picture" type="file" icon='camera retro' iconPosition='left' placeholder='Picture' onChange={(e)=>{this.handleFile(e)}} />
+                  <Image src={this.state.file}  required/>
                   <div id="addDishButtons">
                     <Button id="loginButton" size="large" onClick={this.save}>Save</Button>
                     <Button id="loginButton" size="large"  style={{backgroundColor: '#d6d4d4'}} onClick={this.cancel}>Cancel</Button>
