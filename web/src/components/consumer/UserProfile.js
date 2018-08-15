@@ -4,6 +4,8 @@ import { Switch, Route, Link } from 'react-router-dom';
 import NavBar from './../general/NavBar';
 import UserView from './UserProfile-View';
 import UserEdit from './UserProfile-Edit';
+import UserPay from './UserProfile-Pay';
+import UserPaycheck from './UserProfile-Paycheck';
 
 export default class ConsumerProfile extends Component{
   state = {
@@ -43,6 +45,14 @@ export default class ConsumerProfile extends Component{
         <Switch>
           <Route exact path='/user/:id' render={(props) =>
             <UserView user={this.props.user} profile={this.state.profile}
+              id={props.match.params.id} {...props}/>}/>
+
+          <Route exact path='/user/:id/pay' render={(props) =>
+            <UserPay user={this.props.user} profile={this.state.profile}
+              id={props.match.params.id} {...props}/>}/>
+
+          <Route exact path='/user/:id/paycheck' render={(props) =>
+            <UserPaycheck user={this.props.user} profile={this.state.profile}
               id={props.match.params.id} {...props}/>}/>
 
           <Route exact path='/user/:id/edit' render={(props) =>

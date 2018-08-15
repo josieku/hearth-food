@@ -22,8 +22,8 @@ export default class Main extends Component{
     fetch(`/user/${this.props.user._id}/orders`)
     .then(response => response.json())
     .then(orders => this.setState({
-      pending: orders.filter(item => !item.accepted && !item.expired || !item.payment && !item.expired ),
-      scheduled: orders.filter(item => item.accepted && item.payment && !item.expired),
+      pending: orders.filter(item => !item.accepted && !item.expired ),
+      scheduled: orders.filter(item => item.accepted && !item.expired),
       history: orders.filter(item => item.expired)
     }))
   }
@@ -42,7 +42,11 @@ export default class Main extends Component{
     })
     .then(resp => resp.json())
     .then(saved => {
-
+      const pending = this.state.pending.slice();
+      pending.splice(index, 1);
+      const history = this.state.history.slice();
+      history.push(saved);
+      this.setState({ pending, history })
     })
   }
 
