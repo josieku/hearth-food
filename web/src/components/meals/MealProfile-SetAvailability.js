@@ -184,6 +184,7 @@ export default class SetAvailability extends Component {
 
   render() {
     const meal = this.props.meal;
+    console.log(this.props.meal)
     return(
       <div>
         <h4>Set customer pickup times for {meal.title}</h4>

@@ -1,7 +1,16 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Dropdown, Header, Menu, Segment, Image, Icon, Transition } from 'semantic-ui-react';
+import { pulse } from 'react-animations';
+import Radium, { StyleRoot } from 'radium';
 import './../../../public/index.css'
+
+const styles = {
+  pulse: {
+    animation: '20s',
+    animationName: Radium.keyframes(pulse, 'pulse')
+  }
+}
 
 function NotifCondense(item){
   return(
@@ -18,12 +27,39 @@ export default class NavBar extends Component {
     this.props.logout();
   }
 
-  nav = (role, id, stateNotifs) => {
-    const { activeItem } = this.state
+  notifAnimation = () => {
+    console.log("animation")
+    return setInterval(this.wiggle, 10000);
+  }
+
+  wiggle = () => {
+    return (
+      <Transition animation="jiggle" duration="5000">
+         <Menu.Item icon="bell" href='/dashboard/notifications' onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+      </Transition>
+    )
+  }
+
+  notifIcon = (stateNotifs) => {
     const notifications = stateNotifs ? stateNotifs.filter(item=>!item.seen) : []
     const notifs = notifications.length;
-    const user = this.props.user;
     const notifIcon = notifs > 0 ? "bell" : "bell outline";
+    const notifWiggle = notifs > 0 ? true : false;
+    if (notifWiggle) return (
+      <Transition animation="jiggle" duration="5000">
+       <Menu.Item icon="bell" href='/dashboard/notifications' onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+      </Transition>)
+    else return (
+      <Menu.Item icon={notifIcon} href='/dashboard/notifications'
+      onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+    )
+  }
+
+  nav = (role, id, stateNotifs) => {
+    const { activeItem } = this.state
+    const user = this.props.user;
+    const notifications = stateNotifs ? stateNotifs.filter(item=>!item.seen) : []
+    const notifs = notifications.length;
     const notifWiggle = notifs > 0 ? true : false;
     if (role === "consumer") {
       return (
@@ -33,17 +69,12 @@ export default class NavBar extends Component {
           <Menu.Menu text="true" id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
-                <Menu.Item icon={notifIcon} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
-                {/* <Transition animation="jiggle" duration="1000" visible={notifWiggle}>
-                </Transition> */}
-                {/* <Dropdown icon={notifIcon} floating className='icon' direction='right'>
-                  <Dropdown.Menu>
-                    <Dropdown.Header content='Unseen notifications' />
-                    {notifications.map(NotifCondense)}
-                    <Dropdown.Item>Discussion</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown> */}
-                {/* <Menu.Item name='Messages' href='/messages' active={ activeItem === 'Messages'}  onClick={()=>{this.setState({activeItem: 'Messages'})}}/> */}
+                {notifWiggle
+                  ? <Transition animation="jiggle" duration="3000" visible={notifWiggle}>
+                      <Menu.Item icon="bell" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                    </Transition>
+                  : <Menu.Item icon="bell outline" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                }
                 <Menu.Item>
                 <Dropdown icon={'user'}>
                   <Dropdown.Menu>
@@ -67,10 +98,16 @@ export default class NavBar extends Component {
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'Consumer'}  onClick={()=>{this.setState({activeItem: 'Consumer'})}}/>
                 <Menu.Item name='History' href='/dashboard/history' active={ activeItem === 'History'}  onClick={()=>{this.setState({activeItem: 'History'})}}/>
-                <Menu.Item icon={notifIcon} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                {notifWiggle
+                  ? <Transition animation="jiggle" duration="3000" visible={notifWiggle}>
+                      <Menu.Item icon="bell" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                    </Transition>
+                  : <Menu.Item icon="bell outline" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                }
                 <Menu.Item>
               <Dropdown icon='user' floating className='icon'>
                 <Dropdown.Menu>
+                  <Dropdown.Item disabled>Hello, {user.firstName}</Dropdown.Item>
                   <Dropdown.Item href={`/user/${id}`}><Icon name='user'/> Profile</Dropdown.Item>
                   <Dropdown.Item href={`/user/${id}/paycheck`}><Icon name='dollar sign'/> Paycheck</Dropdown.Item>
                   <Dropdown.Item href='/auth/logout'><Icon name='sign out'/> Logout</Dropdown.Item>

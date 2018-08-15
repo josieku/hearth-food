@@ -130,6 +130,33 @@ router.post('/:id/requests/complete', (req,res) => {
          })
 })
 
+router.post('/:id/requests/cancel', (req,res) => {
+  const updates = {
+    expired: true,
+    cancelled: true,
+    declineComment: req.body.comment
+  }
+
+  Request.findByIdAndUpdate(req.body.requestId, updates)
+         .populate('meal')
+         .populate('consumer')
+         .exec()
+         .then(request => {
+           const newNotif = new Notification({
+             type: 'Expired Request',
+             meal: request.meal._id,
+             content: `Your ${request.meal.title} has been cancelled.  The chef stated the reason as: ${req.body.comment}`,
+             user: request.consumer,
+             seen: false,
+             time: Date.now()
+           })
+
+           newNotif.save()
+
+           res.json(request)
+         })
+})
+
 router.post('/:id/requests/decline', (req,res) => {
   const updates = {
     expired: true,

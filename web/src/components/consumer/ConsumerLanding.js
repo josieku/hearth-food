@@ -11,6 +11,7 @@ import Notifications from './../general/Notifications';
 export default class ConsumerLanding extends Component{
   state = {
     notifications: [],
+    loadingNotifs: true,
   }
 
   componentDidMount = e => {
@@ -19,7 +20,10 @@ export default class ConsumerLanding extends Component{
     } else {
       fetch(`/user/${this.props.user._id}/notif`)
       .then(resp => resp.json())
-      .then(notifications => this.setState({ notifications }))
+      .then(notifications => {
+        console.log('notifs', notifications)
+        this.setState({ notifications, loadingNotifs: false })
+      })
     }
 
     let intervalId = this.getNotifs();
@@ -51,7 +55,7 @@ export default class ConsumerLanding extends Component{
   }
 
   getNotifs = () => {
-    return setInterval(this.fetchNotifs, 30000);
+    return setInterval(this.fetchNotifs, 10000);
   }
 
   updateNotifications = (unseen) => {
@@ -87,7 +91,7 @@ export default class ConsumerLanding extends Component{
           <Route exact path="/dashboard/notifications" render={(props)=>
             <Notifications user={user} update={this.updateNotifications}
               notifications={this.state.notifications} delete={this.deleteNotif}
-              {...props} />}/>
+              loading={this.state.loadingNotifs} {...props} />}/>
 
           <Route exact path="/dashboard" render={(props)=>
             <Listings user={user} recents={this.state.recents} {...props} />}/>

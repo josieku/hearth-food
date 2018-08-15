@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Image, Message, Segment, Dimmer, Loader } from 'semantic-ui-react';
 
 export default class Add extends React.Component {
   state = {
@@ -101,6 +101,11 @@ export default class Add extends React.Component {
                 </Form>
               </Grid.Column>
             </Grid>
+            <Dimmer.Dimmable as={Segment} dimmed={this.props.loading}>
+              <Dimmer active={this.props.loading} inverted>
+                <Loader>Loading</Loader>
+              </Dimmer>
+            </Dimmer.Dimmable>
           </div>
         )
       }

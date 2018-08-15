@@ -14,6 +14,7 @@ export default class Menu extends Component{
     menuOriginal: [],
     open: false,
     loading: true,
+    saving: false,
   }
 
   componentDidMount = () => {
@@ -29,6 +30,7 @@ export default class Menu extends Component{
 
   saveDish = (title, description, ingredients, price, cuisine, recipe, picture) => {
     const chef = this.state.profile._id;
+    this.setState({ saving: true })
     fetch(`/chef/${chef}/menu/add`, {
       method: 'POST',
       headers: {
@@ -42,8 +44,7 @@ export default class Menu extends Component{
     .then(saved => {
       const menu = this.state.menu.slice();
       menu.push(saved);
-      this.setState({ menu })
-      console.log('menu', this.state.menu)
+      this.setState({ menu, saving: false })
       this.props.history.push(`/dashboard/menu`)
     })
   }
@@ -82,7 +83,8 @@ export default class Menu extends Component{
       <div>
         <Switch>
           <Route exact path='/dashboard/menu/add' render={(props) =>
-            <Add save={this.saveDish} {...props}/>}/>
+            <Add save={this.saveDish} loading={this.state.saving}
+              {...props}/>}/>
 
           <Route path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id} search={this.searchMenu}
