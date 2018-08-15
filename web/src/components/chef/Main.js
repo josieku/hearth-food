@@ -24,6 +24,8 @@ export default class Main extends Component{
     ordersOriginal: [],
     requests: [],
     orders: [],
+    loadingOrders: true,
+    loadingReqs: true,
   }
 
   componentDidMount = () => {
@@ -34,11 +36,19 @@ export default class Main extends Component{
 
     fetch(`/chef/${this.props.id}/orders`)
     .then(resp => resp.json())
-    .then(orders => this.setState({ orders, ordersOriginal: orders }))
+    .then(orders => this.setState({
+      orders,
+      ordersOriginal: orders,
+      loadingOrders: false,
+    }))
 
     fetch(`/chef/${this.props.id}/requests`)
     .then(resp => resp.json())
-    .then(requests => this.setState({ requests, requestsOriginal: requests }))
+    .then(requests => this.setState({
+      requests,
+      requestsOriginal: requests,
+      loadingReqs: false,
+    }))
   }
 
   acceptRequest = async (requestId, index) => {
@@ -208,6 +218,7 @@ export default class Main extends Component{
               orders={this.state.orders}
               sort={this.sortOrders}
               search={this.searchOrders}
+              loading={this.state.loadingOrders}
             />
             </Grid.Column>
             <Grid.Column width={8}>
@@ -218,6 +229,7 @@ export default class Main extends Component{
                 search={this.searchRequests}
                 decline={this.decline}
                 sort={this.sortRequests}
+                loading={this.state.loadingReqs}
                 requests={this.state.requests}/>
               </Grid.Column>
             </Grid>

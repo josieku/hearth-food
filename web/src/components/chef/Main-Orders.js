@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Dropdown, Grid, Input, Item, Menu, Modal } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Input, Item, Menu, Modal, Loader } from 'semantic-ui-react';
 
 
 function OrderItem(item, index, complete, change) {
@@ -16,10 +16,11 @@ function OrderItem(item, index, complete, change) {
       <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
   </Grid.Column>
   <Grid.Column textAlign='right' width={6}>
-    {item.payment
+    {/* {item.payment
       ? <button disabled>Change pickup time</button>
-      : <EditModal request={item} ind={index} change={change}/> }
-      {item.payment ? <button onClick={()=>complete(item._id, index)}>Delivered!</button> : null}
+      : <EditModal request={item} ind={index} change={change}/> } */}
+    <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
+    <Button>Cancel</Button>
   </Grid.Column>
   </Grid>
   <Divider />
@@ -114,11 +115,18 @@ export default class OrderListing extends Component{
               </Menu.Menu>
           </Menu>
         </Grid.Row>
-        {/* <h2 id="chefLandingHeader">Orders</h2> */}
-          {this.props.orders.length > 0
-            ? this.props.orders.map((item, ind) =>
-              OrderItem(item, ind, this.props.complete, this.props.changes))
-            : 'No orders yet'}
+        {this.props.loading
+          ? <Loader active inline='centered'/>
+          : this.props.orders.length > 0
+          ? this.props.orders.map((item, ind) =>
+            OrderItem(item, ind, this.props.complete, this.props.changes))
+          : 'No orders yet'
+        }
+
+        {/* {this.props.orders.length > 0
+          ? this.props.orders.map((item, ind) =>
+            OrderItem(item, ind, this.props.complete, this.props.changes))
+          : 'No orders yet'} */}
       </div>
     )
   }
