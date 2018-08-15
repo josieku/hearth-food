@@ -36,6 +36,13 @@ var MapWithLocation = compose(
     containerElement: <div style={{ height: '500px', width: '500px'}} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
+  withStateHandlers(() => ({
+    isOpen: false,
+  }), {
+    onToggleOpen: ({ isOpen }) => () => ({
+      isOpen: !isOpen,
+    })
+  }),
   lifecycle({
     // componentDidMount() {
     //   var self = this
@@ -125,6 +132,10 @@ var MapWithLocation = compose(
             circleBounds: refs.circle.getBounds(),
           })
         },
+        showInfo: (a) => {
+          console.log('setting info state')
+          this.setState({showInfoIndex: a })
+        }
       })
     },
   }),
@@ -139,13 +150,12 @@ var MapWithLocation = compose(
         center={props.location}
         onBoundsChanged={props.onBoundsChanged}
       >
-        <MarkerWithLabel
+        <Marker
           position={props.location}
           labelAnchor={new window.google.maps.Point(0, 0)}
           labelStyle={{backgroundColor: "purple", fontSize: "28px", padding: "16px"}}
         >
-          <div>You!</div>
-        </MarkerWithLabel>
+        </Marker>
         <Circle
           ref={props.onCircleMounted}
           options={{
@@ -186,18 +196,21 @@ var MapWithLocation = compose(
         {props.markers.map((marker, index) => {
           var distance = measure(marker.position.lat, marker.position.lng, props.location.lat, props.location.lng)
           console.log(distance)
+          var rounded = distance.toString().split('.')[0]
           return (
-            <MarkerWithLabel
+            <Marker
               key={index}
               position={marker.position}
-              labelAnchor={new window.google.maps.Point(0, 0)}
-              labelStyle={{backgroundColor: "orange", fontSize: "18px", padding: "16px"}}
+              onClick={()=>{props.showInfo(index)}}
             >
-              <div>
-                {marker.name} <br />
-                {distance} meters away!
-              </div>
-            </MarkerWithLabel>
+              {(props.showInfoIndex === index) &&
+                <InfoWindow onCloseClick={props.onToggleOpen}>
+                  <div>
+                    {marker.name} <br />
+                    {rounded} meters away!
+                  </div>
+                </InfoWindow>}
+            </Marker>
           )
         })}
       </GoogleMap>

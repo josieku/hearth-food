@@ -24,7 +24,8 @@ function Listing(meal, user){
   console.log(meal)
   console.log(user)
   var distance = measure(meal.chef.location.lat, meal.chef.location.lng, user.location.lat, user.location.lng)
-  console.log(distance)
+  var rounded = distance.toString().split('.')[0]
+  console.log(rounded)
   return (
     <Element width="500px">
       <div id="listItem" key={meal._id}>
@@ -56,7 +57,7 @@ function Listing(meal, user){
                 <Item.Extra><h4>Cuisine</h4></Item.Extra>
                 <Item.Extra>{meal.cuisine}</Item.Extra>
                 <Item.Extra><h4>Distance from you</h4></Item.Extra>
-                <Item.Extra>{distance}</Item.Extra>
+                <Item.Extra>{rounded} meters away!</Item.Extra>
                 <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
               </Item.Content>
             </Grid.Column>
