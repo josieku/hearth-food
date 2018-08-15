@@ -13,6 +13,7 @@ export default class Menu extends Component{
     menu: [],
     menuOriginal: [],
     open: false,
+    loading: true,
   }
 
   componentDidMount = () => {
@@ -21,11 +22,12 @@ export default class Menu extends Component{
       .then(profile => this.setState({
         profile,
         menu: profile.menu,
-        menuOriginal: profile.menu
+        menuOriginal: profile.menu,
+        loading: false
       }))
   }
 
-  saveDish = (title, description, ingredients, price, cuisine, recipe) => {
+  saveDish = (title, description, ingredients, price, cuisine, recipe, picture) => {
     const chef = this.state.profile._id;
     fetch(`/chef/${chef}/menu/add`, {
       method: 'POST',
@@ -33,7 +35,8 @@ export default class Menu extends Component{
         'Content-Type': 'application/json',
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
-      body: JSON.stringify({ title, description, ingredients, price, cuisine, chef, recipe }),
+      body: JSON.stringify({ title, description, ingredients, price, cuisine,
+        chef, recipe, picture }),
     })
     .then(resp => resp.json())
     .then(saved => {
@@ -62,8 +65,19 @@ export default class Menu extends Component{
     }
   }
 
+  sortMenu = (indicator) => {
+    if (indicator === "high"){
+      const menu = this.state.menu.slice().sort((a,b)=>a["price"]-b["price"])
+      this.setState({ menu })
+    } else if (indicator === "low"){
+      const menu = this.state.menu.slice().sort((a,b)=>b["price"]-a["price"])
+      this.setState({ menu })
+    }
+  }
+
   render(){
     const profile = this.state.profile;
+    const menu = this.state.menu.filter(item=>!item.archived);
     return(
       <div>
         <Switch>
@@ -72,7 +86,9 @@ export default class Menu extends Component{
 
           <Route path="/dashboard/menu" render={(props) =>
             <MenuListing id={profile._id} search={this.searchMenu}
-                         menu={this.state.menu.filter(item=>!item.archived)} {...props}/>}/>
+                         loading={this.state.loading}
+                         first={menu.length > 0 ? menu[0] : null}
+                         sort={this.sortMenu} menu={menu} {...props}/>}/>
 
         </Switch>
       </div>

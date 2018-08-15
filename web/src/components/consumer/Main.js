@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Divider, Dropdown, Grid, Header, Item, Input, Menu, Search } from "semantic-ui-react";
+import { Button, Divider, Dropdown, Grid, Header, Item, Input, Menu, Search, Loader } from "semantic-ui-react";
 
 import NavBar from './../general/NavBar'
 import MapContainer from '.././maps/MapContainer'
@@ -85,17 +85,15 @@ function recentCondense(item){
 export default class Listings extends Component{
   state = {
     listings: [],
-    recents: []
+    recents: [],
+    loading: true,
   }
 
   componentDidMount = e => {
     console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => {
-      console.log(listings)
-      this.setState({ listings })
-    });
+    .then(listings => this.setState({ listings, loading: false }));
 
     fetch(`/user/${this.props.user._id}/recent`)
     .then(resp => resp.json())
@@ -134,7 +132,9 @@ export default class Listings extends Component{
                 </Menu.Menu>
               </Menu>
             </Grid.Row>
-              <MealListings listings={this.state.listings}/>
+            {this.state.loading
+              ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
+              : <MealListings listings={this.state.listings}/>}
           </Grid.Column>
           <Grid.Column>
             <Grid.Row>
@@ -149,8 +149,11 @@ export default class Listings extends Component{
                   <Menu.Item header>Recent Meals</Menu.Item>
                 </Menu>
             <div id="listOfRecents">
-            {this.state.recents.map(recentCondense)}
-          </div>
+              {this.state.recents.length > 0
+                ? this.state.recents.map(recentCondense)
+                : "No recent meals.  Start ordering now!"
+              }
+            </div>
             </Grid.Row>
           </Grid.Column>
     </Grid>

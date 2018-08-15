@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, Grid, Header, Input, Item, Menu, Segment } from 'semantic-ui-react';
+import { Button, Dropdown, Grid, Header, Input, Item, Menu, Segment, Loader } from 'semantic-ui-react';
 
 import Edit from './../meals/MealProfile-Edit';
 
@@ -25,13 +25,14 @@ function MenuListItem(item) {
 export default class MenuListing extends Component{
   state = {
     activeItem: this.props.menu.length >0 ? this.props.menu[0].title : null,
-    shownRecipe: this.props.menu.length > 0 ? this.props.menu[0] : null
+    shownRecipe: this.props.first
   }
 
   handleClick = (item) => {
     this.setState({shownRecipe: item, activeItem: item.title})
     console.log(this.state.shownRecipe);
   }
+
 
   render(){
     const { activeItem } = this.state
@@ -46,16 +47,18 @@ export default class MenuListing extends Component{
               <Dropdown.Menu>
                 <Dropdown.Header content='Filter by selection' />
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                <Dropdown.Item onClick={()=>{this.props.sort("high")}}>Price: Low to High
                 </Dropdown.Item>
-                <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                <Dropdown.Item onClick={()=>{this.props.sort("low")}}>Price: High to Low</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
             <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
           </Menu.Menu>
         </Menu>
-        { this.props.menu.length > 0
+        { this.props.loading
+          ? <Loader active inline='centered'/>
+          : this.props.menu.length > 0
           ? <Segment basic>
             <Grid columns={2}>
               <Grid.Column width={4}>
@@ -74,8 +77,9 @@ export default class MenuListing extends Component{
                     </Grid.Column>
                   </Grid>
                 </Segment>
-                : "No meals, add now!" }
-              </div>
+                : "No meals, add now!"
+              }
+            </div>
             )
           }
         }
