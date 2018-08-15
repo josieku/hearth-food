@@ -1,24 +1,32 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, Grid, Header, Input, Item, Menu, Segment, Loader } from 'semantic-ui-react';
+import { Button, Dropdown, Grid, Header, Image, Input, Item, Menu, Rating, Segment, Loader } from 'semantic-ui-react';
 
 import Edit from './../meals/MealProfile-Edit';
 
 function MenuListItem(item) {
   return (
-    <Item className="menu-list-item">
-      <Header href={`/meal/${item._id}`}>{item.title}</Header>
-      {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
-      <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
-      <Item.Content><strong>Ingredients: </strong>{item.ingredients}</Item.Content>
-      <Item.Content><strong>Price: </strong>{item.price}</Item.Content>
-      <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
-      <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
-      <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
-      <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Set Availability</Button>
-      <Header >Recipe</Header>
-      <Item.Content>{item.recipe}</Item.Content>
-    </Item>
+    <Grid>
+      <Grid.Column width={9}>
+        <Item className="menu-list-item">
+          <Header href={`/meal/${item._id}`}>{item.title}</Header>
+          {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
+          <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
+          <Item.Content><strong>Ingredients: </strong>{item.ingredients}</Item.Content>
+          <Item.Content><strong>Price: </strong>{item.price}</Item.Content>
+          <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
+          <Rating icon='star' defaultRating={item.overallRating} maxRating={5} disabled/>
+          <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
+          <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
+          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Set Availability</Button>
+          <Header >Recipe</Header>
+          <Item.Content>{item.recipe}</Item.Content>
+        </Item>
+      </Grid.Column>
+      <Grid.Column width={7}>
+        <Image src={item.picture} fluid circular/>
+      </Grid.Column>
+    </Grid>
   )
 }
 
@@ -30,13 +38,11 @@ export default class MenuListing extends Component{
 
   handleClick = (item) => {
     this.setState({shownRecipe: item, activeItem: item.title})
-    console.log(this.state.shownRecipe);
   }
 
 
   render(){
     const { activeItem } = this.state
-    console.log('shownrecipe', this.state.shownRecipe, this.props.menu[0])
     return (
       <div>
         <Menu text id="chefMenu">
