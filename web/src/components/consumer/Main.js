@@ -13,7 +13,7 @@ function Listing(meal){
             <Item.Image circular size="small" style={{padding: '3px'}} src={meal.picture} />
             <Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/>
           </Grid.Column>
-          <Grid.Column width={8}>
+          <Grid.Column width={8} style={{paddingTop:'0em'}}>
             <Item.Content>
               <Link to={`/meal/${meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
               <Item.Header><h2>{meal.title}</h2></Item.Header>
@@ -114,7 +114,7 @@ export default class Listings extends Component{
     return(
       <div className="main">
         <Grid columns={2} padded="vertically">
-          <Grid.Column>
+          <Grid.Column width={7} style={{paddingTop:'0em'}}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header>Available Meals</Menu.Item>
@@ -136,7 +136,7 @@ export default class Listings extends Component{
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
               : <MealListings listings={this.state.listings}/>}
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={8} style={{paddingTop:'0em'}}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header>Location of Meal</Menu.Item>

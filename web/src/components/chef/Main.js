@@ -209,7 +209,7 @@ export default class Main extends Component{
           : null
         }
         <Grid columns={2} >
-          <Grid.Column width={8} >
+          <Grid.Column width={8} style={{paddingTop:'0em'}}>
             <OrderListing
               changes={this.changesOrders}
               chefId={profile._id}
@@ -221,7 +221,7 @@ export default class Main extends Component{
               loading={this.state.loadingOrders}
             />
             </Grid.Column>
-            <Grid.Column width={8}>
+            <Grid.Column width={8} style={{paddingTop:'0em'}}>
               <RequestListing
                 chefId={profile._id}
                 accept={this.acceptRequest}

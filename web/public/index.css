@@ -49,6 +49,7 @@ body {
 #header {
   background-color: #D6D4D4;
   font-size: medium;
+  height: 60px;
 }
 .smallHeader {
   color: #B73535
@@ -86,6 +87,7 @@ body {
 /* Notifications styles */
 #notificationHead {
   background-color: #D6D4D4;
+  height: 60px
 }
 #notification-true {
   color: grey;

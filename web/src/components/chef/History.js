@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import { Button, Divider, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 
 function HistoryItem(item) {
   return (
-    <li key={item._id} className="history-list-item" style={{border:"1px solid black"}}>
-      <p>Customer: {item.consumer.firstName}</p>
-      <p>Meal: {item.meal.title}</p>
-      <p>Time: {item.time.date}</p>
-      <p>Status:
+    <Item key={item._id} className="history-list-item">
+      <Item.Content><strong> Customer: </strong>{item.consumer.firstName}</Item.Content>
+      <Item.Content><strong>Meal: </strong>{item.meal.title}</Item.Content>
+      <Item.Content><strong>Time: </strong>{item.time.date}</Item.Content>
+      <Item.Content><strong>Status: </strong>
         {item.completed
           ? <span style={{fontWeight: "bold"}}>Done!</span>
           : item.declineComment
@@ -17,9 +18,10 @@ function HistoryItem(item) {
             </span>
           : <span>Expired...</span>
         }
-      </p>
-      <p>Additional requests: {item.requests ? item.requests : 'None'}</p>
-    </li>
+      </Item.Content>
+      <Item.Content><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Content>
+      <Divider/>
+    </Item>
   )
 }
 
@@ -37,7 +39,9 @@ export default class HistoryListing extends Component{
   render(){
     return(
       <div>
-        <h2>Request History</h2>
+        <Menu text fluid id="notificationHead" style={{padding: '3px'}}>
+        <Menu.Item header>Request History</Menu.Item>
+      </Menu>
         <ul style={{listStyleType: "none"}}>
           {this.state.history.length > 0
             ? this.state.history.map(HistoryItem)
