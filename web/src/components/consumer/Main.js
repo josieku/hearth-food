@@ -66,6 +66,7 @@ function Listing(meal, user){
         </Item>
       </div>
     </Element>
+
 )
 }
 
@@ -217,7 +218,7 @@ export default class Listings extends Component{
     return(
       <div className="main">
         <Grid columns={2} padded="vertically">
-          <Grid.Column>
+          <Grid.Column width={7} style={{paddingTop:'0em'}}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header>Available Meals</Menu.Item>
@@ -249,7 +250,7 @@ export default class Listings extends Component{
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
               : <MealListings listings={this.state.listings} user={this.props.user} radius={this.state.radius}/>}
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={8} style={{paddingTop:'0em'}}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header>Location of Meal</Menu.Item>
