@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Dropdown, Grid, Input, Item, Menu, Modal, Loader } from 'semantic-ui-react';
+import { Button, Form, Divider, Dropdown, Grid, Input, Item, Menu, Modal, Loader, TextArea } from 'semantic-ui-react';
 
 
-function OrderItem(item, index, complete, change) {
+function OrderItem(item, index, complete, cancel) {
   return (
     <Item key={item._id} className="order-list-item">
     <Grid>
@@ -20,7 +20,7 @@ function OrderItem(item, index, complete, change) {
       ? <button disabled>Change pickup time</button>
       : <EditModal request={item} ind={index} change={change}/> } */}
     <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
-    <Button>Cancel</Button>
+    <Button onClick={()=>cancel(item, index)}>Cancel</Button>
   </Grid.Column>
   </Grid>
   <Divider />
@@ -30,9 +30,8 @@ function OrderItem(item, index, complete, change) {
 
 class EditModal extends Component {
   state = {
-    // time: this.props.request.time.time,
     time: this.props.request.time,
-    modalOpen: false
+    modalOpen: false,
   }
 
   chosenTime = () => {
@@ -86,6 +85,40 @@ class EditModal extends Component {
 }
 
 export default class OrderListing extends Component{
+  state = {
+    comment: "",
+    item: null,
+    index: null,
+    open: false,
+  }
+
+  cancelModal = (item, index) => {
+    this.setState({
+      open: true,
+      item,
+      index,
+    })
+  }
+
+  cancel = () => {
+    this.props.cancel(this.state.item._id, this.state.comment, this.state.index);
+    this.setState({
+      comment: "",
+      item: null,
+      index: null,
+      open: false,
+    })
+  }
+
+  close = () => {
+    this.setState({
+      comment: "",
+      item: null,
+      index: null,
+      open: false,
+    })
+  }
+
   render(){
     return(
       <div>
@@ -119,10 +152,25 @@ export default class OrderListing extends Component{
           ? <Loader active inline='centered'/>
           : this.props.orders.length > 0
           ? this.props.orders.map((item, ind) =>
-            OrderItem(item, ind, this.props.complete, this.props.changes))
+            OrderItem(item, ind, this.props.complete, this.cancelModal))
           : 'No orders yet'
         }
-
+        {this.state.item
+          ? <Modal open={this.state.open}>
+            <Modal.Header>Cancel Request</Modal.Header>
+            <Modal.Content>
+              <p>Let {this.state.item.consumer.firstName} know why you're cancelling their request.</p>
+              <p>Please note that this may affect your rating.</p>
+              <Form>
+                <TextArea placeholder='Say something' onChange={(e)=>this.setState({comment:e.target.value})}/>
+              </Form>
+            </Modal.Content>
+            <Modal.Actions>
+              <Button negative onClick={this.close}>No</Button>
+              <Button positive icon='checkmark' labelPosition='right' content="Yes" onClick={this.cancel}/>
+            </Modal.Actions>
+          </Modal>
+          : null}
         {/* {this.props.orders.length > 0
           ? this.props.orders.map((item, ind) =>
             OrderItem(item, ind, this.props.complete, this.props.changes))

@@ -16,6 +16,7 @@ export default class MealProfile extends Component {
     verified: false,
     reviews: [],
     requestId: "",
+    loading: true,
   }
 
   componentDidMount = () => {
@@ -26,16 +27,17 @@ export default class MealProfile extends Component {
           meal,
           chefId: meal.chef._id,
           times: meal.availability.filter(item=>!item.passed),
-          reviews: meal.reviews ? meal.reviews : []
+          reviews: meal.reviews ? meal.reviews : [],
+          loading: false
          });
-        console.log('after mount', this.state)
       })
 
     fetch(`/meal/${this.props.id}/review?user=${this.props.user._id}`)
       .then(resp => resp.json())
-      .then(async request => {
+      .then(request => {
+        console.log('request', request)
         if (Object.keys(request).length > 0){
-          await this.setState({ verified: true, requestId: request._id })
+          this.setState({ verified: true, requestId: request._id })
         }
       })
   }
@@ -130,7 +132,7 @@ export default class MealProfile extends Component {
             <MealView meal={this.state.meal} reviews={this.state.reviews}
               times={this.state.times} verified={this.state.verified}
               requestId={this.state.requestId} user={this.props.user}
-              add={this.addReview} {...props}/> }/>
+              add={this.addReview} {...props} loading={this.state.loading}/> }/>
         </Switch>
       </div>
     )
