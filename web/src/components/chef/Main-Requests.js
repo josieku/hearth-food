@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Item, Input, Dropdown, Menu, Segment, TextArea, Modal } from 'semantic-ui-react';
+import { Button, Divider, Dropdown, Grid, Input, Item, Menu, TextArea, Modal, Loader } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept, decline) {
   return (
@@ -54,26 +54,38 @@ export default class RequestListing extends Component{
       <div>
         <Grid.Column>
           <Grid.Row>
-            <Menu text id="availableMeals">
+            <Menu text id="header">
               <Menu.Item header>Requests</Menu.Item>
               <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-              <Input placeholder='Search...'/>
-                  <Dropdown icon='filter' floating button className='icon'>
+                <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
+                  <Dropdown icon='filter' floating button className='icon' id='redButton'>
                     <Dropdown.Menu>
                       <Dropdown.Header content='Filter by selection' />
                       <Dropdown.Divider />
-                      <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                      <Dropdown.Item onClick={()=>{this.props.sort("high")}}>
+                        Price: Low to High
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.props.sort("low")}}>
+                        Price: High to Low
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.props.sort("earliest")}}>
+                        Pickup Time: Earliest to Latest
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.props.sort("latest")}}>
+                        Pickup Time: Latest to Earliest
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Menu.Menu>
             </Menu>
           </Grid.Row>
-          {this.props.requests.length > 0
+          {this.props.loading
+            ? <Loader active inline='centered'/>
+            : this.props.requests.length > 0
             ? this.props.requests.map((item, ind) =>
                 RequestItem(item, ind, this.props.accept, this.open))
-            : 'No requests, start sharing your dishes!'}
+            : 'No requests, start sharing your dishes!'
+          }
           {this.state.item
             ? <Modal open={this.state.open}>
               <Modal.Header>Decline Request</Modal.Header>

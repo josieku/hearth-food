@@ -1,9 +1,18 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
 import { Button, Divider, Grid, Menu, Segment } from 'semantic-ui-react';
+import Fuse from 'fuse.js';
 
 import RequestListing from './Main-Requests';
 import OrderListing from './Main-Orders';
+
+function UnseenNotifications(item){
+  return(
+    <div key={item._id}>
+      {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
+    </div>
+  )
+}
 
 export default class Main extends Component{
   state = {
@@ -11,8 +20,12 @@ export default class Main extends Component{
     menu: this.props.user.menu,
     open: false,
     mounted: false,
+    requestsOriginal: [],
+    ordersOriginal: [],
     requests: [],
     orders: [],
+    loadingOrders: true,
+    loadingReqs: true,
   }
 
   componentDidMount = () => {
@@ -23,11 +36,19 @@ export default class Main extends Component{
 
     fetch(`/chef/${this.props.id}/orders`)
     .then(resp => resp.json())
-    .then(orders => this.setState({ orders }))
+    .then(orders => this.setState({
+      orders,
+      ordersOriginal: orders,
+      loadingOrders: false,
+    }))
 
     fetch(`/chef/${this.props.id}/requests`)
     .then(resp => resp.json())
-    .then(requests => this.setState({ requests }))
+    .then(requests => this.setState({
+      requests,
+      requestsOriginal: requests,
+      loadingReqs: false,
+    }))
   }
 
   acceptRequest = async (requestId, index) => {
@@ -42,7 +63,8 @@ export default class Main extends Component{
       const accepted = requests.splice(index, 1)[0];
       const orders = this.state.orders.slice();
       orders.push(Object.create(accepted));
-      this.setState({ requests, orders });
+      this.setState({ requests, orders,
+        requestsOriginal: requests, ordersOriginal: orders });
     }
   }
 
@@ -99,10 +121,93 @@ export default class Main extends Component{
     this.setState({ requests });
   }
 
+  searchOrders = (input) => {
+    if (input.length > 0){
+      var options = {
+        keys: ['meal.title',
+               'consumer.firstName',
+               'meal.ingredients',
+               'meal.description' ],
+        threshold: 0.4
+      };
+      var fuse = new Fuse(this.state.ordersOriginal, options);
+      const orders = fuse.search(input);
+      this.setState({ orders });
+    } else {
+      this.setState({ orders: this.state.ordersOriginal })
+    }
+  }
+
+  searchRequests = (input) => {
+    if (input.length > 0){
+      var options = {
+        keys: ['meal.title',
+               'consumer.firstName',
+               'meal.ingredients',
+               'meal.description' ],
+        threshold: 0.4
+      };
+      var fuse = new Fuse(this.state.requestsOriginal, options);
+      const requests = fuse.search(input);
+      this.setState({ requests });
+    } else {
+      this.setState({ requests: this.state.requestsOriginal })
+    }
+  }
+
+  sortOrders = indicator => {
+    if (indicator === "high"){
+      const orders = this.state.orders.slice().sort((a,b)=>a.meal["price"]-b.meal["price"])
+      this.setState({ orders })
+    } else if (indicator === "low"){
+      const orders = this.state.orders.slice().sort((a,b)=>b.meal["price"]-a.meal["price"])
+      this.setState({ orders })
+    } else if (indicator === "earliest"){
+      const orders = this.state.orders.slice().sort((a,b)=>a.time.time-b.time.time)
+      console.log(orders[0].time.time, orders[2].time.time)
+      this.setState({ orders })
+    } else if (indicator === "latest") {
+      const orders = this.state.orders.slice().sort((a,b)=>b.time.time-a.time.time)
+      console.log(orders[0].time.time, orders[2].time.time)
+      this.setState({ orders })
+    }
+  }
+
+  sortRequests = indicator => {
+    if (indicator === "high"){
+      const requests = this.state.requests.slice().sort((a,b)=>a.meal["price"]-b.meal["price"])
+      this.setState({ requests })
+    } else if (indicator === "low"){
+      const requests = this.state.requests.slice().sort((a,b)=>b.meal["price"]-a.meal["price"])
+      this.setState({ requests })
+    } else if (indicator === "earliest"){
+      const requests = this.state.requests.slice().sort((a,b)=>a.time.time-b.time.time)
+      this.setState({ requests })
+    } else if (indicator === "latest") {
+      const requests = this.state.requests.slice().sort((a,b)=>b.time.time-a.time.time)
+      this.setState({ requests })
+    }
+  }
+
+  mark = () => {
+    this.props.updateNotifs(this.props.notifications.filter(item=>!item.seen));
+  }
+
   render(){
     const profile = this.state.profile;
+    const notifs = this.props.notifications;
     return(
       <div>
+        {notifs.filter(item=>!item.seen).length > 0
+          ? <div>
+              <p>
+                <strong>New notifications</strong>
+                <button onClick={this.mark}>Mark all as read</button>
+              </p>
+              {notifs.filter(item=>!item.seen).map(UnseenNotifications)}
+            </div>
+          : null
+        }
         <Grid columns={2} >
           <Grid.Column width={8} >
             <OrderListing
@@ -111,6 +216,9 @@ export default class Main extends Component{
               complete={this.complete}
               setOrders={this.setOrders}
               orders={this.state.orders}
+              sort={this.sortOrders}
+              search={this.searchOrders}
+              loading={this.state.loadingOrders}
             />
             </Grid.Column>
             <Grid.Column width={8}>
@@ -118,7 +226,10 @@ export default class Main extends Component{
                 chefId={profile._id}
                 accept={this.acceptRequest}
                 setRequests={this.setRequests}
+                search={this.searchRequests}
                 decline={this.decline}
+                sort={this.sortRequests}
+                loading={this.state.loadingReqs}
                 requests={this.state.requests}/>
               </Grid.Column>
             </Grid>

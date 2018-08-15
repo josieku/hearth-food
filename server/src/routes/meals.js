@@ -1,5 +1,8 @@
 import { version } from "../../package.json";
 import { Router } from "express";
+import cron from 'node-cron';
+import moment from 'moment'
+
 const bodyParser = require('body-parser');
 const router = Router();
 
@@ -10,17 +13,19 @@ var Available = require('../models/models').Available;
 var Mealreview = require('../models/models').Mealreview;
 var Notification = require('../models/models').Notification;
 
+/* ROUTES */
+
 router.get('/listings', (req, res) => {
   Meal.find({archived: false})
       .populate('chef')
       .exec()
       .then(meals => {
-        console.log('meals', meals);
+        // console.log('meals', meals);
         res.json(meals)})
 })
 
 router.get('/:id', (req, res) => {
-  console.log('fetching');
+  // console.log('fetching');
   Meal.findById(req.params.id)
       .populate('chef')
       .populate('availability')
@@ -45,28 +50,29 @@ router.get('/:id/review', (req, res) => {
 })
 
 router.post('/:id/save', (req, res) => {
-  console.log('saving meal');
+  // console.log('saving meal');
 
   const changes = {
     title: req.body.title,
     description: req.body.description,
     ingredients: req.body.ingredients,
     price: req.body.price,
-    cuisine: req.body.cuisine
+    cuisine: req.body.cuisine,
+    picture: req.body.picture
   }
 
   Meal.findByIdAndUpdate(req.params.id, changes, {new: true})
       .populate('chef')
       .exec()
       .then(meal => {
-        console.log('!!!!!updated meal!!!!', meal);
+        // console.log('!!!!!updated meal!!!!', meal);
         res.json(meal);
       })
       .catch(err => console.error('error here', err))
 })
 
 router.post('/:id/request', (req, res) => {
-  console.log('requesting meal', req.params.id);
+  // console.log('requesting meal', req.params.id);
   var newRequest = new Request({
     consumer: req.body.consumer,
     chef: req.body.chef,
@@ -122,7 +128,7 @@ router.post('/:id/request', (req, res) => {
     newNotif.save()
 
   }).then(e => res.send('requested'))
-  console.log('meal requested');
+  // console.log('meal requested');
 })
 
 router.post('/:id/archive', (req, res) => {
@@ -148,10 +154,13 @@ router.post('/:id/setavailable', async (req, res) => {
   const availability = await Promise.all(req.body.times.map(async item => {
     const date= new Date(item.date);
     const start = item.start.split(':');
-    const timeLong = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
-                     parseInt(start[0]), parseInt(start[1]), 0, 0 ).getTime()
-    // console.log('itemid', item._id);
+    const hour = parseInt(start[0])-1 >= 0 ? parseInt(start[0]) - 1 : 23
+    const dateFull = new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+                     hour, parseInt(start[1]), 0, 0 )
+    const timeLong = dateFull.getTime();
+
     let final = {};
+
     if (item._id || item.availableId){
       const id = item._id || item.availableId;
       const updates = {
@@ -163,19 +172,27 @@ router.post('/:id/setavailable', async (req, res) => {
       await Available.findByIdAndUpdate(id, updates, {new: true})
                .then(available => {final = available});
     } else {
-      // console.log('new item')
       const tempAvailable = new Available({
         meal: req.params.id,
         chef: req.body.chefId,
         date: item.date,
         start: item.start,
         end: item.end,
-        time: timeLong
+        time: timeLong,
       })
 
       await tempAvailable.save().then(available => {final = available});
     }
-    // console.log('final', final)
+
+    let cronStr = `0 ${dateFull.getMinutes()} ${dateFull.getHours()} `
+    cronStr += `${date.getDate()} ${date.getMonth()+1} ${date.getDay()}`
+
+    var job = cron.schedule(cronStr, function(){
+      Available.findByIdAndUpdate(final._id, {passed: true})
+               .then(e => console.log('passed'))
+      job.destroy();
+    }, true)
+
     return final
   }))
 

@@ -10,14 +10,11 @@ export default class Notifications extends Component{
 
   mark = (e) => {
     e.preventDefault()
-    // console.log('marking');
     const unseen = this.props.notifications.filter(item => !item.seen);
-    // console.log('unseen', unseen);
-    // console.log(this.props.update)
     this.props.update(unseen);
   }
 
-  notifListing = (item) => {
+  notifListing = (item, ind) => {
     return (
       <Grid columns={2}>
         <Grid.Row>
@@ -30,7 +27,11 @@ export default class Notifications extends Component{
             </Item>
           </Grid.Column>
           <Grid.Column width={3} verticalAlign='middle'>
-            <Button size='mini' id='redButton' icon='trash alternate'></Button>
+            <Button size='mini'
+                    id='redButton'
+                    icon='trash alternate'
+                    onClick={()=>{this.props.delete(item._id,ind)}}
+                  />
           </Grid.Column>
         </Grid.Row>
           <Divider />
@@ -40,10 +41,12 @@ export default class Notifications extends Component{
 
   renderNotifs = (bool) => {
     if (bool && this.props.notifications.length > 0 ) {
-      const listing = this.props.notifications.filter(item => !item.seen).map(this.notifListing);
+      const listing = this.props.notifications
+                                .filter(item => !item.seen)
+                                .map((item, ind)=>this.notifListing(item, ind));
       return listing.length > 0 ? listing : "No unread notifications";
     } else if (!bool && this.props.notifications.length > 0){
-      return this.props.notifications.map(this.notifListing);
+      return this.props.notifications.map((item, ind)=>this.notifListing(item, ind));
     } else{
       return "No notifications"
     }
