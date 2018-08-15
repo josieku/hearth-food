@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
-import flatpickr from "flatpickr";
+import { Button, Form, Grid, Header, Image, Message, Segment, Loader, Modal, Divider } from 'semantic-ui-react';
+import { DatePicker, TimePicker } from "@blueprintjs/datetime";
+import './../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css';
+// import './../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
+import './../../../../node_modules/@blueprintjs/datetime/lib/css/blueprint-datetime.css';
+import moment from 'moment';
 
 class TimeSlot extends Component {
   edit = e => {
@@ -45,19 +49,15 @@ class TimeSlot extends Component {
 
 class AddTime extends Component {
   state = {
-    date: this.props.date ? this.props.date.slice(0,10) : "",
-    start: this.props.start ? this.props.start : "",
-    end: this.props.end ? this.props.end : "",
+    date: this.props.date ? new Date(this.props.date) : moment().add(1,'hours').toDate(),
+    start: this.props.start
+          ? moment(this.props.start, "HH:mm").toDate()
+          : moment().add(1, 'hours').toDate(),
+    end: this.props.end
+        ? moment(this.props.end, "HH:mm").toDate()
+        : moment().add(1, 'hours').add(30,'minutes').toDate(),
     duration: 30,
     confirm: this.props.date ? true: false,
-  }
-
-  handleStart = start => {
-    const time = start.split(":");
-    const startDate = new Date(0, 0, 0, time[0], time[1], 0);
-    const endTime = startDate.getTime() + (parseInt(this.state.duration) * 60 * 1000);
-    const end = new Date(endTime).toString().slice(16, 21);
-    this.setState({ start, end })
   }
 
   done = e => {
@@ -65,8 +65,8 @@ class AddTime extends Component {
     console.log('availableId', this.props.availableId);
     const timeObj = {
       date: this.state.date,
-      start: this.state.start,
-      end: this.state.end,
+      start: moment(this.state.start).format("HH:mm"),
+      end: moment(this.state.end).format("HH:mm"),
       availableId: this.props.availableId,
     }
     this.props.save(this.props.ind, timeObj);
@@ -87,25 +87,41 @@ class AddTime extends Component {
     this.props.cancel();
   }
 
+  handleDateChange = (date) => {
+    this.setState({ date })
+  }
+
+  handleStartChange = (start) => {
+    this.setState({ start })
+  }
+
+  handleEndChange = (end) => {
+    this.setState({ end })
+  }
+
   render(){
-    const today = new Date().getFullYear() + "-" + (new Date().getMonth()+1) + "-" + new Date().getDate();
     return(
-      <div>
-        <form>
-            <input type="date" value={this.state.date} min={today}
-              onChange={(e)=>this.setState({ date: e.target.value })}/>
-            <label>Start time</label>
-            <input type="time" name="start" value={this.state.start}
-              onChange={(e)=>this.handleStart(e.target.value)}/>
-            <label>End time</label>
-            <input type="time" name="end" value={this.state.end}
-              onChange={(e)=>this.setState({ end: e.target.value })}/>
-            {this.props.date
-              ? <button onClick={this.done}>Save</button>
-              : <button onClick={this.done}>Done</button> }
-            <button onClick={this.cancel}>Cancel</button>
-          </form>
-      </div>
+      <Modal open={true}>
+        <div style={{width: "230px"}}>
+          <DatePicker value={this.state.date}
+            showActionsBar={true}
+            minDate={new Date()}
+            maxDate={moment().add(14, 'days').toDate()}
+            onChange={this.handleDateChange}/>
+          <label>Start time</label>
+          <TimePicker value={this.state.start}
+            showArrowButtons useAmPm
+            onChange={this.handleStartChange}/>
+          <label>End time</label>
+          <TimePicker value={this.state.end}
+            showArrowButtons useAmPm
+            minTime={moment(this.state.start).add(30,'minutes').toDate()}
+            onChange={this.handleEndChange}/>
+          <Button onClick={this.done}>
+            {this.props.date ? "Save" : "Add"}
+          </Button>
+        </div>
+      </Modal>
     )
   }
 }
@@ -184,27 +200,32 @@ export default class SetAvailability extends Component {
 
   render() {
     const meal = this.props.meal;
-    console.log(this.props.meal)
     return(
       <div>
-        <h4>Set customer pickup times for {meal.title}</h4>
-        <p>When are you offering this meal?</p>
-        <button onClick={this.addTime}>Add time slots</button>
-        {this.state.add
-          ? <AddTime date={this.state.date} start={this.state.start}
-                     end={this.state.end}
-                     availableId={this.state.availableId}
-                     mealId={meal._id} chefId={meal.chef._id}
-                     ind={this.state.ind} cancel={this.cancel} save={this.save}
-                   />
-          : null }
-        {this.state.available
-          .sort((a,b)=>new Date(a.date)-new Date(b.date))
-          .map((obj, ind) =>
-          <TimeSlot key={ind} ind={ind} date={obj.date} start={obj.start}
-            end={obj.end} availableId={obj._id}
-            edit={this.edit} delete={this.delete}/>)}
-        <button onClick={this.commit}>Save</button>
+        {this.props.loading
+          ? <Loader active inline='centered'>Be happy with hearth!</Loader>
+          : <div>
+              <h4>Set customer pickup times for {meal.title}</h4>
+              <p>When are you offering this meal?</p>
+              <button onClick={this.addTime}>Add time slots</button>
+              {this.state.add
+                ? <AddTime date={this.state.date} start={this.state.start}
+                           end={this.state.end}
+                           availableId={this.state.availableId}
+                           mealId={meal._id} chefId={meal.chef._id}
+                           ind={this.state.ind} cancel={this.cancel} save={this.save}
+                         />
+                : null }
+              <Divider>Time Slots</Divider>
+              {this.state.available
+                .sort((a,b)=>new Date(a.date)-new Date(b.date))
+                .map((obj, ind) =>
+                <TimeSlot key={ind} ind={ind} date={obj.date} start={obj.start}
+                  end={obj.end} availableId={obj._id}
+                  edit={this.edit} delete={this.delete}/>)}
+              <button onClick={this.commit}>Save</button>
+            </div>
+        }
       </div>
     )
   }
