@@ -122,58 +122,59 @@ class AddReview extends Component {
         return(
           <div className="main">
             <Segment>
-          {this.props.loading
+              {this.props.loading
                 ? <Loader active inline='centered'>Patience for a great meal...</Loader>
                 : <Grid columns={2}>
-                {meal.archived ? <h1>This meal has been archived</h1> : null}
-                <Grid.Column width={8}>
-                  <Item>
-                    <Grid>
+                  {meal.archived ? <h1>This meal has been archived</h1> : null}
+                  <Grid.Column width={8}>
+                    <Item>
+                      <Grid>
+                        <Grid.Row>
+                          <Grid.Column width={8} textAlign='left'>
+                            <Item.Header as='h2' style={{margin: '0', paddingBottom: '3px'}}>{meal.title}</Item.Header>
+                          </Grid.Column>
+                          <Grid.Column textAlign='right' width={8}>
+                            <Item.Header as='h2' style={{margin: '0', paddingBottom: '3px'}}><strong>Price:</strong>${meal.price}</Item.Header>
+                          </Grid.Column>
+                        </Grid.Row>
+                      </Grid>
+                      <Divider fitted/>
+                      <Rating icon='star' defaultRating={meal.overallRating} maxRating={5} size='huge' disabled/>
+                      {requestEditButton(user, chef, meal)}
+                      { this.props.times.length > 0
+                        ?
+                        <div>
+                          <Item.Content><strong>Available Pick Up Times: </strong></Item.Content>
+                          {meal.archived
+                            ? null
+                            : this.props.times.map(item=>timeslots(item, meal._id))}
+                          </div>
+                          : <Item.Content>No available pick up times, check again later</Item.Content>}
+                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Cuisine: </strong></Item.Header>
+                          <Item.Content style={{marginBottom: '3px'}}>{meal.cuisine}</Item.Content>
+                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Description:</strong></Item.Header>
+                          <Item.Content style={{marginBottom: '3px'}}>{meal.description}</Item.Content>
+                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Ingredients:</strong></Item.Header>
+                          <Item.Content style={{marginBottom: '3px'}}>{meal.ingredients}</Item.Content>
+                        </Item>
+                      </Grid.Column>
+                      <Grid.Column width={8}>
+                        <Image src={meal.picture} rounded fluid/>
+                      </Grid.Column>
                       <Grid.Row>
-                        <Grid.Column width={8} textAlign='left'>
-                          <Item.Header as='h2' style={{margin: '0', paddingBottom: '3px'}}>{meal.title}</Item.Header>
-                        </Grid.Column>
-                        <Grid.Column textAlign='right' width={8}>
-                          <Item.Header as='h2' style={{margin: '0', paddingBottom: '3px'}}><strong>Price:</strong>${meal.price}</Item.Header>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                    <Divider fitted/>
-                    <Rating icon='star' defaultRating={meal.overallRating} maxRating={5} size='huge' disabled/>
-                    {requestEditButton(user, chef, meal)}
-                    { this.props.times.length > 0
-                      ?
-                      <div>
-                        <Item.Content><strong>Available Pick Up Times: </strong></Item.Content>
-                        {meal.archived
-                          ? null
-                          : this.props.times.map(item=>timeslots(item, meal._id))}
-                        </div>
-                        : <Item.Content>No available pick up times, check again later</Item.Content>}
-                        <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Cuisine: </strong></Item.Header>
-                        <Item.Content style={{marginBottom: '3px'}}>{meal.cuisine}</Item.Content>
-                        <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Description:</strong></Item.Header>
-                        <Item.Content style={{marginBottom: '3px'}}>{meal.description}</Item.Content>
-                        <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Ingredients:</strong></Item.Header>
-                        <Item.Content style={{marginBottom: '3px'}}>{meal.ingredients}</Item.Content>
-                      </Item>
-                    </Grid.Column>
-                    <Grid.Column width={8}>
-                      <Image src={meal.picture} rounded fluid/>
-                    </Grid.Column>
-                    <Grid.Row>
-                      <Grid.Column width={16}>
-                        <AddReview mealId={meal._id} user={user} add={this.props.add}
-                          requestId={this.props.requestId} verified={this.props.verified}/>
-                          <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
-                          <Segment piled style={{margin: 0}}>
-                            <Reviews list={this.props.reviews}/>
-                          </Segment>
-                        </Grid.Column>
-                      </Grid.Row>
-                    </Grid>
-                  </Segment>
-                </div>
-              )
-            }
-          };
+                        <Grid.Column width={16}>
+                          <AddReview mealId={meal._id} user={user} add={this.props.add}
+                            requestId={this.props.requestId} verified={this.props.verified}/>
+                            <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
+                            <Segment piled style={{margin: 0}}>
+                              <Reviews list={this.props.reviews}/>
+                            </Segment>
+                          </Grid.Column>
+                        </Grid.Row>
+                      </Grid>
+                    }
+                    </Segment>
+                  </div>
+                )
+              }
+            };
