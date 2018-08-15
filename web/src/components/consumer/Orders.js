@@ -42,7 +42,11 @@ export default class Main extends Component{
     })
     .then(resp => resp.json())
     .then(saved => {
-
+      const pending = this.state.pending.slice();
+      pending.splice(index, 1);
+      const history = this.state.history.slice();
+      history.push(saved);
+      this.setState({ pending, history })
     })
   }
 

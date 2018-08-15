@@ -20,7 +20,7 @@ router.get('/listings', (req, res) => {
       .populate('chef')
       .exec()
       .then(meals => {
-        console.log('meals', meals);
+        // console.log('meals', meals);
         res.json(meals)})
 })
 
@@ -50,7 +50,7 @@ router.get('/:id/review', (req, res) => {
 })
 
 router.post('/:id/save', (req, res) => {
-  console.log('saving meal');
+  // console.log('saving meal');
 
   const changes = {
     title: req.body.title,
@@ -65,14 +65,14 @@ router.post('/:id/save', (req, res) => {
       .populate('chef')
       .exec()
       .then(meal => {
-        console.log('!!!!!updated meal!!!!', meal);
+        // console.log('!!!!!updated meal!!!!', meal);
         res.json(meal);
       })
       .catch(err => console.error('error here', err))
 })
 
 router.post('/:id/request', (req, res) => {
-  console.log('requesting meal', req.params.id);
+  // console.log('requesting meal', req.params.id);
   var newRequest = new Request({
     consumer: req.body.consumer,
     chef: req.body.chef,
@@ -128,7 +128,7 @@ router.post('/:id/request', (req, res) => {
     newNotif.save()
 
   }).then(e => res.send('requested'))
-  console.log('meal requested');
+  // console.log('meal requested');
 })
 
 router.post('/:id/archive', (req, res) => {

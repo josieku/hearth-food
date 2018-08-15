@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Dropdown, Header, Menu, Segment, Image, Icon } from 'semantic-ui-react';
+import { Dropdown, Header, Menu, Segment, Image, Icon, Transition } from 'semantic-ui-react';
 import './../../../public/index.css'
 
 function NotifCondense(item){
@@ -24,6 +24,7 @@ export default class NavBar extends Component {
     const notifs = notifications.length;
     const user = this.props.user;
     const notifIcon = notifs > 0 ? "bell" : "bell outline";
+    const notifWiggle = notifs > 0 ? true : false;
     if (role === "consumer") {
       return (
         <div>
@@ -33,6 +34,8 @@ export default class NavBar extends Component {
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
                 <Menu.Item icon={notifIcon} href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                {/* <Transition animation="jiggle" duration="1000" visible={notifWiggle}>
+                </Transition> */}
                 {/* <Dropdown icon={notifIcon} floating className='icon' direction='right'>
                   <Dropdown.Menu>
                     <Dropdown.Header content='Unseen notifications' />
@@ -44,6 +47,7 @@ export default class NavBar extends Component {
                 <Menu.Item>
                 <Dropdown icon={'user'}>
                   <Dropdown.Menu>
+                    <Dropdown.Item disabled>Hello, {user.firstName}</Dropdown.Item>
                     <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
                     <Dropdown.Item href={`/user/${id}/pay`}>Payment</Dropdown.Item>
                     <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>

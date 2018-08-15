@@ -8,8 +8,8 @@ export default class Add extends React.Component {
     ingredients: "",
     price: 0,
     cuisine: "",
-    recipe: "",
-    steps: 0
+    recipe: "ah",
+    steps: 0,
     file: "",
   }
 
