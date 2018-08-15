@@ -33,7 +33,7 @@ function MenuListItem(item) {
 export default class MenuListing extends Component{
   state = {
     activeItem: this.props.menu.length >0 ? this.props.menu[0].title : null,
-    shownRecipe: this.props.first
+    shownRecipe: this.props.menu[0]
   }
 
   handleClick = (item) => {
