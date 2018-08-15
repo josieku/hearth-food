@@ -161,7 +161,7 @@ var mealSchema = mongoose.Schema({
   },
   recipe: {
     type: String,
-    required: true
+    // required: true
   },
   createdAt: {
     type: Date,
@@ -363,11 +363,6 @@ var notificationSchema = mongoose.Schema({
     required: true,
     default: false
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    expires: 604800000,
-  }
 })
 
 

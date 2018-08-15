@@ -17,6 +17,7 @@ var Notification = require('../models/models').Notification;
 
 router.get('/listings', (req, res) => {
   Meal.find({archived: false})
+      .populate('availability')
       .populate('chef')
       .exec()
       .then(meals => {
@@ -37,12 +38,14 @@ router.get('/:id', (req, res) => {
 
 router.get('/:id/available', (req, res) => {
   Available.find({ 'meal': req.params.id, 'passed': false })
-           .then(available => {console.log(available); res.json(available)})
+           .then(available => {
+             // console.log(available);
+             res.json(available)})
 })
 
 router.get('/:id/review', (req, res) => {
   Request.find({ consumer: req.query.user, meal: req.params.id,
-                 payment: true, expired: true, review: false })
+                 expired: true, review: false })
          .then(request => {
            // console.log('!!! REQUEST !!!', request);
            res.json(request)
@@ -244,8 +247,8 @@ router.post('/:id/review', (req, res) => {
 })
 
 router.delete('/:id/setavailable', (req, res) => {
-  Available.findByIdAndDelete(req.body.availableId)
-           .then(e =>{console.log('deleted'); res.send('deleted')})
+  Available.findByIdAndUpdate(req.body.availableId, {passed: true})
+           .then(e => res.send('deleted'))
 
   Meal.findById(req.params.id)
       .then(meal => {
