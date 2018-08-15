@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
-import { Button, Divider, Grid, Menu, Segment } from 'semantic-ui-react';
+import { Button, Divider, Grid, Menu, Segment, Message } from 'semantic-ui-react';
 import Fuse from 'fuse.js';
 
 import RequestListing from './Main-Requests';
@@ -8,9 +8,12 @@ import OrderListing from './Main-Orders';
 
 function UnseenNotifications(item){
   return(
-    <div key={item._id}>
+    <Message>
       {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
-    </div>
+    </Message>
+    // <div key={item._id}>
+    //   {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
+    // </div>
   )
 }
 
@@ -86,6 +89,22 @@ export default class Main extends Component{
         this.setState({ orders })
       })
     }
+  }
+
+  cancelOrder = async (requestId, comment, index) => {
+    if (this.state.mounted && Object.keys(this.props.user).length > 0){
+      await fetch(`/chef/${this.props.id}/requests/cancel`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({ requestId, comment }),
+      })
+    }
+    const orders = this.state.orders.slice();
+    orders.splice(index, 1);
+    this.setState({ orders });
   }
 
   complete = async (requestId, index) => {
@@ -200,10 +219,10 @@ export default class Main extends Component{
       <div>
         {notifs.filter(item=>!item.seen).length > 0
           ? <div>
-              <p>
-                <strong>New notifications</strong>
+              <span>
+                <strong>New notifications </strong>
                 <button onClick={this.mark}>Mark all as read</button>
-              </p>
+              </span>
               {notifs.filter(item=>!item.seen).map(UnseenNotifications)}
             </div>
           : null
@@ -213,6 +232,7 @@ export default class Main extends Component{
             <OrderListing
               changes={this.changesOrders}
               chefId={profile._id}
+              cancel={this.cancelOrder}
               complete={this.complete}
               setOrders={this.setOrders}
               orders={this.state.orders}

@@ -116,10 +116,13 @@ class AddReview extends Component {
         const meal = this.props.meal;
         const chef = Object.assign({}, meal.chef);
         const user = this.props.user;
+        console.log('reviews', meal.reviews)
         return(
           <div className="main">
             <Segment>
-              <Grid columns={2}>
+          {this.props.loading
+                ? <Loader active inline='centered'>Patience for a great meal...</Loader>
+                : <Grid columns={2}>
                 {meal.archived ? <h1>This meal has been archived</h1> : null}
                 <Grid.Column width={8}>
                   <Item>

@@ -11,6 +11,7 @@ import Notifications from './../general/Notifications';
 export default class ChefLanding extends Component{
   state = {
     notifications: [],
+    loadingNotifs: true,
     intervalId: "",
   }
 
@@ -18,7 +19,7 @@ export default class ChefLanding extends Component{
     fetch(`/user/${this.props.user._id}/notif`)
     .then(resp => resp.json())
     .then(notifications => {
-      this.setState({ notifications })
+      this.setState({ notifications, loadingNotifs: false })
     })
 
     let intervalId = this.getNotifs();
@@ -34,7 +35,7 @@ export default class ChefLanding extends Component{
   }
 
   getNotifs = () => {
-    return setInterval(this.fetchNotifs, 30000);
+    return setInterval(this.fetchNotifs, 10000);
   }
 
   deleteNotif = (notifId, index) => {
@@ -83,7 +84,7 @@ export default class ChefLanding extends Component{
           <Route exact path="/dashboard/notifications" render={(props)=>
             <Notifications user={user} update={this.updateNotifications}
               notifications={this.state.notifications} delete={this.deleteNotif}
-              {...props} />}/>
+              loading={this.state.loadingNotifs} {...props} />}/>
 
           <Route exact path="/dashboard" render={(props)=>
             <Main user={user} id={user._id} updateNotifs={this.updateNotifications}

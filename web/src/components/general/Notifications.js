@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
+import { Button, Divider, Grid, Header, Item, Menu, Segment, Loader } from 'semantic-ui-react';
 
 export default class Notifications extends Component{
   state = {
@@ -72,7 +72,11 @@ export default class Notifications extends Component{
           </Menu.Menu>
         </Menu>
         <ul style={{listStyleType: "none"}}>
-          {this.renderNotifs(this.state.unread)}
+          {this.props.loading
+            ? <Loader active inline='centered'>
+                Optimizing your dining experience...
+              </Loader>
+            : this.renderNotifs(this.state.unread)}
         </ul>
       </div>
     )
