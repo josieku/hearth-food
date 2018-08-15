@@ -8,13 +8,9 @@ export default class Add extends React.Component {
     ingredients: "",
     price: 0,
     cuisine: "",
-    picture: null,
     recipe: "",
-<<<<<<< HEAD
-    steps: 0
-=======
+    steps: 0,
     file: "",
->>>>>>> 42b15f9bf350caf6f19cf7003d44275175efc036
   }
 
   handleFile = (e) => {
