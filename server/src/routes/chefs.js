@@ -73,12 +73,12 @@ router.post('/:id/menu/add', (req,res) => {
 
   newMeal.save()
          .then(saved => {
-           console.log(saved);
+           // console.log(saved);
            User.findOne({role:'chef', "_id": req.params.id })
                .then(user => {
                  // console.log(user);
                  var menuList = user.menu.slice();
-                 console.log('!!menu!!', menuList)
+                 // console.log('!!menu!!', menuList)
                  menuList.push(saved._id);
                  user.menu = menuList;
                  user.save();
@@ -111,11 +111,14 @@ router.post('/:id/requests/accept', (req, res) => {
 
 router.post('/:id/requests/complete', (req,res) => {
   Request.findByIdAndUpdate(req.body.requestId, { completed: true, expired: true })
+         .populate('meal')
+         .populate('consumer')
+         .exec()
          .then(request => {
            const newNotif = new Notification({
-             type: 'Accepted Request',
+             type: 'Expired Request',
              meal: request.meal._id,
-             content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
+             content: `Your ${request.meal.title} has been delivered.  Hope you enjoy it!`,
              user: request.consumer,
              seen: false,
              time: Date.now()

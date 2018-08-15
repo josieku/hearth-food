@@ -36,11 +36,11 @@ router.get('/:id/recent', (req, res) => {
            requests = requests.sort((a,b)=>a.time.time-b.time.time);
            const end = requests.length;
            if ((end - 3) < 0){
-             console.log(requests);
+             // console.log(requests);
              res.json(requests)
            } else{
              const list = requests.slice(end-3);
-             console.log(list);
+             // console.log(list);
              res.json(list);
            }
          })
