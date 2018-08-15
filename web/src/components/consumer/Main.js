@@ -5,7 +5,24 @@ import { Button, Divider, Dropdown, Grid, Header, Item, Input, Menu, Search } fr
 import NavBar from './../general/NavBar'
 import MapContainer from '.././maps/MapContainer'
 
-function Listing(meal){
+function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d * 1000; // meters
+}
+
+
+function Listing(meal, user){
+  console.log(meal)
+  console.log(user)
+  var distance = measure(meal.chef.location.lat, meal.chef.location.lng, user.location.lat, user.location.lng)
+  console.log(distance)
   return (
     <div id="listItem" key={meal._id}>
       <Item>
@@ -31,7 +48,7 @@ function Listing(meal){
             <Item.Extra><h4>Cuisine</h4></Item.Extra>
             <Item.Extra>{meal.cuisine}</Item.Extra>
             <Item.Extra><h4>Distance from you</h4></Item.Extra>
-            <Item.Extra>{meal.distance}</Item.Extra>
+            <Item.Extra>{distance}</Item.Extra>
             <Button id="redButton" href="/meal/${meal._id}" size='mini' >Request</Button>
           </Item.Content>
         </Grid.Column>
@@ -44,9 +61,17 @@ function Listing(meal){
 
 class MealListings extends Component {
   render(){
+    var filter = this.props.listings.filter(meal => {
+      var distance = measure(meal.chef.location.lat, meal.chef.location.lng, this.props.user.location.lat, this.props.user.location.lng)
+      console.log(distance)
+      return (distance < this.props.radius)
+    })
+    console.log(filter)
     return (
       <div>
-        {this.props.listings.map(Listing)}
+        {filter.map(meal => {
+          return Listing(meal, this.props.user)
+        })}
       </div>
     )
   }
@@ -98,11 +123,14 @@ function recentCondense(item){
 }
 
 export default class Listings extends Component{
-  state = {
-    listings: [],
-    recents: []
+  constructor(props){
+    super(props)
+    this.state = {
+      listings: [],
+      recents: [],
+      radius: 1000
+    }
   }
-
   componentDidMount = e => {
     console.log(this.props)
     fetch('/meal/listings')
@@ -115,6 +143,13 @@ export default class Listings extends Component{
     fetch(`/user/${this.props.user._id}/recent`)
     .then(resp => resp.json())
     .then(recents => this.setState({ recents }))
+  }
+
+  sendRadius = radius => {
+    this.setState({
+      radius: radius
+    })
+    console.log(radius)
   }
 
   sort = indicator => {
@@ -149,7 +184,7 @@ export default class Listings extends Component{
                 </Menu.Menu>
               </Menu>
             </Grid.Row>
-              <MealListings listings={this.state.listings}/>
+              <MealListings listings={this.state.listings} user={this.props.user} radius={this.state.radius}/>
           </Grid.Column>
           <Grid.Column>
             <Grid.Row>
@@ -157,7 +192,7 @@ export default class Listings extends Component{
                 <Menu.Item header>Location of Meal</Menu.Item>
               </Menu>
                 {/* <Map listings={this.state.listings}/> */}
-                <MapContainer location={this.props.user.location} />
+                <MapContainer location={this.props.user.location} places={this.state.listings} sendRadius={this.sendRadius} />
             </Grid.Row>
             <Grid.Row>
                 <Menu text id="header">

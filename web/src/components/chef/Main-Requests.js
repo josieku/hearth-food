@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Item, Menu, Segment, TextArea, Modal } from 'semantic-ui-react';
+import { Button, Divider, Grid, Item, Input, Dropdown, Menu, Segment, TextArea, Modal } from 'semantic-ui-react';
 
 function RequestItem(item, index, accept, decline) {
   return (
