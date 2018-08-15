@@ -12,7 +12,7 @@ function OrderItem(item, index, complete, change) {
       <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
       <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
       <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra><strong>Status: {item.payment ? <span>Ready to cook!</span> : <span>Awaiting payment...</span>}</strong></Item.Extra>
+      <Item.Extra><strong>Status: </strong> <span>Ready to cook!</span></Item.Extra>
       <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
   </Grid.Column>
   <Grid.Column textAlign='right' width={6}>

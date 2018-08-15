@@ -109,7 +109,7 @@ class CustomerSignup extends React.Component {
                 <Form.Input fluid type="email" icon='envelope' iconPosition='left' placeholder='E-mail address' onChange={(e)=>this.setState({ email: e.target.value })}/>
                 <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Password' onChange={(e)=>this.setState({ password: e.target.value })}/>
                 <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Confirm Password' onChange={(e)=>this.setState({ repeat: e.target.value })} />
-                <Form.Input fluid type="file" icon='camera retro' iconPosition='left' placeholder='Driver"s license' onChange={(e)=>{this.handleFile(e)}}/>
+                <Form.Input label="Profile Picture" fluid type="file" icon='camera retro' iconPosition='left' placeholder='Driver"s license' onChange={(e)=>{this.handleFile(e)}}/>
                 <Button id="loginButton" fluid size='large' onClick={this.signup}>
                   Sign Up
                 </Button>

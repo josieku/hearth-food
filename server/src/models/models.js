@@ -102,6 +102,11 @@ var mealSchema = mongoose.Schema({
     type: [],
     required: true
   },
+  // meat: {
+  //   type: String,
+  //   enum: [],
+  //   required: true
+  // },
   description: {
     type: String,
     required: true
@@ -156,6 +161,11 @@ var mealSchema = mongoose.Schema({
   },
   recipe: {
     type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
     required: true
   }
 })
