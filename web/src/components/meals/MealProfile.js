@@ -125,7 +125,7 @@ export default class MealProfile extends Component {
                {...props}/>}/>
 
           <Route exact path={`/meal/${id}/setavailable`} render={(props) =>
-            <MealAvailability meal={this.state.meal} mealId={id}
+            <MealAvailability meal={this.state.meal} mealId={id} loading={this.state.loading}
               set={this.setAvailability} user={this.props.user} {...props}/>}/>
 
           <Route path={`/meal/${id}`} render={(props)=>
