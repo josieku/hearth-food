@@ -1,60 +1,79 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, Divider, Dropdown, Grid, Input,Item, Loader, Menu, Rating } from "semantic-ui-react";
+import Fuse from 'fuse.js';
+import * as Scroll from 'react-scroll';
+import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 import MapContainer from '.././maps/MapContainer'
 
 function Listing(meal){
   return (
-    <div id="listItem" key={meal._id}>
-      <Item>
-        <Grid columns={3}>
-          <Grid.Column width={3}>
-            <Item.Image circular size="small" style={{padding: '3px'}} src={meal.picture} />
-            <Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/>
-          </Grid.Column>
-          <Grid.Column width={8}>
-            <Item.Content>
-              <Link to={`/meal/${meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
-              <Item.Header><h2>{meal.title}</h2></Item.Header>
-            </Link>
-            <Item.Meta><h4>Description</h4></Item.Meta>
-            <Item.Description>{meal.description}</Item.Description>
-            <Item.Extra><h4>Ingredients</h4></Item.Extra>
-            <Item.Extra>{meal.ingredients}</Item.Extra>
-          </Item.Content>
-        </Grid.Column>
-        <Grid.Column width={4}>
-          <Item.Content>
-            <Item.Extra><h4>Price per plate</h4></Item.Extra>
-            <Item.Extra>${meal.price}</Item.Extra>
-            <Item.Extra><h4>Cuisine</h4></Item.Extra>
-            <Item.Extra>{meal.cuisine}</Item.Extra>
-            <Item.Extra><h4>Distance from you</h4></Item.Extra>
-            <Item.Extra>{meal.distance}</Item.Extra>
-            <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
-          </Item.Content>
-        </Grid.Column>
-      </Grid>
-      <Divider />
-    </Item>
-  </div>
+    <Element width="500px">
+      <div id="listItem" key={meal._id}>
+        <Item>
+          <Grid columns={3}>
+            <Grid.Column width={3}>
+              <Item.Image circular size="small" style={{padding: '3px'}} src={meal.picture} />
+              {meal.reviews.length > 5
+                ? <Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/>
+                : <p>No rating</p>
+              }
+              <span>{meal.reviews.length} reviews</span>
+            </Grid.Column>
+            <Grid.Column width={8}>
+              <Item.Content>
+                <Link to={`/meal/${meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
+                  <Item.Header><h2>{meal.title}</h2></Item.Header>
+                </Link>
+                <Item.Meta><h4>Description</h4></Item.Meta>
+                <Item.Description>{meal.description}</Item.Description>
+                <Item.Extra><h4>Ingredients</h4></Item.Extra>
+                <Item.Extra>{meal.ingredients}</Item.Extra>
+              </Item.Content>
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <Item.Content>
+                <Item.Extra><h4>Price per plate</h4></Item.Extra>
+                <Item.Extra>${meal.price}</Item.Extra>
+                <Item.Extra><h4>Cuisine</h4></Item.Extra>
+                <Item.Extra>{meal.cuisine}</Item.Extra>
+                <Item.Extra><h4>Distance from you</h4></Item.Extra>
+                <Item.Extra>{meal.distance}</Item.Extra>
+                <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
+              </Item.Content>
+            </Grid.Column>
+          </Grid>
+          <Divider />
+        </Item>
+      </div>
+    </Element>
 )
 }
 
 class MealListings extends Component {
   render(){
+    const style ={
+      position: 'relative',
+      height: '810px',
+      width: '560px',
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      marginBottom: '100px',
+    }
     return (
       <div>
-        {this.props.listings.map(Listing)}
+        <Element id="listings-scroll-container" style={style}>
+          {this.props.listings.map(Listing)}
+        </Element>
       </div>
     )
   }
 };
 
-function recentCondense(item){
+function recentCondense(item, ind){
   return (
-    <div id="listItem" key={item.meal._id}>
+    <div id="listItem" key={ind}>
       <Item>
         <Grid columns={2}>
           <Grid.Column width={12}>
@@ -62,16 +81,14 @@ function recentCondense(item){
               <Link to={`/meal/${item.meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
               <Item.Header><h2>{item.meal.title}</h2></Item.Header>
             </Link>
-            <Item.Meta><h4>Description</h4></Item.Meta>
-            <Item.Description>{item.meal.description}</Item.Description>
-            <Item.Extra><h4>Ingredients</h4></Item.Extra>
-            <Item.Extra>{item.meal.ingredients}</Item.Extra>
+            <Item.Content>
+              Ordered {new Date(item.time.time).toString().slice(0,15)} at {item.time.start}
+            </Item.Content>
           </Item.Content>
         </Grid.Column>
         <Grid.Column width={4}>
           <Item.Content>
-            <Item.Extra><h4>Price per plate</h4></Item.Extra>
-            <Item.Extra>${item.meal.price}</Item.Extra>
+            <Item.Extra><h4>${item.meal.price}</h4></Item.Extra>
           </Item.Content>
           <Button size='mini' id="redButton">Request Again</Button>
         </Grid.Column>
@@ -84,29 +101,84 @@ function recentCondense(item){
 
 export default class Listings extends Component{
   state = {
+    listingsOriginal: [],
     listings: [],
     recents: [],
-    loading: true,
+    cuisines: [],
+    loadingListing: true,
+    loadingRecents: true,
   }
 
   componentDidMount = e => {
     console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => this.setState({ listings, loading: false }));
+    .then(listings => {
+      const cuisines = {};
+      for (let ind in listings){
+        const genre = listings[ind]["cuisine"];
+        if (cuisines[genre]){
+          cuisines[genre] = cuisines[genre] + 1
+        } else{
+          cuisines[genre] = 1
+        }
+      }
+
+      this.setState({
+        listings: listings.filter(item => item.availability.length > 0),
+        listingsOriginal: listings.filter(item => item.availability.length > 0),
+        cuisines: Object.keys(cuisines),
+        loadingListing: false
+      })
+    });
 
     fetch(`/user/${this.props.user._id}/recent`)
     .then(resp => resp.json())
-    .then(recents => this.setState({ recents }))
+    .then(recents => this.setState({ recents, loadingRecents: false }))
   }
 
   sort = indicator => {
-    if (indicator === "high"){
-      const tempArr = this.state.listings.slice().sort((a,b)=>a["price"]-b["price"])
-      this.setState({listings: tempArr})
-    } else if (indicator === "low"){
-      const tempArr = this.state.listings.slice().sort((a,b)=>b["price"]-a["price"])
-      this.setState({listings: tempArr})
+    if (indicator === "low"){
+      const listings = this.state.listings.slice().sort((a,b)=>a["price"]-b["price"])
+      this.setState({ listings })
+    } else if (indicator === "high"){
+      const listings = this.state.listings.slice().sort((a,b)=>b["price"]-a["price"])
+      this.setState({ listings })
+    } else if (indicator === "rating"){
+      const listings = this.state.listings.slice()
+                                          .filter(item=>item.reviews.length > 5)
+                                          .sort((a,b)=>b.overallRating-a.overallRating)
+      this.setState({ listings })
+    } else if (indicator === "reviews"){
+      const listings = this.state.listings.slice().sort((a,b)=>b.reviews.length-a.reviews.length)
+      this.setState({ listings })
+    }
+  }
+
+  filter = (indicator, input) => {
+    if (indicator === "cuisine"){
+      const listings = this.state.listings.slice().filter(item=>item.cuisine===input)
+      this.setState({ listings })
+    } else if (indicator === "time"){
+      const listings = this.state.listings.slice()
+    }
+  }
+
+  search = input => {
+    if (input.length > 0){
+      var options = {
+        keys: ['title',
+               'chef.firstName',
+               'ingredients',
+               'description',
+               'cuisine' ],
+        threshold: 0.4
+      };
+      var fuse = new Fuse(this.state.listingsOriginal, options);
+      const listings = fuse.search(input);
+      this.setState({ listings });
+    } else {
+      this.setState({ listings: this.state.listingsOriginal })
     }
   }
 
@@ -119,20 +191,30 @@ export default class Listings extends Component{
               <Menu text id="header">
                 <Menu.Item header>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-                  <Input id='searchInHeader' icon='search' placeholder='Search...'/>
+                  <Input id='searchInHeader' icon='search'
+                    placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
                   <Dropdown icon='filter' floating button className="icon" id="redButton">
                     <Dropdown.Menu>
                       <Dropdown.Header content='Filter by selection' />
                       <Dropdown.Divider />
-                      <Dropdown.Item onClick={()=>{this.sort("high")}}>Price: Low to High
+                      <Dropdown.Item onClick={()=>{this.sort("high")}}>
+                        Price: High to Low
                       </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("low")}}>Price: High to Low</Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.sort("low")}}>
+                        Price: Low to High
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.sort("rating")}}>
+                        Highest Rated
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
+                        Most Reviewed
+                      </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </Menu.Menu>
               </Menu>
             </Grid.Row>
-            {this.state.loading
+            {this.state.loadingListing
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
               : <MealListings listings={this.state.listings}/>}
           </Grid.Column>
@@ -149,8 +231,10 @@ export default class Listings extends Component{
                   <Menu.Item header>Recent Meals</Menu.Item>
                 </Menu>
             <div id="listOfRecents">
-              {this.state.recents.length > 0
-                ? this.state.recents.map(recentCondense)
+              {this.state.loadingRecents
+                ? <Loader active inline='centered'/>
+                : this.state.recents.length > 0
+                ? this.state.recents.map((item,ind)=>recentCondense(item,ind))
                 : "No recent meals.  Start ordering now!"
               }
             </div>
