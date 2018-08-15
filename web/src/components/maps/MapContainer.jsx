@@ -51,7 +51,6 @@ var MapWithLocation = compose(
     // },
     componentWillMount() {
       const refs = {}
-      var places;
       var foo;
       var self = this;
       self.setState(foo = {
@@ -70,7 +69,9 @@ var MapWithLocation = compose(
           refs.searchBox = ref;
         },
         onPlacesChanged: () => {
-          places = self.props.places
+          // refs.map.fitBounds(bounds);
+          var places = self.props.places
+          console.log(places)
           if (places) {
             var bounds = self.state.circleBounds
             console.log(places, bounds)
@@ -79,19 +80,15 @@ var MapWithLocation = compose(
               name: place.title,
               distance: measure(place.chef.location.lat, place.chef.location.lng, self.props.location.lat, self.props.location.lng)
             }));
-            console.log(places2)
             var nextMarkers = places2.filter(place => {
-              console.log(place.distance)
               return (place.distance < self.state.radius)
             });
-            console.log(nextMarkers)
             const nextCenter = _.get(nextMarkers, '0.position', self.state.center);
-
+            this.props.sendRadius(this.state.radius)
             self.setState({
               markers: nextMarkers,
             });
           }
-          // refs.map.fitBounds(bounds);
         },
         onBoundsChanged: () => {
           self.setState({
@@ -101,11 +98,7 @@ var MapWithLocation = compose(
             self.setState({
               circleBounds: refs.circle.getBounds()
             }, () => {
-              if (refs.searchBox) {
-                setTimeout(() => {
-                  foo.onPlacesChanged()
-                }, 2000)
-              }
+              foo.onPlacesChanged()
               // if (refs.searchBox) {
               //   var input = document.getElementById('search')
               //   window.google.maps.event.trigger( input, 'focus')
@@ -170,7 +163,6 @@ var MapWithLocation = compose(
           ref={props.onSearchBoxMounted}
           bounds={props.circleBounds}
           controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
-          onPlacesChanged={props.onPlacesChanged}
         >
           <input
             id="search"
