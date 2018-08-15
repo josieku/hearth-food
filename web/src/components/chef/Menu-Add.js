@@ -9,7 +9,8 @@ export default class Add extends React.Component {
     price: 0,
     cuisine: "",
     picture: null,
-    recipe: ""
+    recipe: "",
+    steps: 0
   }
 
   handleFile = (e) => {
@@ -56,6 +57,14 @@ export default class Add extends React.Component {
       this.props.history.push('/dashboard/menu')
     }
 
+    addStep = e =>{
+      this.setState({
+        steps: this.state.steps ++
+      });
+      console.log(this.state.steps);
+
+    }
+
     render() {
       return(
         <div className='login-form'>
@@ -78,8 +87,13 @@ export default class Add extends React.Component {
                     <Form.Input fluid label="Price per dish" type="number" icon='dollar sign' iconPosition='left' placeholder='Price' onChange={(e)=>this.setState({ price: e.target.value })} required/>
                     <Form.TextArea label="Ingredients" placeholder='List out the ingredients in the dish ...' onChange={(e)=>this.setState({ ingredients: e.target.value })} required/>
                     <Form.Input fluid label="Cuisine" type="name" icon='key' iconPosition='left' placeholder='Cuisine' onChange={(e)=>this.setState({ cuisine: e.target.value })} required/>
-                    <Form.TextArea  label="Recipe" placeholder='Insert a Recipe' onChange={(e)=>this.setState({ recipe: e.target.value })} required/>
-
+                    <Header as='h5'>Recipe</Header>
+                    {/* <Form.Input  label="Recipe" placeholder='Step One...' onChange={(e)=>this.setState({ stepOne: e.target.value })} required/> */}
+                    {/* <Form.Input  placeholder='Step Two...' onChange={(e)=>this.setState({ stepTwo: e.target.value })} required/>
+                    <Form.Input  placeholder='Step Three...' onChange={(e)=>this.setState({ stepThree: e.target.value })} required/>
+                    <Form.Input  placeholder='Step Four...' onChange={(e)=>this.setState({ stepFour: e.target.value })} required/>
+                    <Form.Input  placeholder='Step Five...' onChange={(e)=>this.setState({ stepFive: e.target.value })} required/> */}
+                    <Button id="redButton" icon icon="plus circle" labelPosition="left" label="Add Step to Recipe" floated="right" onClick={this.addStep}/>
                     {/* <Form.Input fluid type="password" icon='key' iconPosition='left' placeholder='Confirm Password' onChange={(e)=>this.setState({ repeat: e.target.value })}  required/> */}
                     <Form.Input fluid label="Dish Picture" type="file" icon='camera retro' iconPosition='left' placeholder='Picture' onChange={(e)=>{this.handleFile(e)}} />
                     <Image src={this.state.file}  required/>
