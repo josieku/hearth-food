@@ -8,18 +8,17 @@ export default class Add extends React.Component {
     ingredients: "",
     price: 0,
     cuisine: "",
-    recipe: "",
+    picture: null,
+    recipe: "kajdhf",
     steps: 0,
     file: "",
   }
 
   handleFile = (e) => {
     var _this = this
-    console.log(e.target.value)
     var fReader = new FileReader();
     fReader.readAsDataURL(e.target.files[0]);
     fReader.onloadend = function(event){
-      // console.log(event.target.result);
       _this.setState({
         file: event.target.result
       })
@@ -27,7 +26,6 @@ export default class Add extends React.Component {
   }
 
   save = e => {
-    // console.log('saving', this.state);
     this.props.save(this.state.title, this.state.description,
       this.state.ingredients, parseInt(this.state.price),
       this.state.cuisine, this.state.recipe, this.state.file);
