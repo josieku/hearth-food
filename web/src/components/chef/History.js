@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
+import { Button, Divider, Grid, Header, Item, Loader, Menu, Segment } from 'semantic-ui-react';
 
 function HistoryItem(item) {
   return (
@@ -27,13 +27,14 @@ function HistoryItem(item) {
 
 export default class HistoryListing extends Component{
   state = {
-    history: []
+    history: [],
+    loadingHistory: true
   }
 
   componentDidMount = () => {
     fetch(`/chef/${this.props.chefId}/history`)
     .then(resp => resp.json())
-    .then(history => this.setState({ history }))
+    .then(history => this.setState({ history, loadingHistory: false }))
   }
 
   render(){
@@ -42,11 +43,14 @@ export default class HistoryListing extends Component{
         <Menu text fluid id="notificationHead" style={{padding: '3px'}}>
         <Menu.Item header>Request History</Menu.Item>
       </Menu>
-        <ul style={{listStyleType: "none"}}>
-          {this.state.history.length > 0
-            ? this.state.history.map(HistoryItem)
-            : 'No history yet'}
+      {this.state.loadingHistory
+      ? <Loader active inline='centered'>Loading your past meals</Loader> :
+      <ul style={{listStyleType: "none"}}>
+        {this.state.history.length > 0
+          ? this.state.history.map(HistoryItem)
+          : 'No history yet'}
         </ul>
+    }
       </div>
     )
   }
