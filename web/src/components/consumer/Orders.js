@@ -70,6 +70,9 @@ export default class Main extends Component{
     const { activeItem } = this.state;
     return(
       <div>
+        <Menu text id="header" attached>
+          <Menu.Item header style={{color: 'white'}}>Your Orders</Menu.Item>
+        </Menu>
         <Segment>
             <Menu fluid tabular>
               <Menu.Item name="Scheduled Orders" active={activeItem === "Scheduled Orders"} onClick={this.handleClick} />

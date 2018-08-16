@@ -245,13 +245,13 @@ export default class Listings extends Component{
           <Grid.Column>
             <Grid.Row>
               <Menu text id="header">
-                <Menu.Item header>Available Meals</Menu.Item>
+                <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
-                  <Dropdown icon='filter' floating button className="icon" id="redButton">
+                  <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
                     <Dropdown.Menu>
-                      <Dropdown.Header content='Filter by selection' />
+                      <Dropdown.Header content='Sort by selection' />
                       <Dropdown.Divider />
                       <Dropdown.Item onClick={()=>{this.sort("high")}}>
                         Price: High to Low
@@ -279,14 +279,14 @@ export default class Listings extends Component{
           <Grid.Column>
             <Grid.Row>
               <Menu text id="header">
-                <Menu.Item header>Location of Meal</Menu.Item>
+                <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
               </Menu>
                 {/* <Map listings={this.state.listings}/> */}
                 <MapContainer location={this.props.user.location} places={this.state.listings} sendRadius={this.sendRadius} />
             </Grid.Row>
             <Grid.Row>
                 <Menu text id="header">
-                  <Menu.Item header>Recent Meals</Menu.Item>
+                  <Menu.Item header style={{color: 'white'}}>Recent Meals</Menu.Item>
                 </Menu>
             <div id="listOfRecents">
               {this.state.loadingRecents
