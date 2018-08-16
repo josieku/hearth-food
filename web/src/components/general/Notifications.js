@@ -18,7 +18,7 @@ export default class Notifications extends Component{
     return (
       <Grid columns={2}>
         <Grid.Row>
-          <Grid.Column width={13}>
+          <Grid.Column width={15}>
             <Item key={item._id} id={`notification-${item.seen}`}>
               <Item.Content><strong>Type: </strong>{item.type}</Item.Content>
               <Item.Content><strong>Time: </strong>{new Date(item.time).toString()}</Item.Content>
@@ -26,7 +26,7 @@ export default class Notifications extends Component{
               <Item.Content>{item.content}</Item.Content>
             </Item>
           </Grid.Column>
-          <Grid.Column width={3} verticalAlign='middle'>
+          <Grid.Column width={1} verticalAlign='middle'>
             <Button size='mini'
                     id='redButton'
                     icon='trash alternate'
@@ -55,8 +55,8 @@ export default class Notifications extends Component{
   render(){
     return(
       <div>
-        <Menu text fluid id="notificationHead">
-          <Menu.Item header>Notifications</Menu.Item>
+        <Menu text fluid id="header">
+          <Menu.Item header style={{color: 'white'}}>Notifications</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
             <Button onClick={this.mark} id="redButton">
               Mark all as read

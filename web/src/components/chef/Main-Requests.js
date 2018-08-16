@@ -5,11 +5,11 @@ import { Button, Divider, Dropdown, Grid, Input, Item, Menu, TextArea, Modal, Lo
 function RequestItem(item, index, accept, decline) {
   return (
     <Item key={item._id} className="request-list-item">
-      <Item.Header>Customer: {item.consumer.firstName}</Item.Header>
-      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
-      <Item.Extra>Date: {new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
-      <Item.Extra>Time: {item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
+      <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
+      <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
+      <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
+      <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
+      <Item.Extra><strong>Requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
       <Button onClick={() => accept(item._id, index)}>Accept</Button>
       <Button onClick={() => decline(item, index)}>Decline</Button>
         <Divider />
@@ -55,7 +55,7 @@ export default class RequestListing extends Component{
         <Grid.Column>
           <Grid.Row>
             <Menu text id="header">
-              <Menu.Item header>Requests</Menu.Item>
+              <Menu.Item header style={{color: 'white'}}>Requests</Menu.Item>
               <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                 <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                   <Dropdown icon='filter' floating button className='icon' id='redButton'>

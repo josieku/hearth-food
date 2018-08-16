@@ -79,12 +79,16 @@ class MealListings extends Component {
       overflowX: 'hidden',
       marginBottom: '100px',
     }
+<<<<<<< HEAD
     console.log(this.props.bounds)
     console.log(this.props.listings)
     var meals = this.props.listings.filter(meal => {
       return this.props.bounds.contains(meal.chef.location)
     })
     console.log(meals)
+=======
+
+>>>>>>> a8bd3797d577986333a1d59e5b234d8c398c14c1
     return (
       <div>
         <Element id="listings-scroll-container" style={style}>
@@ -129,6 +133,7 @@ export default class Listings extends Component{
     listings: [],
     recents: [],
     cuisines: [],
+    cuisineSearch: [],
     loadingListing: true,
     loadingRecents: true,
     radius: 500
@@ -137,7 +142,8 @@ export default class Listings extends Component{
     console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => {
+    .then(list => {
+      const listings = list.filter(item => item.availability.length > 0);
       const cuisines = {};
       for (let ind in listings){
         const genre = listings[ind]["cuisine"];
@@ -149,8 +155,8 @@ export default class Listings extends Component{
       }
 
       this.setState({
-        listings: listings.filter(item => item.availability.length > 0),
-        listingsOriginal: listings.filter(item => item.availability.length > 0),
+        listings: listings,
+        listingsOriginal: listings,
         cuisines: Object.keys(cuisines),
         loadingListing: false
       })
@@ -165,7 +171,10 @@ export default class Listings extends Component{
     this.setState({
       bounds: bounds
     })
+<<<<<<< HEAD
     console.log(bounds)
+=======
+>>>>>>> a8bd3797d577986333a1d59e5b234d8c398c14c1
   }
 
   sort = indicator => {
@@ -176,9 +185,12 @@ export default class Listings extends Component{
       const listings = this.state.listings.slice().sort((a,b)=>b["price"]-a["price"])
       this.setState({ listings })
     } else if (indicator === "rating"){
-      const listings = this.state.listings.slice()
+      const yesRatings = this.state.listings.slice()
                                           .filter(item=>item.reviews.length > 5)
                                           .sort((a,b)=>b.overallRating-a.overallRating)
+      const noRatings = this.state.listingsOriginal.filter(item=>item.reviews.length < 6);
+      console.log('noratings', noRatings);
+      const listings = yesRatings.concat(noRatings)
       this.setState({ listings })
     } else if (indicator === "reviews"){
       const listings = this.state.listings.slice().sort((a,b)=>b.reviews.length-a.reviews.length)
@@ -188,7 +200,13 @@ export default class Listings extends Component{
 
   filter = (indicator, input) => {
     if (indicator === "cuisine"){
-      const listings = this.state.listings.slice().filter(item=>item.cuisine===input)
+      const listings = this.state.listings.slice()
+                                          .filter(item=>{
+                                            console.log('item.cuisine', item.cuisine)
+                                            for (let ind in input){
+                                              if (item.cuisine[0] === input[ind]) return item;}
+                                            })
+      console.log('filtered', listings)
       this.setState({ listings })
     } else if (indicator === "time"){
       const listings = this.state.listings.slice()
@@ -213,20 +231,33 @@ export default class Listings extends Component{
     }
   }
 
+  cuisineFilter = (e, data) => {
+    console.log('cuisine', data.value);
+    if (data.value.length > 0){
+      this.filter('cuisine', data.value)
+    } else {
+      this.setState({ listings: this.state.listingsOriginal })
+    }
+    // this.setState({ cuisineSearch: data.value })
+  }
+
   render(){
+    const cuisines = this.state.cuisines.map(item=>{
+      return {key: item, value: item, text: item}
+    })
     return(
       <div className="main">
         <Grid columns={2} padded="vertically">
           <Grid.Column>
             <Grid.Row>
               <Menu text id="header">
-                <Menu.Item header>Available Meals</Menu.Item>
+                <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
-                  <Dropdown icon='filter' floating button className="icon" id="redButton">
+                  <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
                     <Dropdown.Menu>
-                      <Dropdown.Header content='Filter by selection' />
+                      <Dropdown.Header content='Sort by selection' />
                       <Dropdown.Divider />
                       <Dropdown.Item onClick={()=>{this.sort("high")}}>
                         Price: High to Low
@@ -242,6 +273,8 @@ export default class Listings extends Component{
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Dropdown placeholder='Cuisine' fluid multiple search selection
+                    options={cuisines} onChange={this.cuisineFilter}/>
                 </Menu.Menu>
               </Menu>
             </Grid.Row>
@@ -252,14 +285,14 @@ export default class Listings extends Component{
           <Grid.Column>
             <Grid.Row>
               <Menu text id="header">
-                <Menu.Item header>Location of Meal</Menu.Item>
+                <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
               </Menu>
                 {/* <Map listings={this.state.listings}/> */}
                 <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
             </Grid.Row>
             <Grid.Row>
                 <Menu text id="header">
-                  <Menu.Item header>Recent Meals</Menu.Item>
+                  <Menu.Item header style={{color: 'white'}}>Recent Meals</Menu.Item>
                 </Menu>
             <div id="listOfRecents">
               {this.state.loadingRecents

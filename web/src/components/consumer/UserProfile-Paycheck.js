@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Grid, Header, Image, Segment} from 'semantic-ui-react';
+import { Button, Divider, Input, Item, Menu, Segment} from 'semantic-ui-react';
 import Fuse from 'fuse.js';
 
 function ChargeListing(item){
   return (
-    <div style={{border: "1px solid black"}}>
-      <p>Meal: {item.meal.title}</p>
-      <p>Price: {item.meal.price}</p>
-      <p>Customer: {item.consumer.firstName}</p>
-      <p>Date: {new Date(item.time.time).toString().slice(0,15)}</p>
-      <p>Time: {item.time.start} to {item.time.end}</p>
-    </div>
+    <Item style={{marginTop: '5px'}}>
+      <Item.Content><strong>Meal: </strong>{item.meal.title}</Item.Content>
+      <Item.Content><strong>Price: </strong>{item.meal.price}</Item.Content>
+      <Item.Content><strong>Customer: </strong>{item.consumer.firstName}</Item.Content>
+      <Item.Content><strong>Date: </strong>{new Date(item.time.time).toString().slice(0,15)}</Item.Content>
+      <Item.Content><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Content>
+      <Divider fitted/>
+    </Item>
   )
 }
 
@@ -64,13 +65,16 @@ export default class ProfilePaycheck extends Component{
 
     return(
       <div>
-        <h1>Paycheck (chef)</h1>
-        <button>Change your bank information</button>
-        <input onChange={(e)=>this.search(e.target.value)} placeholder="search..."/>
-        <p>Payslip, Total: <strong>{this.renderTotal(this.state.charges)}</strong></p>
-        <div style={{border: "1px solid black"}}>
+        <Menu text id="header" attached>
+          <Menu.Item header style={{color: 'white'}}>Chef's Paycheck</Menu.Item>
+          <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+            <Input id="searchInHeader" onChange={(e)=>this.search(e.target.value)} placeholder="search..."/>
+            <Button id='redButton'>Change your billing information</Button>
+          </Menu.Menu>
+        </Menu>
+        <Segment attached="top">
           {this.state.charges.sort((a,b)=>a.time.time - b.time.time).map(ChargeListing)}
-        </div>
+        </Segment>
       </div>
       )
     }

@@ -44,8 +44,8 @@ const HomepageHeading = ({ mobile }) => (
         marginTop: mobile ? '0.5em' : '1.5em',
       }}
     />
-    <Button id='getStarted' size='huge'>
-      <Link to="/auth/signup" style={{textDecoration: 'none', color: 'white'}}> Get Started </Link>
+    <Button href='/auth/signup' id='getStarted' size='huge'>
+      Get Started
       <Icon name='right arrow' />
     </Button>
   </Container>
@@ -105,8 +105,9 @@ class DesktopContainer extends Component {
           <Segment
             inverted
             textAlign='center'
-            style={{ minHeight: 700, padding: '1em 0em', backgroundColor: '#B73535' }}
+            style={{ minHeight: 700, padding: '1em 0em', backgroundImage: '#B73535' }}
             vertical
+            id='landingBackground'
           >
             <Menu
               id="mainPageMenu"
@@ -293,7 +294,7 @@ const HomepageLayout = () => (
         <p style={{ fontSize: '1.33em' }}>
           Apply to be a hearth chef below. Our university ambassador will contact you to start the process, and you'll be cooking in no time!
         </p>
-          <Link to="/auth/signup" style={{textDecoration: 'none', color: 'white'}}><Button size='huge'>Cook With Us</Button></Link>
+          <Link to="/auth/signup" style={{textDecoration: 'none', color: 'white'}}><Button size='huge' id='getStarted'>Cook With Us</Button></Link>
         <Divider/>
       </Container>
     </Segment>

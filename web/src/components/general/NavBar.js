@@ -64,10 +64,10 @@ export default class NavBar extends Component {
     if (role === "consumer") {
       return (
         <div>
-          <Menu text>
+          <Menu text style={{marginTop: '0px', paddingTop: '10px'}}>
           <h2>hearth-EAT</h2>
           <Menu.Menu text="true" id='navBar' position='right'>
-                <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
+                <Menu.Item style={{padding: ''}} name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
                 {notifWiggle
                   ? <Transition animation="jiggle" duration="3000" visible={notifWiggle}>
@@ -92,7 +92,7 @@ export default class NavBar extends Component {
     } else if (role === "chef") {
       return (
         <div>
-          <Menu text>
+          <Menu text style={{marginTop: '0px', paddingTop: '10px'}}>
             <h2> hearth-COOK </h2>
           <Menu.Menu  id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
@@ -121,7 +121,7 @@ export default class NavBar extends Component {
     } else {
       return (
         <div>
-          <Menu text>
+          <Menu text style={{marginTop: '0px', paddingTop: '10px'}}>
             <Header as='h2'>hearth</Header>
           <Menu.Menu id='navBar' position='right'>
                 <Menu.Item name='About' href='/' active={ activeItem === 'About'}  onClick={()=>{this.setState({activeItem: 'About'})}}/>

@@ -8,21 +8,21 @@ function OrderItem(item, index, complete, cancel) {
     <Item key={item._id} className="order-list-item">
     <Grid>
       <Grid.Column width={6}>
-      <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
-      <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
-      <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
-      <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra><strong>Status: </strong> <span>Ready to cook!</span></Item.Extra>
-      <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
-  </Grid.Column>
-  <Grid.Column textAlign='right' width={6}>
-    {/* {item.payment
-      ? <button disabled>Change pickup time</button>
-      : <EditModal request={item} ind={index} change={change}/> } */}
-    <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
-    <Button onClick={()=>cancel(item, index)}>Cancel</Button>
-  </Grid.Column>
-  </Grid>
+        <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
+        <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
+        <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
+        <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
+        <Item.Extra><strong>Status: </strong> <span>Ready to cook!</span></Item.Extra>
+        <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
+      </Grid.Column>
+      <Grid.Column textAlign='right' width={6}>
+        {/* {item.payment
+          ? <button disabled>Change pickup time</button>
+          : <EditModal request={item} ind={index} change={change}/> } */}
+        <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
+        <Button onClick={()=>cancel(item, index)}>Cancel</Button>
+      </Grid.Column>
+    </Grid>
   <Divider />
 </Item>
   )
@@ -124,7 +124,7 @@ export default class OrderListing extends Component{
       <div>
         <Grid.Row>
           <Menu text id="header">
-            <Menu.Item header>Orders</Menu.Item>
+            <Menu.Item header style={{color: 'white'}}>Orders</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
               <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                 <Dropdown icon='filter' floating button className='icon' id='redButton'>
