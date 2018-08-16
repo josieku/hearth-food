@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Dropdown, Grid, Header, Image, Input, Item, Menu, Rating, Segment, Loader } from 'semantic-ui-react';
-
+// import Offer from './../meals/MealProfile-SetAvailability';
 import Edit from './../meals/MealProfile-Edit';
 
 function MenuListItem(item) {
   return (
     <Grid>
       <Grid.Column width={9}>
-        <Item className="menu-list-item">
+        <Item className="menu-list-item" >
           <Header href={`/meal/${item._id}`}>{item.title}</Header>
           {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
           <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
@@ -18,8 +18,8 @@ function MenuListItem(item) {
           <Rating icon='star' defaultRating={item.overallRating} maxRating={5} disabled/>
           <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
           <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
-          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Set Availability</Button>
-          <Header >Recipe</Header>
+          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Offer Meal</Button>
+          <Header>Recipe</Header>
           <Item.Content>{item.recipe}</Item.Content>
         </Item>
       </Grid.Column>
@@ -30,10 +30,12 @@ function MenuListItem(item) {
   )
 }
 
+
+
 export default class MenuListing extends Component{
   state = {
     activeItem: this.props.menu.length >0 ? this.props.menu[0].title : null,
-    shownRecipe: this.props.first
+    shownRecipe: this.props.menu[0]
   }
 
   handleClick = (item) => {
@@ -65,19 +67,19 @@ export default class MenuListing extends Component{
         { this.props.loading
           ? <Loader active inline='centered'/>
           : this.props.menu.length > 0
-          ? <Segment basic>
+          ? <Segment style={{backgroundColor: '#EAF2EF'}}>
             <Grid columns={2}>
-              <Grid.Column width={4}>
-                <Menu fluid vertical tabular>
+              <Grid.Column width={4} style={{paddingRight: '0px'}}>
+                <Menu fluid vertical tabular style={{borderRight: '0px'}}>
                   {this.props.menu.length > 0
                     ? this.props.menu.map(item =>
-                      <Menu.Item color='red' name={item.title} key={item._id}
+                      <Menu.Item name={item.title} key={item._id}
                         active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>)
                         : null}
                       </Menu>
                     </Grid.Column>
-                    <Grid.Column stretched width={12}>
-                      <Segment attached>
+                    <Grid.Column stretched width={12} style={{paddingLeft: '0px'}}>
+                      <Segment basic style={{backgroundColor: 'white', borderRadius: '3px'}}>
                         {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
                       </Segment>
                     </Grid.Column>

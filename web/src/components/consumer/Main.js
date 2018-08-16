@@ -79,6 +79,7 @@ class MealListings extends Component {
       overflowX: 'hidden',
       marginBottom: '100px',
     }
+
     return (
       <div>
         <Element id="listings-scroll-container" style={style}>
@@ -123,6 +124,7 @@ export default class Listings extends Component{
     listings: [],
     recents: [],
     cuisines: [],
+    cuisineSearch: [],
     loadingListing: true,
     loadingRecents: true,
     radius: 500
@@ -131,7 +133,8 @@ export default class Listings extends Component{
     console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
-    .then(listings => {
+    .then(list => {
+      const listings = list.filter(item => item.availability.length > 0);
       const cuisines = {};
       for (let ind in listings){
         const genre = listings[ind]["cuisine"];
@@ -143,8 +146,8 @@ export default class Listings extends Component{
       }
 
       this.setState({
-        listings: listings.filter(item => item.availability.length > 0),
-        listingsOriginal: listings.filter(item => item.availability.length > 0),
+        listings: listings,
+        listingsOriginal: listings,
         cuisines: Object.keys(cuisines),
         loadingListing: false
       })
@@ -159,7 +162,6 @@ export default class Listings extends Component{
     this.setState({
       radius: radius
     })
-    console.log(radius)
   }
 
   sort = indicator => {
@@ -170,9 +172,12 @@ export default class Listings extends Component{
       const listings = this.state.listings.slice().sort((a,b)=>b["price"]-a["price"])
       this.setState({ listings })
     } else if (indicator === "rating"){
-      const listings = this.state.listings.slice()
+      const yesRatings = this.state.listings.slice()
                                           .filter(item=>item.reviews.length > 5)
                                           .sort((a,b)=>b.overallRating-a.overallRating)
+      const noRatings = this.state.listingsOriginal.filter(item=>item.reviews.length < 6);
+      console.log('noratings', noRatings);
+      const listings = yesRatings.concat(noRatings)
       this.setState({ listings })
     } else if (indicator === "reviews"){
       const listings = this.state.listings.slice().sort((a,b)=>b.reviews.length-a.reviews.length)
@@ -182,7 +187,13 @@ export default class Listings extends Component{
 
   filter = (indicator, input) => {
     if (indicator === "cuisine"){
-      const listings = this.state.listings.slice().filter(item=>item.cuisine===input)
+      const listings = this.state.listings.slice()
+                                          .filter(item=>{
+                                            console.log('item.cuisine', item.cuisine)
+                                            for (let ind in input){
+                                              if (item.cuisine[0] === input[ind]) return item;}
+                                            })
+      console.log('filtered', listings)
       this.setState({ listings })
     } else if (indicator === "time"){
       const listings = this.state.listings.slice()
@@ -207,7 +218,20 @@ export default class Listings extends Component{
     }
   }
 
+  cuisineFilter = (e, data) => {
+    console.log('cuisine', data.value);
+    if (data.value.length > 0){
+      this.filter('cuisine', data.value)
+    } else {
+      this.setState({ listings: this.state.listingsOriginal })
+    }
+    // this.setState({ cuisineSearch: data.value })
+  }
+
   render(){
+    const cuisines = this.state.cuisines.map(item=>{
+      return {key: item, value: item, text: item}
+    })
     return(
       <div className="main">
         <Grid columns={2} padded="vertically">
@@ -236,6 +260,8 @@ export default class Listings extends Component{
                       </Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Dropdown placeholder='Cuisine' fluid multiple search selection
+                    options={cuisines} onChange={this.cuisineFilter}/>
                 </Menu.Menu>
               </Menu>
             </Grid.Row>

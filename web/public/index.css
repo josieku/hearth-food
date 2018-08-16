@@ -4,7 +4,7 @@ body {
 }
 
 .App {
-  background-color: white;
+  background-color: #FFF7EF;
 }
 
 .main {
@@ -14,7 +14,10 @@ body {
 /* Landing Page Styles */
 #getStarted {
   color: white;
-  background: #969595
+  background: #C60000
+}
+#landingBackground {
+  background-color: #F7C59F
 }
 /* General Styling */
 #navBar {
@@ -37,7 +40,7 @@ body {
 }
 #loginButton {
   color: white;
-  background-color: #B73535;
+  background-color: #C60000;
   margin: 5px;
 }
 
@@ -47,26 +50,27 @@ body {
 /* Consumer Landing Styling */
 
 #header {
-  background-color: #D6D4D4;
+  background-color: #C60000;
   font-size: medium;
+  height: 60px;
+  color: white
 }
 .smallHeader {
-  color: #B73535
+  color: #C60000
 }
 
 /* Chef Landing Styling */
 #chefLandingHeader {
-  background-color: #B73535
+  background-color: #C60000
 }
 
 /* Menu Styling  */
 #redButton {
-  background-color: #B73535;
-  color: white;
+  background-color: #EAF2EF;
   margin: 5px;
 }
 #chefMenu {
-  background-color: #D6D4D4;
+  background-color: #C60000;
 }
 
 /* Add and Edit a dish form styling */
@@ -75,7 +79,7 @@ body {
 }
 /* Consumer Orders Page Styling */
 .conOrderPageHeader {
-  background-color: #B73535
+  background-color: #C60000
 }
 
 /* Profile View Styling */
@@ -85,7 +89,8 @@ body {
 
 /* Notifications styles */
 #notificationHead {
-  background-color: #D6D4D4;
+  background-color: #C60000;
+  height: 60px
 }
 #notification-true {
   color: grey;

@@ -14,6 +14,7 @@
     "npm-run-all": "^4.0.2"
   },
   "dependencies": {
+    "@blueprintjs/datetime": "^3.1.0",
     "ajv": "^6.5.2",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",
@@ -32,7 +33,6 @@
     "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
     "radium": "^0.24.1",
-    "rc-time-picker": "^3.4.0",
     "react": "^16.4.1",
     "react-animations": "^1.0.0",
     "react-dom": "^16.4.1",
@@ -42,6 +42,7 @@
     "react-modal": "^3.5.1",
     "react-router-dom": "^4.3.1",
     "react-scroll": "^1.7.10",
+    "react-share": "^2.2.0",
     "recompose": "^0.28.1",
     "semantic-ui": "^2.3.3",
     "semantic-ui-css": "^2.3.3",
