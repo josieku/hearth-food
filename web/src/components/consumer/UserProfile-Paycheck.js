@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Input, Item, Menu, Segment} from 'semantic-ui-react';
+import { Button, Divider, Input, Item, Menu, Segment, Loader} from 'semantic-ui-react';
 import Fuse from 'fuse.js';
 
 function ChargeListing(item){
@@ -19,7 +19,8 @@ function ChargeListing(item){
 export default class ProfilePaycheck extends Component{
   state = {
     chargesOriginal: [],
-    charges: []
+    charges: [],
+    loading: true,
   }
 
   componentDidMount = () => {
@@ -28,7 +29,10 @@ export default class ProfilePaycheck extends Component{
     } else {
       fetch(`/user/${this.props.id}/paycheck`)
         .then(resp => resp.json())
-        .then(charges => this.setState({ charges, chargesOriginal: charges }) )
+        .then(list => {
+          const charges = list.sort((a,b)=> b.time.time - a.time.time)
+          this.setState({ charges, chargesOriginal: charges, loading: false })
+        } )
     }
   }
 
@@ -72,9 +76,19 @@ export default class ProfilePaycheck extends Component{
             <Button id='redButton'>Change your billing information</Button>
           </Menu.Menu>
         </Menu>
-        <Segment attached="top">
-          {this.state.charges.sort((a,b)=>a.time.time - b.time.time).map(ChargeListing)}
-        </Segment>
+        {this.state.loading
+          ? <div style={{margin: "15px"}}>
+              <Loader active inline='centered'>Good job!  You worked hard.</Loader>
+            </div>
+          : <div>
+            <div style={{marginTop:"5px"}}>
+              <p><strong>Earned this week: </strong> ${this.renderTotal(this.state.chargesOriginal)}</p>
+            </div>
+            <Segment attached="top">
+              {this.state.charges.sort((a,b)=>a.time.time - b.time.time).map(ChargeListing)}
+            </Segment>
+          </div>
+        }
       </div>
       )
     }
