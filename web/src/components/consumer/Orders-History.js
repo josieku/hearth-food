@@ -4,11 +4,11 @@ import { Divider, Item } from 'semantic-ui-react';
 function HistoryItem(item, bool) {
   return (
     <Item key={item._id} className="request-list-item">
-      <Item.Header>Chef: {item.chef.firstName}</Item.Header>
-      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
-      <Item.Extra>Date: {new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
-      <Item.Extra>Time: {item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
+      <Item.Header><strong>Chef: </strong>{item.chef.firstName}</Item.Header>
+      <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
+      <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
+      <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
+      <Item.Extra><strong>Requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
       {bool ? <Divider/> : null}
     </Item>
   )

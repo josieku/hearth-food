@@ -94,7 +94,9 @@ export default class ConsumerLanding extends Component{
               loading={this.state.loadingNotifs} {...props} />}/>
 
           <Route exact path="/dashboard" render={(props)=>
-            <Listings user={user} recents={this.state.recents} {...props} />}/>
+            <Listings user={user} recents={this.state.recents} 
+              notifications={this.state.notifications} updateNotifs={this.updateNotifications}
+              {...props} />}/>
           {/* <Route exact path='/user/:id' render={({ match }) =>
             <Profile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/> */}
         </Switch>

@@ -51,7 +51,7 @@ export default class MenuListing extends Component{
           <Menu.Item header style={{color: 'white'}}>Your Menu</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
             <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-            <Dropdown icon='filter' floating button className="icon" id="redButton">
+            <Dropdown icon='sort' floating button className="icon" id="redButton">
               <Dropdown.Menu>
                 <Dropdown.Header content='Filter by selection' />
                 <Dropdown.Divider />

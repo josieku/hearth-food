@@ -5,10 +5,10 @@ import { Divider, Item } from 'semantic-ui-react';
 function ScheduledItem(item, bool, index, cancel) {
   return (
     <Item key={item._id} className="request-list-item">
-      <Item.Header>Chef: {item.chef.firstName}</Item.Header>
-      <Item.Extra>Meal: {item.meal.title}</Item.Extra>
-      <Item.Extra>Pickup Time: {item.time.date}</Item.Extra>
-      <Item.Extra>Requests: {item.requests ? item.requests : 'None'}</Item.Extra>
+      <Item.Header><strong>Chef: </strong>{item.chef.firstName}</Item.Header>
+      <Item.Extra><strong>Meal: </strong> {item.meal.title}</Item.Extra>
+      <Item.Extra><strong>Pickup Time:</strong> {item.time.date}</Item.Extra>
+      <Item.Extra><strong>Requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
       {item.accepted
         ? <button disabled>Cancel</button>
         : <button onClick={() => cancel(item._id, index)}>Cancel</button> }
