@@ -74,18 +74,15 @@ class MealListings extends Component {
     const style ={
       position: 'relative',
       height: '810px',
-      width: '560px',
       overflowY: 'scroll',
       overflowX: 'hidden',
       marginBottom: '100px',
     }
 
     return (
-      <div>
         <Element id="listings-scroll-container" style={style}>
           {this.props.listings.map(meal => Listing(meal, this.props.user))}
         </Element>
-      </div>
     )
   }
 };
@@ -235,41 +232,43 @@ export default class Listings extends Component{
     return(
       <div className="main">
         <Grid columns={2} padded="vertically">
-          <Grid.Column>
+          <Grid.Column width={9}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
-                  <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
-                    <Dropdown.Menu>
-                      <Dropdown.Header content='Sort by selection' />
-                      <Dropdown.Divider />
-                      <Dropdown.Item onClick={()=>{this.sort("high")}}>
-                        Price: High to Low
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("low")}}>
-                        Price: Low to High
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("rating")}}>
-                        Highest Rated
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
-                        Most Reviewed
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown placeholder='Cuisine' fluid multiple search selection
+                  <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
                     options={cuisines} onChange={this.cuisineFilter}/>
+                    <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                      <Dropdown.Menu>
+                        <Dropdown.Header content='Sort by selection' />
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={()=>{this.sort("high")}}>
+                          Price: High to Low
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("low")}}>
+                          Price: Low to High
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("rating")}}>
+                          Highest Rated
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
+                          Most Reviewed
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                 </Menu.Menu>
               </Menu>
             </Grid.Row>
+            <Grid.Row style={{justifyContent: 'center'}}>
             {this.state.loadingListing
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
               : <MealListings listings={this.state.listings} user={this.props.user} radius={this.state.radius}/>}
+            </Grid.Row>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={7}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
