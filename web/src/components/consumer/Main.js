@@ -79,16 +79,12 @@ class MealListings extends Component {
       overflowX: 'hidden',
       marginBottom: '100px',
     }
-<<<<<<< HEAD
     console.log(this.props.bounds)
     console.log(this.props.listings)
     var meals = this.props.listings.filter(meal => {
       return this.props.bounds.contains(meal.chef.location)
     })
     console.log(meals)
-=======
-
->>>>>>> a8bd3797d577986333a1d59e5b234d8c398c14c1
     return (
       <div>
         <Element id="listings-scroll-container" style={style}>
@@ -171,10 +167,7 @@ export default class Listings extends Component{
     this.setState({
       bounds: bounds
     })
-<<<<<<< HEAD
     console.log(bounds)
-=======
->>>>>>> a8bd3797d577986333a1d59e5b234d8c398c14c1
   }
 
   sort = indicator => {
