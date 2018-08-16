@@ -86,10 +86,15 @@ class MealListings extends Component {
       overflowX: 'hidden',
       marginBottom: '100px',
     }
-
+    console.log(this.props.bounds)
+    console.log(this.props.listings)
+    var meals = this.props.listings.filter(meal => {
+      return this.props.bounds.contains(meal.chef.location)
+    })
+    console.log(meals)
     return (
         <Element id="listings-scroll-container" style={style}>
-          {this.props.listings.map(meal => Listing(meal, this.props.user))}
+          {meals.map(meal => Listing(meal, this.props.user))}
         </Element>
     )
   }
@@ -163,10 +168,11 @@ export default class Listings extends Component{
     .then(recents => this.setState({ recents, loadingRecents: false }))
   }
 
-  sendRadius = radius => {
+  sendBounds = bounds => {
     this.setState({
-      radius: radius
+      bounds: bounds
     })
+    console.log(bounds)
   }
 
   sort = indicator => {
@@ -292,8 +298,7 @@ export default class Listings extends Component{
             <Grid.Row style={{justifyContent: 'center'}}>
             {this.state.loadingListing
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
-              : <MealListings listings={this.state.listings} user={this.props.user} radius={this.state.radius}/>}
-            </Grid.Row>
+              : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
           </Grid.Column>
           <Grid.Column width={7}>
             <Grid.Row>
@@ -301,7 +306,7 @@ export default class Listings extends Component{
                 <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
               </Menu>
                 {/* <Map listings={this.state.listings}/> */}
-                <MapContainer location={this.props.user.location} places={this.state.listings} sendRadius={this.sendRadius} />
+                <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
             </Grid.Row>
             <Grid.Row>
                 <Menu text id="header">

@@ -113,6 +113,8 @@ var MapWithLocation = compose(
             bounds: refs.map.getBounds(),
           }, () => {
               foo.onPlacesChanged()
+              self.props.sendBounds(self.state.bounds)
+              console.log(self.state.bounds)
               // if (refs.searchBox) {
               //   var input = document.getElementById('search')
               //   window.google.maps.event.trigger( input, 'focus')
@@ -170,30 +172,6 @@ var MapWithLocation = compose(
               </div>
             </InfoWindow>}
         </Marker>
-        <SearchBox
-          ref={props.onSearchBoxMounted}
-          bounds={props.circleBounds}
-          controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
-        >
-          <input
-            id="search"
-            type="text"
-            placeholder="Customized your placeholder"
-            style={{
-              boxSizing: `border-box`,
-              border: `1px solid transparent`,
-              width: `240px`,
-              height: `32px`,
-              marginTop: `27px`,
-              padding: `0 12px`,
-              borderRadius: `3px`,
-              boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-              fontSize: `14px`,
-              outline: `none`,
-              textOverflow: `ellipses`,
-            }}
-          />
-        </SearchBox>
         <MarkerClusterer
           onClick={props.onMarkerClustererClick}
           averageCenter
