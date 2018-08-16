@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
-import { Button, Divider, Grid, Menu, Segment } from 'semantic-ui-react';
+import { Button, Divider, Grid, Menu, Segment, Input } from 'semantic-ui-react';
+import Fuse from 'fuse.js';
 
 import PendingListing from './Orders-Pending';
 import ScheduledListing from './Orders-Scheduled';
@@ -11,9 +12,13 @@ export default class Main extends Component{
   state = {
     profile: this.props.user,
     mounted: false,
+    orders: [],
     pending: [],
+    pendingOriginal: [],
     scheduled: [],
+    scheduledOriginal: [],
     history: [],
+    historyOriginal: [],
     activeItem: "Scheduled Orders"
   }
 
@@ -22,22 +27,23 @@ export default class Main extends Component{
     fetch(`/user/${this.props.user._id}/orders`)
     .then(response => response.json())
     .then(orders => this.setState({
+      orders,
       pending: orders.filter(item => !item.accepted && !item.expired ),
+      pendingOriginal: orders.filter(item => !item.accepted && !item.expired ),
       scheduled: orders.filter(item => item.accepted && !item.expired),
-      history: orders.filter(item => item.expired)
+      scheduledOriginal: orders.filter(item => item.accepted && !item.expired),
+      history: orders.filter(item => item.expired),
+      historyOriginal: orders.filter(item => item.expired)
     }))
   }
 
   cancel = (requestId, index) => {
-    // cancel request function
-    // updates request to cancel = true
-    // append previous version to new updated version
     fetch(`/user/${this.props.user._id}/request/cancel`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      credentials: 'same-origin',
       body: JSON.stringify({ requestId }),
     })
     .then(resp => resp.json())
@@ -46,7 +52,12 @@ export default class Main extends Component{
       pending.splice(index, 1);
       const history = this.state.history.slice();
       history.push(saved);
-      this.setState({ pending, history })
+      this.setState({
+        pending,
+        pendingOriginal: pending,
+        history,
+        historyOriginal: history
+      })
     })
   }
 
@@ -54,8 +65,7 @@ export default class Main extends Component{
     if(item === "Pending Orders") {
       return <PendingListing pending={this.state.pending} cancel={this.cancel}/>
     } else if (item === "Scheduled Orders") {
-        return <ScheduledListing scheduled={this.state.scheduled} cancel={this.cancel}
-                    />
+        return <ScheduledListing scheduled={this.state.scheduled} cancel={this.cancel}/>
     } else {
       return <HistoryListing pastOrders={this.state.history}/>
     }
@@ -65,6 +75,35 @@ export default class Main extends Component{
     this.setState({activeItem: name})
   }
 
+  search = input => {
+    if (input.length > 0){
+      var options = {
+        keys: ['meal.title',
+               'meal.description',
+               'meal.ingredients',
+               'time.date',
+               'time.start',
+               'chef.firstName',
+               'meal.cuisine'
+             ],
+        threshold: 0.4
+      };
+      var fuse = new Fuse(this.state.orders, options);
+      const orders = fuse.search(input);
+      this.setState({
+        pending: orders.filter(item => !item.accepted && !item.expired),
+        scheduled: orders.filter(item => item.accepted && !item.expired),
+        history: orders.filter(item => item.expired),
+      });
+    } else {
+      this.setState({
+        pending: this.state.pendingOriginal,
+        scheduled: this.state.scheduledOriginal,
+        history: this.state.historyOriginal
+      })
+    }
+  }
+
   render(){
     const profile = this.state.profile;
     const { activeItem } = this.state;
@@ -72,6 +111,9 @@ export default class Main extends Component{
       <div>
         <Menu text id="header" attached>
           <Menu.Item header style={{color: 'white'}}>Your Orders</Menu.Item>
+          <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+            <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
+          </Menu.Menu>
         </Menu>
         <Segment>
             <Menu fluid tabular>

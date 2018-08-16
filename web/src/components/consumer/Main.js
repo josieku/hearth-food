@@ -1,11 +1,19 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Divider, Dropdown, Grid, Input,Item, Loader, Menu, Rating } from "semantic-ui-react";
+import { Button, Divider, Dropdown, Grid, Input,Item, Loader, Menu, Rating, Message } from "semantic-ui-react";
 import Fuse from 'fuse.js';
 import * as Scroll from 'react-scroll';
 import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 import MapContainer from '.././maps/MapContainer'
+
+function UnseenNotifications(item){
+  return(
+    <Message>
+      {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
+    </Message>
+  )
+}
 
 function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement function
     var R = 6378.137; // Radius of earth in KM
@@ -33,7 +41,7 @@ function Listing(meal, user){
           <Grid columns={3}>
             <Grid.Column width={3}>
               <Item.Image circular size="small" style={{padding: '3px'}} src={meal.picture} />
-              {meal.reviews.length > 5
+              {meal.reviews.length > 4
                 ? <Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/>
                 : <p>No rating</p>
               }
@@ -74,7 +82,6 @@ class MealListings extends Component {
     const style ={
       position: 'relative',
       height: '810px',
-      width: '560px',
       overflowY: 'scroll',
       overflowX: 'hidden',
       marginBottom: '100px',
@@ -86,11 +93,9 @@ class MealListings extends Component {
     })
     console.log(meals)
     return (
-      <div>
         <Element id="listings-scroll-container" style={style}>
           {meals.map(meal => Listing(meal, this.props.user))}
         </Element>
-      </div>
     )
   }
 };
@@ -179,9 +184,9 @@ export default class Listings extends Component{
       this.setState({ listings })
     } else if (indicator === "rating"){
       const yesRatings = this.state.listings.slice()
-                                          .filter(item=>item.reviews.length > 5)
+                                          .filter(item=>item.reviews.length > 4)
                                           .sort((a,b)=>b.overallRating-a.overallRating)
-      const noRatings = this.state.listingsOriginal.filter(item=>item.reviews.length < 6);
+      const noRatings = this.state.listingsOriginal.filter(item=>item.reviews.length < 5);
       console.log('noratings', noRatings);
       const listings = yesRatings.concat(noRatings)
       this.setState({ listings })
@@ -234,48 +239,68 @@ export default class Listings extends Component{
     // this.setState({ cuisineSearch: data.value })
   }
 
+  mark = () => {
+    this.props.updateNotifs(this.props.notifications.filter(item=>!item.seen))
+  }
+
   render(){
     const cuisines = this.state.cuisines.map(item=>{
       return {key: item, value: item, text: item}
     })
+
+    const notifs = this.props.notifications;
+
     return(
       <div className="main">
+        <div>
+          {notifs.filter(item=>!item.seen).length > 0
+            ? <div>
+                <span>
+                  <strong>New notifications </strong>
+                  <button onClick={this.mark}>Mark all as read</button>
+                </span>
+                {notifs.filter(item=>!item.seen).map(UnseenNotifications)}
+              </div>
+            : null
+          }
+        </div>
         <Grid columns={2} padded="vertically">
-          <Grid.Column>
+          <Grid.Column width={9}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
-                  <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
-                    <Dropdown.Menu>
-                      <Dropdown.Header content='Sort by selection' />
-                      <Dropdown.Divider />
-                      <Dropdown.Item onClick={()=>{this.sort("high")}}>
-                        Price: High to Low
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("low")}}>
-                        Price: Low to High
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("rating")}}>
-                        Highest Rated
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
-                        Most Reviewed
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown placeholder='Cuisine' fluid multiple search selection
+                  <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
                     options={cuisines} onChange={this.cuisineFilter}/>
+                    <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                      <Dropdown.Menu>
+                        <Dropdown.Header content='Sort by selection' />
+                        <Dropdown.Divider />
+                        <Dropdown.Item onClick={()=>{this.sort("high")}}>
+                          Price: High to Low
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("low")}}>
+                          Price: Low to High
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("rating")}}>
+                          Highest Rated
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
+                          Most Reviewed
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
                 </Menu.Menu>
               </Menu>
             </Grid.Row>
+            <Grid.Row style={{justifyContent: 'center'}}>
             {this.state.loadingListing
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
               : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column width={7}>
             <Grid.Row>
               <Menu text id="header">
                 <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>

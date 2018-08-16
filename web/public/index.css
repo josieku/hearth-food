@@ -8,7 +8,7 @@ html {
 }
 .App {
   background-color: #FFF7EF;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .main {
@@ -28,7 +28,11 @@ html {
   font-size: 20px;
 }
 #searchInHeader{
-  margin: 5px
+  margin: 5px;
+  width: 40%;
+}
+#cuisineSelect {
+  margin: 5px;
 }
 
 /* Landing page styling */
