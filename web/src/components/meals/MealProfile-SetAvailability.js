@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Form, Grid, Header, Image, Item, Menu, Message, Segment, Loader, Modal, Divider } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Image, Item, Menu, Message, Segment, Loader, Modal, Divider, Input } from 'semantic-ui-react';
 import { DatePicker, TimePicker } from "@blueprintjs/datetime";
 import './../../../../node_modules/@blueprintjs/core/lib/css/blueprint.css';
 // import './../../../../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
@@ -19,17 +19,10 @@ class TimeSlot extends Component {
     }
 
     renderHours = () => {
-      const start = this.props.start.split(":");
-      const end = this.props.end.split(":");
-      const startDate = new Date(0, 0, 0, start[0], start[1], 0);
-      const endDate = new Date(0, 0, 0, end[0], end[1], 0);
-      let diff = endDate.getTime() - startDate.getTime();
-      let hours = Math.floor(diff / 1000 / 60 / 60);
-      diff -= hours * 1000 * 60 * 60;
-      const minutes = Math.floor(diff / 1000 / 60);
-      // If using time pickers with 24 hours format, add the below line get exact hours
-      if (hours < 0) {hours = hours + 24;}
-      return ("Serving duration: " + hours + " hours and " + (minutes <= 9 ? "0" : "") + minutes + " minutes");
+      const start = moment(this.props.start, "HH:mm");
+      const end = moment(this.props.end, "HH:mm");
+      const minutes = end.diff(start, 'minutes');
+      return ("Serving duration: " + minutes + " minutes");
     }
 
     render(){
@@ -58,6 +51,7 @@ class TimeSlot extends Component {
       : moment().add(1, 'hours').add(30,'minutes').toDate(),
       duration: 30,
       confirm: this.props.date ? true: false,
+      open: false,
     }
 
     done = e => {
@@ -71,18 +65,20 @@ class TimeSlot extends Component {
       }
       this.props.save(this.props.ind, timeObj);
       this.setState({
-        date: "",
-        start: "",
-        end: ""
+        date: moment().add(1,'hours').toDate(),
+        start: moment().add(1, 'hours').toDate(),
+        end: moment().add(1, 'hours').add(30,'minutes').toDate(),
+        open: false,
       })
     }
 
     cancel = e => {
       e.preventDefault();
       this.setState({
-        date: null,
-        start: null,
-        end: null
+        date: moment().add(1,'hours').toDate(),
+        start: moment().add(1, 'hours').toDate(),
+        end: moment().add(1, 'hours').add(30,'minutes').toDate(),
+        open: false
       });
       this.props.cancel();
     }
@@ -99,44 +95,73 @@ class TimeSlot extends Component {
       this.setState({ end })
     }
 
+    renderHours = () => {
+      const start = moment(this.state.start, "HH:mm");
+      const end = moment(this.state.end, "HH:mm");
+      const minutes = end.diff(start, 'minutes');
+      return ("Serving duration: " + minutes + " minutes");
+    }
+
+    renderPreview = (date, start, end) => {
+      return (
+        <div>
+          <p>{date.toDateString()}</p>
+          <p>{moment(start).format("hh:mm A")} - {moment(end).format("hh:mm A")}</p>
+          <p>{this.renderHours()}</p>
+        </div>)
+    }
+
     render(){
       return(
-        <Modal trigger={<Button id='redButton' size='mini'>Add Time Slot</Button>} size='small' closeIcon>
-          <Modal.Content>
-            <Grid>
-              <Grid.Row>
-                <Grid.Column width={7}>
-                  <div style={{width: "230px"}}>
-                    <DatePicker
-                      // value={this.state.date}
-                      showActionsBar={true}
-                      minDate={new Date()}
-                      maxDate={moment().add(14, 'days').toDate()}
-                      onChange={this.handleDateChange}/>
-                    </div>
-                  </Grid.Column>
-                  <Grid.Column width={4}>
-                    <Item>
-                      <label>Start time</label>
-                      <TimePicker
-                        // value={this.state.start}
-                        showArrowButtons useAmPm
-                        onChange={this.handleStartChange}/>
-                        <label>End time</label>
+        <div>
+          <Button onClick={()=>this.setState({open: true})}>Add Time Slot</Button>
+          <Modal open={this.state.open} size='small'>
+            <Modal.Content>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column width={6}>
+                    <div style={{width: "230px"}}>
+                      <Header as="h4">Date</Header>
+                      <DatePicker
+                        value={this.state.date}
+                        showActionsBar={true}
+                        minDate={new Date()}
+                        maxDate={moment().add(14, 'days').toDate()}
+                        onChange={this.handleDateChange}/>
+                      </div>
+                    </Grid.Column>
+                    <Grid.Column width={4}>
+                      <Item>
+                        <Header as="h4">Start time</Header>
                         <TimePicker
-                          // value={this.state.end}
+                          value={this.state.start}
+                          showArrowButtons useAmPm
+                          onChange={this.handleStartChange}/>
+                        <Header as="h4">End time</Header>
+                        <TimePicker
+                          value={this.state.end}
                           showArrowButtons useAmPm
                           minTime={moment(this.state.start).add(30,'minutes').toDate()}
                           onChange={this.handleEndChange}/>
-                          <Button id='redButton' size='tiny' onClick={this.done}>
-                            {this.props.date ? "Save" : "Add"}
-                          </Button>
-                        </Item>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                </Modal.Content>
-              </Modal>
+                      </Item>
+                    </Grid.Column>
+                    <Grid.Column width={5}>
+                      <Header as="h4">Preview</Header>
+                        {this.renderPreview(this.state.date, this.state.start, this.state.end)}
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Modal.Content>
+              <Modal.Actions>
+                <Button id='redButton' onClick={this.done}>
+                  {this.props.date ? "Save" : "Add"}
+                </Button>
+                <Button id='redButton' onClick={this.cancel}>
+                  Cancel
+                </Button>
+              </Modal.Actions>
+            </Modal>
+        </div>
             )
           }
         }
@@ -155,7 +180,8 @@ class TimeSlot extends Component {
           componentDidMount = () => {
             fetch(`/meal/${this.props.mealId}/available`)
             .then(resp => resp.json())
-            .then(available => {
+            .then(list => {
+              const available = list.filter(item => item.time > Date.now())
               this.setState({ available })
             })
           }
@@ -215,33 +241,47 @@ class TimeSlot extends Component {
 
           render() {
             const meal = this.props.meal;
+
+            const headerStyle = {
+              marginBottom: '4px',
+              backgroundColor: '#D6D4D4',
+              padding: '10px',
+              borderRadius: '5px'
+            }
+
             return(
               <div>
                 {this.props.loading
                   ? <Loader active inline='centered'>Be happy with hearth!</Loader>
                   : <div>
-                    <Header as='h2'
-                      style={{marginBottom: '4px', backgroundColor: '#D6D4D4', paddingBottom: '10px', paddingTop: '10px'}}>
-                      Set customer pickup times for {meal.title}
-                    </Header>
-                    <Header as='h4' style={{marginBottom: '8px', marginTop: '3px'}}>When are you offering this meal?</Header>
-                    <AddTime date={this.state.date} start={this.state.start}
-                     end={this.state.end}
-                     availableId={this.state.availableId}
-                     mealId={meal._id} chefId={meal.chef._id}
-                     ind={this.state.ind} cancel={this.cancel} save={this.save}
-                    />
+                    <Menu text id="header">
+                      <Menu.Item header>Set pickup times for {meal.title}</Menu.Item>
+                      <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
+                        {/* <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/> */}
+                        <AddTime date={this.state.date} start={this.state.start}
+                         end={this.state.end}
+                         availableId={this.state.availableId}
+                         mealId={meal._id} chefId={meal.chef._id}
+                         ind={this.state.ind} cancel={this.cancel} save={this.save}
+                        />
+                      </Menu.Menu>
+                    </Menu>
+
+                      <Header as='h4' style={{marginBottom: '8px', marginTop: '3px'}}>
+                        Time Slots  </Header>
                       <Divider/>
-                      <Header as='h2' style={{marginBottom: '4px', backgroundColor: '#D6D4D4', paddingBottom: '10px', paddingTop: '10px'}}>
-                        Time Slots
-                      </Header>
-                      {this.state.available
-                        .sort((a,b)=>new Date(a.date)-new Date(b.date))
-                        .map((obj, ind) =>
-                        <TimeSlot key={ind} ind={ind} date={obj.date} start={obj.start}
-                          end={obj.end} availableId={obj._id}
-                          edit={this.edit} delete={this.delete}/>)}
-                          <Button id='redButton' size='tiny' onClick={this.commit}>Save</Button>
+                      {this.state.available.length > 0
+                        ? this.state.available
+                          .sort((a,b)=>new Date(a.date)-new Date(b.date))
+                          .map((obj, ind) =>
+                          <TimeSlot key={ind} ind={ind} date={obj.date} start={obj.start}
+                            end={obj.end} availableId={obj._id}
+                            edit={this.edit} delete={this.delete}/>)
+                        : <p>No time slots, click 'Add Time Slot' to offer your meal!</p>
+                      }
+                          <Button id='redButton' style={{marginTop:"10px"}} onClick={this.commit}>
+                            Finish
+                          </Button>
                         </div>
                       }
                     </div>
