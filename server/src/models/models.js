@@ -326,6 +326,9 @@ var availabilitySchema = mongoose.Schema({
     required: true,
     default: false
   },
+  comment: {
+    type: String,
+  }
   // expireAt: {
   //   type: Date,
   //   required: true
