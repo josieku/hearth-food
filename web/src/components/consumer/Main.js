@@ -299,6 +299,7 @@ export default class Listings extends Component{
             {this.state.loadingListing
               ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
               : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
+            </Grid.Row>
           </Grid.Column>
           <Grid.Column width={7}>
             <Grid.Row>
