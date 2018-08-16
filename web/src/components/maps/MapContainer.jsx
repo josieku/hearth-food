@@ -2,7 +2,7 @@ const _ = require("lodash");
 import React from 'react';
 import ReactDOM from 'react-dom'
 import {geolocated} from 'react-geolocated';
-const { compose, withProps, lifecycle, defaultProps, withStateHandlers } = require("recompose");
+const { compose, withProps, lifecycle, defaultProps, withStateHandlers, withHandlers } = require("recompose");
 const {
   withScriptjs,
   withGoogleMap,
@@ -14,6 +14,7 @@ import SearchBox from "react-google-maps/lib/components/places/SearchBox"
 const { InfoBox } = require("react-google-maps/lib/components/addons/InfoBox");
 const { MarkerWithLabel } = require("react-google-maps/lib/components/addons/MarkerWithLabel");
 import { Circle } from "react-google-maps";
+const { MarkerClusterer } = require("react-google-maps/lib/components/addons/MarkerClusterer");
 
 function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
     var R = 6378.137; // Radius of earth in KM
@@ -43,34 +44,24 @@ var MapWithLocation = compose(
       isOpen: !isOpen,
     })
   }),
+  withHandlers({
+    onMarkerClustererClick: () => (markerClusterer) => {
+      const clickedMarkers = markerClusterer.getMarkers()
+      console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+      console.log(clickedMarkers)
+    },
+  }),
   lifecycle({
-    // componentDidMount() {
-    //   var self = this
-    //   geo.getCurrentPosition(function(position) {
-    //     if (position) {
-    //       self.setState({
-    //         center: {lat: position.coords.latitude, lng: position.coords.longitude}
-    //       })
-    //     } else {
-    //       console.log('boo')
-    //     }
-    //   })
-    // },
     componentWillMount() {
       const refs = {}
       var foo;
       var self = this;
       self.setState(foo = {
         bounds: null,
-        circleBounds: null,
         center: {lat: 0, lng: 0},
-        radius: 1000,
-        markers: [],
+        markers: {},
         onMapMounted: ref => {
           refs.map = ref;
-        },
-        onCircleMounted: ref => {
-          refs.circle = ref;
         },
         onSearchBoxMounted: ref => {
           refs.searchBox = ref;
@@ -78,33 +69,49 @@ var MapWithLocation = compose(
         onPlacesChanged: () => {
           // refs.map.fitBounds(bounds);
           var places = self.props.places
+          var listings = {}
           console.log(places)
           if (places) {
-            var bounds = self.state.circleBounds
-            console.log(places, bounds)
-            const places2 = places.map(place => ({
+            places.forEach(meal => {
+              if (listings[meal.chef._id]) {
+                console.log('hello')
+                var arr = listings[meal.chef._id].concat({
+                  position: meal.chef.location,
+                  price: meal.price,
+                  rating: meal.reviews.length > 4 ? meal.overallRating : 'Not Available',
+                  name: meal.title,
+                })
+                listings[meal.chef._id] = arr
+              } else {
+                console.log('goodbye')
+                listings[meal.chef._id] = [{
+                  position: meal.chef.location,
+                  price: meal.price,
+                  rating: meal.reviews.length > 4 ? meal.overallRating : 'Not Available',
+                  name: meal.title,
+                }]
+              }
+            })
+            console.log(listings)
+          }
+          if (places) {
+            const nextMarkers = places.map(place => ({
               position: place.chef.location,
+              price: place.price,
+              rating: place.overallRating,
               name: place.title,
               distance: measure(place.chef.location.lat, place.chef.location.lng, self.props.location.lat, self.props.location.lng)
             }));
-            var nextMarkers = places2.filter(place => {
-              return (place.distance < self.state.radius)
-            });
             const nextCenter = _.get(nextMarkers, '0.position', self.state.center);
-            this.props.sendRadius(this.state.radius)
             self.setState({
-              markers: nextMarkers,
+              markers: listings,
             });
           }
         },
         onBoundsChanged: () => {
           self.setState({
             bounds: refs.map.getBounds(),
-            radius: measure(refs.map.getBounds().f.b,refs.map.getBounds().b.b, refs.map.getBounds().f.f, refs.map.getBounds().b.f)/5,
           }, () => {
-            self.setState({
-              circleBounds: refs.circle.getBounds()
-            }, () => {
               foo.onPlacesChanged()
               // if (refs.searchBox) {
               //   var input = document.getElementById('search')
@@ -123,14 +130,8 @@ var MapWithLocation = compose(
               //   //     }
               //   //   });
               //   // itemsloaded.trigger(input, 'SearchTrigger')
-              }
-            )
-          })
-        },
-        onRadiusChanged: () => {
-          self.setState({
-            circleBounds: refs.circle.getBounds(),
-          })
+            }
+          )
         },
         showInfo: (a) => {
           console.log('setting info state')
@@ -142,33 +143,33 @@ var MapWithLocation = compose(
   withScriptjs,
   withGoogleMap
   )((props) => {
-    console.log(props)
+    console.log(window.google.maps)
+    var image = {
+      url: 'https://static.thenounproject.com/png/5024-200.png',
+      origin: new window.google.maps.Point(0, 0),
+      anchor: new window.google.maps.Point(17, 34),
+      scaledSize: new window.google.maps.Size(50, 50)
+    };
     return (
       <GoogleMap
         ref={props.onMapMounted}
-        defaultZoom={15}
+        defaultZoom={14}
         center={props.location}
         onBoundsChanged={props.onBoundsChanged}
       >
         <Marker
+          key={0}
           position={props.location}
-          labelAnchor={new window.google.maps.Point(0, 0)}
-          labelStyle={{backgroundColor: "purple", fontSize: "28px", padding: "16px"}}
+          onClick={()=>{props.showInfo(0)}}
+          icon={image}
         >
+          {(props.showInfoIndex === 0) &&
+            <InfoWindow onCloseClick={props.onToggleOpen}>
+              <div style={{fontWeight: 'bold'}}>
+                This is you!
+              </div>
+            </InfoWindow>}
         </Marker>
-        <Circle
-          ref={props.onCircleMounted}
-          options={{
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35
-          }}
-          center={props.location}
-          radius={props.radius}
-        >
-        </Circle>
         <SearchBox
           ref={props.onSearchBoxMounted}
           bounds={props.circleBounds}
@@ -193,26 +194,39 @@ var MapWithLocation = compose(
             }}
           />
         </SearchBox>
-        {props.markers.map((marker, index) => {
-          var distance = measure(marker.position.lat, marker.position.lng, props.location.lat, props.location.lng)
-          console.log(distance)
-          var rounded = distance.toString().split('.')[0]
-          return (
-            <Marker
-              key={index}
-              position={marker.position}
-              onClick={()=>{props.showInfo(index)}}
-            >
-              {(props.showInfoIndex === index) &&
-                <InfoWindow onCloseClick={props.onToggleOpen}>
-                  <div>
-                    {marker.name} <br />
-                    {rounded} meters away!
-                  </div>
-                </InfoWindow>}
-            </Marker>
-          )
-        })}
+        <MarkerClusterer
+          onClick={props.onMarkerClustererClick}
+          averageCenter
+          enableRetinaIcons
+          gridSize={60}
+        >
+          {_.map(props.markers, (markers, index) => {
+            console.log(markers)
+            return (
+              <Marker
+                key={index + 1}
+                position={markers[0].position}
+                onClick={()=>{props.showInfo(index + 1)}}
+              >
+                {(props.showInfoIndex === index + 1) &&
+                  <InfoWindow onCloseClick={props.onToggleOpen}>
+                    <div>
+                      {markers.map(marker => {
+                        console.log(marker)
+                        return(
+                          <div>
+                            <span style={{fontWeight: 'bold'}}>{marker.name}</span> <br />
+                            ${marker.price} <br />
+                            Rating: {marker.rating}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </InfoWindow>}
+              </Marker>
+            )
+          })}
+        </MarkerClusterer>
       </GoogleMap>
     )
   });
