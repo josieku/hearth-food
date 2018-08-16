@@ -79,16 +79,10 @@ class MealListings extends Component {
       overflowX: 'hidden',
       marginBottom: '100px',
     }
-    var filter = this.props.listings.filter(meal => {
-      var distance = measure(meal.chef.location.lat, meal.chef.location.lng, this.props.user.location.lat, this.props.user.location.lng)
-      console.log(distance)
-      return (distance < this.props.radius)
-    })
-    console.log(filter)
     return (
       <div>
         <Element id="listings-scroll-container" style={style}>
-          {filter.map(meal => Listing(meal, this.props.user))}
+          {this.props.listings.map(meal => Listing(meal, this.props.user))}
         </Element>
       </div>
     )

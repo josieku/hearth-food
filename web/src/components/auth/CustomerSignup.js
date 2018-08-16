@@ -1,6 +1,8 @@
 import React from "react";
 import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
 var geo = window.navigator.geolocation
+import Dropzone from 'react-dropzone';
+import request from 'superagent';
 
 class CustomerSignup extends React.Component {
   state = {

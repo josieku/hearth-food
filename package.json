@@ -36,6 +36,7 @@
     "react": "^16.4.1",
     "react-animations": "^1.0.0",
     "react-dom": "^16.4.1",
+    "react-dropzone": "^4.3.0",
     "react-geolocated": "^2.4.0",
     "react-google-maps": "^9.4.5",
     "react-modal": "^3.5.1",
@@ -44,6 +45,7 @@
     "recompose": "^0.28.1",
     "semantic-ui": "^2.3.3",
     "semantic-ui-css": "^2.3.3",
-    "semantic-ui-react": "^0.82.1"
+    "semantic-ui-react": "^0.82.1",
+    "superagent": "^3.8.3"
   }
 }
