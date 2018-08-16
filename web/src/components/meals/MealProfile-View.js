@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Form, Grid, Header, Image, Message, Rating, Segment, Loader } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Image, Message, Rating, Segment, Loader, Item, Divider } from 'semantic-ui-react';
 import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
          PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
 

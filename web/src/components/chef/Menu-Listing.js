@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Dropdown, Grid, Header, Image, Input, Item, Menu, Rating, Segment, Loader } from 'semantic-ui-react';
-
+// import Offer from './../meals/MealProfile-SetAvailability';
 import Edit from './../meals/MealProfile-Edit';
 
 function MenuListItem(item) {
@@ -18,8 +18,8 @@ function MenuListItem(item) {
           <Rating icon='star' defaultRating={item.overallRating} maxRating={5} disabled/>
           <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
           <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
-          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Set Availability</Button>
-          <Header >Recipe</Header>
+          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Offer Meal</Button>
+          <Header>Recipe</Header>
           <Item.Content>{item.recipe}</Item.Content>
         </Item>
       </Grid.Column>
@@ -29,6 +29,8 @@ function MenuListItem(item) {
     </Grid>
   )
 }
+
+
 
 export default class MenuListing extends Component{
   state = {
