@@ -67,7 +67,7 @@ export default class NavBar extends Component {
           <Menu text>
           <h2>hearth-EAT</h2>
           <Menu.Menu text="true" id='navBar' position='right'>
-                <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
+                <Menu.Item style={{padding: ''}} name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
                 {notifWiggle
                   ? <Transition animation="jiggle" duration="3000" visible={notifWiggle}>

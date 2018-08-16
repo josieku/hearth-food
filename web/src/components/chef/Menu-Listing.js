@@ -8,7 +8,7 @@ function MenuListItem(item) {
   return (
     <Grid>
       <Grid.Column width={9}>
-        <Item className="menu-list-item">
+        <Item className="menu-list-item" >
           <Header href={`/meal/${item._id}`}>{item.title}</Header>
           {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
           <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
@@ -65,19 +65,19 @@ export default class MenuListing extends Component{
         { this.props.loading
           ? <Loader active inline='centered'/>
           : this.props.menu.length > 0
-          ? <Segment basic>
+          ? <Segment style={{backgroundColor: '#EAF2EF'}}>
             <Grid columns={2}>
-              <Grid.Column width={4}>
-                <Menu fluid vertical tabular>
+              <Grid.Column width={4} style={{paddingRight: '0px'}}>
+                <Menu fluid vertical tabular style={{borderRight: '0px'}}>
                   {this.props.menu.length > 0
                     ? this.props.menu.map(item =>
-                      <Menu.Item color='red' name={item.title} key={item._id}
+                      <Menu.Item name={item.title} key={item._id}
                         active={activeItem === item.title} onClick={()=>this.handleClick(item)}/>)
                         : null}
                       </Menu>
                     </Grid.Column>
-                    <Grid.Column stretched width={12}>
-                      <Segment attached>
+                    <Grid.Column stretched width={12} style={{paddingLeft: '0px'}}>
+                      <Segment basic style={{backgroundColor: 'white', borderRadius: '3px'}}>
                         {this.state.shownRecipe ? MenuListItem(this.state.shownRecipe) : null}
                       </Segment>
                     </Grid.Column>
