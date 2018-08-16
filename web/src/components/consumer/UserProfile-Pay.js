@@ -59,7 +59,7 @@ export default class ProfilePay extends Component{
         <Menu text id="header" attached>
           <Menu.Item header style={{color: 'white'}}>Recent Charges</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-            <Input id="searchInHeader" onChange={(e)=>this.search(e.target.value)} placeholder="search..."/>
+            <Input id="searchInHeader" icon='search' onChange={(e)=>this.search(e.target.value)} placeholder="Search..."/>
             <Button id='redButton'>Change your billing information</Button>
           </Menu.Menu>
         </Menu>

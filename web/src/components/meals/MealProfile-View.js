@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Form, Grid, Header, Image, Item, Message, Rating, Segment, Loader, Modal } from 'semantic-ui-react';
-import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
-         PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
+import { Button, Divider, Form, Grid, Header, Image, Input, Item, Rating, Segment, TextArea, Loader, Modal } from 'semantic-ui-react';
+// import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
+//          PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
 
 function OneReview(review){
   return (
@@ -51,16 +51,23 @@ class AddReview extends Component {
   renderForm = () => {
     if (this.props.verified) {
       return (
-        <form>
-          <label>{this.state.anonymous ? "Anon says:": `${this.props.user.firstName} says:`}</label>
-          <input placeholder="Great meal! However, I wish ..." onChange={(e)=>{this.setState({ content: e.target.value })}}/>
-          <label>Click to be anonymous </label>
-          <input type="checkbox" onClick={()=>{this.setState({ anonymous: !this.state.anonymous })}}/>
-          <label>Give your meal a rating </label>
-          <input type="number" min="1" max="5"
-            onChange={(e)=>{this.setState({ rating: e.target.value })}}/>
-            <button onClick={this.send}>Send</button>
-          </form>
+        <Modal open={this.state.open}>
+          <Grid textAlign='center' verticalAlign='middle'>
+            <Grid.Column style={{maxWidth: '80%'}}>
+              <Form size='large'>
+                {/* <label>{this.state.anonymous ? "Anon says:": `${this.props.user.firstName} says:`}</label> */}
+                <TextArea style={{height: '50px'}} placeholder="Leave your review here. Let the chef know what you did and didn't like..." onChange={(e)=>{this.setState({ content: e.target.value })}}/>
+                <label>Click to be anonymous </label>
+                <Form.Input type="checkbox" onClick={()=>{this.setState({ anonymous: !this.state.anonymous })}}/>
+                <label>Give your meal a rating </label>
+                <Form.Input type="number" min="1" max="5"
+                  onChange={(e)=>{this.setState({ rating: e.target.value })}}/>
+                  <Button id='redButton' size='mini' onClick={this.send}>Send</Button>
+                  <Button id='redButton' size='mini' onClick={()=>this.setState({open: false})}>Cancel</Button>
+                </Form>
+              </Grid.Column>
+            </Grid>
+          </Modal>
         )} else {
           return <p>You have not purchased this meal yet.  Buy now to leave a review! </p>
         }
@@ -160,8 +167,8 @@ class AddReview extends Component {
                               {meal.archived
                                 ? null
                                 : this.props.times.filter(item=>item.time > Date.now()).map(item=>timeslots(item, meal._id))}
-                            </Grid.Row>
-                          </Grid>
+                              </Grid.Row>
+                            </Grid>
                           </div>
                           : <Item.Content>No available pick up times, check again later</Item.Content>}
                           <Item.Header as='h3' style={{marginBottom: '5px', marginTop: '10px'}}><strong>Cuisine: </strong></Item.Header>
@@ -177,13 +184,13 @@ class AddReview extends Component {
                       </Grid.Column>
                       <Grid.Row>
                         <Grid.Column width={16}>
-                            <Grid>
-                              <Grid.Column width={3}>
-                                <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
-                              </Grid.Column>
-                              <Grid.Column width={5}>
-                                <AddReview mealId={meal._id} user={user} add={this.props.add}
-                                  requestId={this.props.requestId} verified={this.props.verified}/>
+                          <Grid>
+                            <Grid.Column width={3}>
+                              <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
+                            </Grid.Column>
+                            <Grid.Column width={5}>
+                              <AddReview mealId={meal._id} user={user} add={this.props.add}
+                                requestId={this.props.requestId} verified={this.props.verified}/>
                               </Grid.Column>
                             </Grid>
                             <Segment piled style={{marginTop: "10px"}}>
@@ -193,8 +200,8 @@ class AddReview extends Component {
                         </Grid.Row>
                       </Grid>
                     }
-                    </Segment>
-                  </div>
-                )
-              }
-            };
+                  </Segment>
+                </div>
+              )
+            }
+          };

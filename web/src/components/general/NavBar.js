@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Dropdown, Header, Menu, Segment, Image, Icon, Transition } from 'semantic-ui-react';
+import { Divider, Dropdown, Header, Menu, Segment, Image, Icon, Transition } from 'semantic-ui-react';
 import { pulse } from 'react-animations';
 import Radium, { StyleRoot } from 'radium';
 import './../../../public/index.css'
