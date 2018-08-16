@@ -1,10 +1,14 @@
 body {
   width: 100%;
   height: 100%;
+  margin: 0;
 }
-
+html {
+  margin: auto;
+}
 .App {
   background-color: #FFF7EF;
+  height: 100vh;
 }
 
 .main {
@@ -53,33 +57,29 @@ body {
   background-color: #C60000;
   font-size: medium;
   height: 60px;
-  color: white
+  color: white;
+  border-radius: 5px;
+  padding-left: 3px;
 }
 .smallHeader {
   color: #C60000
-}
-
-/* Chef Landing Styling */
-#chefLandingHeader {
-  background-color: #C60000
 }
 
 /* Menu Styling  */
 #redButton {
   background-color: #EAF2EF;
   margin: 5px;
+  font-size: small;
 }
 #chefMenu {
   background-color: #C60000;
+  border-radius: 5px;
+  padding-left: 3px;
 }
 
 /* Add and Edit a dish form styling */
 #addDishButtons {
   margin-left: 25%;
-}
-/* Consumer Orders Page Styling */
-.conOrderPageHeader {
-  background-color: #C60000
 }
 
 /* Profile View Styling */
@@ -88,10 +88,6 @@ body {
 }
 
 /* Notifications styles */
-#notificationHead {
-  background-color: #C60000;
-  height: 60px
-}
 #notification-true {
   color: grey;
 }

@@ -40,8 +40,8 @@ export default class HistoryListing extends Component{
   render(){
     return(
       <div>
-        <Menu text fluid id="notificationHead" style={{padding: '3px'}}>
-        <Menu.Item header>Request History</Menu.Item>
+        <Menu text fluid id="header" style={{padding: '3px'}}>
+        <Menu.Item header style={{color: 'white'}}>Request History</Menu.Item>
       </Menu>
       {this.state.loadingHistory
       ? <Loader active inline='centered'>Loading your past meals</Loader> :

@@ -124,7 +124,7 @@ export default class OrderListing extends Component{
       <div>
         <Grid.Row>
           <Menu text id="header">
-            <Menu.Item header>Orders</Menu.Item>
+            <Menu.Item header style={{color: 'white'}}>Orders</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
               <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
                 <Dropdown icon='filter' floating button className='icon' id='redButton'>
