@@ -65,7 +65,7 @@ export default class MenuListing extends Component{
           </Menu.Menu>
         </Menu>
         { this.props.loading
-          ? <Loader active inline='centered'/>
+          ? <Loader active inline='centered'>Hungry customers await your delicious meals...</Loader>
           : this.props.menu.length > 0
           ? <Segment style={{backgroundColor: '#EAF2EF'}}>
             <Grid columns={2}>

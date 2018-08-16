@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Form, Grid, Header, Image, Item, Message, Rating, Segment, Loader } from 'semantic-ui-react';
+import { Button, Divider, Form, Grid, Header, Image, Item, Message, Rating, Segment, Loader, Modal } from 'semantic-ui-react';
 import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
          PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
 
 function OneReview(review){
   return (
-    <Item className="review-single">
+    <Item className="review-single" style={{marginBottom: "5px"}}>
       <Item.Content>{review.subject}</Item.Content>
       <Item.Content style={{color: '#B73535', fontWeight: 'bold'}}>{review.anonymous ? <strong>Anonymous says:</strong> : <strong>{review.author.firstName} says: </strong>}</Item.Content>
       <Rating icon='star' defaultRating={review.rating} maxRating={5} size='mini' disabled/>
       <Item.Content>{new Date(review.date).toDateString()}</Item.Content>
       <Item.Content>{review.body}</Item.Content>
-      <Divider fitted/>
+      <Divider fitted style={{marginTop: "5px"}}/>
     </Item>
   )
 }
@@ -69,8 +69,14 @@ class AddReview extends Component {
       render(){
         return(
           <div>
-            <Button id="redButton" style={{margin: '0px'}} size='mini' onClick={()=>this.setState({ open: !this.state.open })}>Leave a review</Button>
-            {this.state.open ? this.renderForm() : null }
+            <Grid>
+              <Grid.Column width={10}>
+                <Button id="redButton" style={{margin: '0px'}} onClick={()=>this.setState({ open: !this.state.open })}>Leave a review</Button>
+              </Grid.Column>
+              <Grid.Column width={20}>
+                {this.state.open ? this.renderForm() : null }
+              </Grid.Column>
+            </Grid>
           </div>
         )
       }
@@ -102,7 +108,7 @@ class AddReview extends Component {
     function timeslots(timeObj, mealId) {
       const path=`/meal/${mealId}/request?time=${timeObj.time}`
       return(
-        <div key={timeObj._id}>
+        <div key={timeObj._id} style={{margin: "5px"}}>
           <Link to={path}>
             <Button id='redButton' style={{margin: '0px'}} size='mini'>
               <p>{new Date(timeObj.date).toDateString()}</p>
@@ -118,7 +124,6 @@ class AddReview extends Component {
         const meal = this.props.meal;
         const chef = Object.assign({}, meal.chef);
         const user = this.props.user;
-        console.log('reviews', meal.reviews)
         return(
           <div className="main">
             <Segment>
@@ -139,22 +144,31 @@ class AddReview extends Component {
                         </Grid.Row>
                       </Grid>
                       <Divider fitted/>
-                      <Rating icon='star' defaultRating={meal.overallRating} maxRating={5} size='huge' disabled/>
-                      {requestEditButton(user, chef, meal)}
+                      <div style={{marginTop:"5px", marginBottom: "5px"}}>
+                        { meal.reviews.length > 4
+                          ? <Rating icon='star' defaultRating={meal.overallRating} maxRating={5} size='huge' disabled/>
+                          : <span>Rating is not available ({meal.reviews.length} reviews)</span>
+                        }
+                      </div>
+                      {/* {requestEditButton(user, chef, meal)} */}
                       { this.props.times.length > 0
                         ?
                         <div>
-                          <Item.Content><strong>Available Pick Up Times: </strong></Item.Content>
-                          {meal.archived
-                            ? null
-                            : this.props.times.map(item=>timeslots(item, meal._id))}
+                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Available Pickup Times: </strong></Item.Header>
+                          <Grid>
+                            <Grid.Row style={{marginLeft: "10px"}}>
+                              {meal.archived
+                                ? null
+                                : this.props.times.filter(item=>item.time > Date.now()).map(item=>timeslots(item, meal._id))}
+                            </Grid.Row>
+                          </Grid>
                           </div>
                           : <Item.Content>No available pick up times, check again later</Item.Content>}
-                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Cuisine: </strong></Item.Header>
+                          <Item.Header as='h3' style={{marginBottom: '5px', marginTop: '10px'}}><strong>Cuisine: </strong></Item.Header>
                           <Item.Content style={{marginBottom: '3px'}}>{meal.cuisine}</Item.Content>
-                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Description:</strong></Item.Header>
+                          <Item.Header as='h3' style={{marginBottom: '5px', marginTop: '10px'}}><strong>Description:</strong></Item.Header>
                           <Item.Content style={{marginBottom: '3px'}}>{meal.description}</Item.Content>
-                          <Item.Header as='h3' style={{marginBottom: '0', marginTop: '10px'}}><strong>Ingredients:</strong></Item.Header>
+                          <Item.Header as='h3' style={{marginBottom: '5px', marginTop: '10px'}}><strong>Ingredients:</strong></Item.Header>
                           <Item.Content style={{marginBottom: '3px'}}>{meal.ingredients}</Item.Content>
                         </Item>
                       </Grid.Column>
@@ -163,10 +177,16 @@ class AddReview extends Component {
                       </Grid.Column>
                       <Grid.Row>
                         <Grid.Column width={16}>
-                          <AddReview mealId={meal._id} user={user} add={this.props.add}
-                            requestId={this.props.requestId} verified={this.props.verified}/>
-                            <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
-                            <Segment piled style={{margin: 0}}>
+                            <Grid>
+                              <Grid.Column width={3}>
+                                <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
+                              </Grid.Column>
+                              <Grid.Column width={5}>
+                                <AddReview mealId={meal._id} user={user} add={this.props.add}
+                                  requestId={this.props.requestId} verified={this.props.verified}/>
+                              </Grid.Column>
+                            </Grid>
+                            <Segment piled style={{marginTop: "10px"}}>
                               <Reviews list={this.props.reviews}/>
                             </Segment>
                           </Grid.Column>
