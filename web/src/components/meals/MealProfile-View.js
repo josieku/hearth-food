@@ -189,7 +189,6 @@ class LeaveReview extends Component {
                 <Grid.Row>
                   <Image src={meal.picture} rounded fluid/>
                 </Grid.Row>
-                <br />
                 <Grid style={{marginLeft: '150px', marginTop: '20px'}}>
                   Share this meal with your friends!
                   <Grid.Row>
@@ -203,24 +202,6 @@ class LeaveReview extends Component {
                   </Grid.Row>
                 </Grid>
               </Grid.Column>
-              <Grid.Row>
-                <Grid.Column width={16}>
-                  <Grid>
-                    <Grid.Column width={3}>
-                      <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
-                    </Grid.Column>
-                    <Grid.Column width={10}>
-                      <LeaveReview user={user} add={this.props.add} meal={meal}
-                        requestId={this.props.requestId} verified={this.props.verified}/>
-                    </Grid.Column>
-                    </Grid>
-                    <Segment piled style={{marginTop: "10px"}}>
-                      <Reviews list={this.props.reviews}/>
-                    </Segment>
-                  </Grid.Column>
-                  <Grid.Column width={8}>
-                    <Image src={meal.picture} rounded fluid/>
-                  </Grid.Column>
                   <Divider style={{width: '95%', margin: '0 auto'}}/>
                   <Grid.Row>
                     <Grid.Column width={16}>
