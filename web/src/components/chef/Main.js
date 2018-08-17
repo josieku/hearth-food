@@ -8,7 +8,7 @@ import OrderListing from './Main-Orders';
 
 function UnseenNotifications(item){
   return(
-    <Message>
+    <Message key={item._id}>
       {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
     </Message>
   )

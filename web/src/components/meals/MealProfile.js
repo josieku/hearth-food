@@ -23,10 +23,26 @@ export default class MealProfile extends Component {
     fetch(`/meal/${this.props.id}`)
       .then(resp => resp.json())
       .then(async meal => {
+        const times = {}
+        const availabilities = meal.availability.filter(item=>!item.passed);
+        console.log('availabilities', availabilities)
+        for (let ind in availabilities) {
+          const date = availabilities[ind]["date"];
+          if (times[date]){
+            const temp = times[date].slice();
+            temp.push(availabilities[ind]);
+            times[date] = temp;
+          } else {
+            times[date] = [availabilities[ind]];
+          }
+        }
+        console.log('times!!!', times)
+
         await this.setState({
           meal,
           chefId: meal.chef._id,
-          times: meal.availability.filter(item=>!item.passed),
+          availabilities,
+          times,
           reviews: meal.reviews ? meal.reviews : [],
           loading: false
          });
@@ -35,7 +51,7 @@ export default class MealProfile extends Component {
     fetch(`/meal/${this.props.id}/review?user=${this.props.user._id}`)
       .then(resp => resp.json())
       .then(request => {
-        console.log('request', request)
+        // console.log('request', request)
         if (Object.keys(request).length > 0){
           this.setState({ verified: true, requestId: request._id })
         }
@@ -50,7 +66,7 @@ export default class MealProfile extends Component {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      credentials: 'same-origin',
       body: JSON.stringify({
         userId, content, anon, rating, date, requestId
       }),
@@ -109,6 +125,7 @@ export default class MealProfile extends Component {
 
   render(){
     const id = this.props.id
+    console.log('state availabilities', this.state.availabilities)
     // console.log(this.state.meal)
     return(
       <div className="main">
@@ -120,7 +137,7 @@ export default class MealProfile extends Component {
 
           <Route exact path={`/meal/${id}/request`} render={(props) =>
             <MealRequest meal={this.state.meal} user={this.props.user}
-              times={this.state.times}
+              times={this.state.availabilities}
                result={parseInt(qs.parse(props.location.search).time)}
                {...props}/>}/>
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, Grid, Header, Image, Input, Item, Menu, Rating, Segment, Loader } from 'semantic-ui-react';
+import { Button, Dropdown, Grid, Header, Image, Input, Item, Menu, Rating, Segment, Loader, Divider } from 'semantic-ui-react';
 // import Offer from './../meals/MealProfile-SetAvailability';
 import Edit from './../meals/MealProfile-Edit';
 
@@ -9,18 +9,31 @@ function MenuListItem(item) {
     <Grid>
       <Grid.Column width={9}>
         <Item className="menu-list-item" >
-          <Header href={`/meal/${item._id}`}>{item.title}</Header>
+          <Grid>
+            <Grid.Column width={12} textAlign='left'>
+              <Item.Header as='h2' href={`/meal/${item._id}`}>{item.title}</Item.Header>
+            </Grid.Column>
+            <Grid.Column textAlign='right' width={4}>
+              <Item.Header as="h4"><strong>Price: </strong>${item.price}</Item.Header>
+            </Grid.Column>
+          </Grid>
+          <Divider/>
           {item.archived ? <Header as='h1'>Meal Archived </Header> : null}
+          <Item.Description><strong>Cuisine: </strong>{item.cuisine.map(c => c)}</Item.Description>
           <Item.Description><strong>Description: </strong>{item.description}</Item.Description>
           <Item.Content><strong>Ingredients: </strong>{item.ingredients}</Item.Content>
-          <Item.Content><strong>Price: </strong>{item.price}</Item.Content>
           <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
-          <Rating icon='star' defaultRating={item.overallRating} maxRating={5} disabled/>
-          <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
+          <Item.Content>
+            <strong>Rating: </strong>
+            {item.reviews.length > 4
+              ? <Rating icon='star' defaultRating={item.overallRating} maxRating={5} disabled/>
+              : <span>Not available</span>
+            }
+          </Item.Content>
+          <br/>
           <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
+          <Button href={`/meal/${item._id}`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>View</Button>
           <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Offer Meal</Button>
-          <Header>Recipe</Header>
-          <Item.Content>{item.recipe}</Item.Content>
         </Item>
       </Grid.Column>
       <Grid.Column width={7}>

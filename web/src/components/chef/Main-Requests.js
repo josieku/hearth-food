@@ -80,7 +80,7 @@ export default class RequestListing extends Component{
             </Menu>
           </Grid.Row>
           {this.props.loading
-            ? <Loader active inline='centered'/>
+            ? <Loader active inline='centered'>Your meals are looking fire!</Loader>
             : this.props.requests.length > 0
             ? this.props.requests.map((item, ind) =>
                 RequestItem(item, ind, this.props.accept, this.open))

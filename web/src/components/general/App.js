@@ -62,11 +62,11 @@ class App extends Component {
   logout = () => {
     localStorage.removeItem('user');
     this.setState({ user: {} });
-    console.log('loggedout');
+    // console.log('loggedout');
   }
 
   render() {
-    console.log(this.state.user)
+    // console.log(this.state.user)
     return (
       <BrowserRouter>
         <div className="App">

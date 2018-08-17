@@ -116,8 +116,9 @@ router.post('/:id/requests/complete', (req,res) => {
          .exec()
          .then(request => {
            const newNotif = new Notification({
-             type: 'Expired Request',
+             type: 'Delivered Request',
              meal: request.meal._id,
+             request: req.body.requestId,
              content: `Your ${request.meal.title} has been delivered.  Hope you enjoy it!`,
              user: request.consumer,
              seen: false,

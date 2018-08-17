@@ -47,7 +47,6 @@ router.get('/:id/review', (req, res) => {
   Request.find({ consumer: req.query.user, meal: req.params.id,
                  expired: true, review: false })
          .then(request => {
-           // console.log('!!! REQUEST !!!', request);
            res.json(request)
          });
 })
@@ -240,7 +239,7 @@ router.post('/:id/review', (req, res) => {
           newNotif.save()
         })
 
-    Request.findByIdAndUpdate(req.params.requestId, {review: true})
+    Request.findByIdAndUpdate(req.body.requestId, {review: true})
            .then(req=> console.log('reviewed for this request'))
     res.json(review);
   });

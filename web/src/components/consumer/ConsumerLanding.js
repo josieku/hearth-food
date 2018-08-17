@@ -1,17 +1,21 @@
 import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
-import { Button, Divider, Dropdown, Grid, Item, Search } from "semantic-ui-react";
+import { Button, Divider, Dropdown, Grid, Item, Search, Modal } from "semantic-ui-react";
 
 import NavBar from './../general/NavBar';
 import Listings from './Main';
 import Orders from './Orders';
 import Profile from './UserProfile';
 import Notifications from './../general/Notifications';
+import AddReview from './../meals/MealProfile-Review';
 
 export default class ConsumerLanding extends Component{
   state = {
     notifications: [],
+    needReview: false,
+    review: [],
     loadingNotifs: true,
+    openReviewModal: true,
   }
 
   componentDidMount = e => {
@@ -21,8 +25,15 @@ export default class ConsumerLanding extends Component{
       fetch(`/user/${this.props.user._id}/notif`)
       .then(resp => resp.json())
       .then(notifications => {
-        console.log('notifs', notifications)
-        this.setState({ notifications, loadingNotifs: false })
+        const review = notifications
+                        .filter(item=> item.type === "Delivered Request" && item.request.completed && !item.request.review)
+                        .map(item => item.request)
+        this.setState({
+          notifications,
+          loadingNotifs: false,
+          review,
+          needReview: review.length > 0
+         })
       })
     }
 
@@ -55,7 +66,7 @@ export default class ConsumerLanding extends Component{
   }
 
   getNotifs = () => {
-    return setInterval(this.fetchNotifs, 10000);
+    return setInterval(this.fetchNotifs, 5000);
   }
 
   updateNotifications = (unseen) => {
@@ -79,6 +90,39 @@ export default class ConsumerLanding extends Component{
     }
   }
 
+  rateMeal = (content, anon, rating, requestId, mealId, ind) => {
+    const userId = this.props.user._id;
+    const date = Date.now();
+    fetch(`/meal/${mealId}/review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        userId, content, anon, rating, date, requestId
+      }),
+    })
+    .then(resp => resp.json())
+    .then(rev => {
+      const review = this.state.review.slice();
+      review.splice(ind, 1);
+      this.setState({ review })
+    })
+  }
+
+  closeReviewModal = () => {
+    this.setState({ review: [] })
+  }
+
+  // renderReviewModal = (request, ind) => {
+  //   return(
+  //     <AddReview user={this.props.user} add={this.props.rateMeal}
+  //       meal={request.meal} open={this.state.open} close={this.closeReviewModal}
+  //       requestId={request._id} verified={true} ind={ind}/>
+  //   )
+  // }
+
   render(){
     const user = this.props.user
     return(
@@ -94,11 +138,10 @@ export default class ConsumerLanding extends Component{
               loading={this.state.loadingNotifs} {...props} />}/>
 
           <Route exact path="/dashboard" render={(props)=>
-            <Listings user={user} recents={this.state.recents} 
+            <Listings user={user} recents={this.state.recents}
+              review={this.state.review} rateMeal={this.rateMeal} close={this.closeReviewModal}
               notifications={this.state.notifications} updateNotifs={this.updateNotifications}
               {...props} />}/>
-          {/* <Route exact path='/user/:id' render={({ match }) =>
-            <Profile user={this.state.user} notLand={this.notLand} id={match.params.id}/>}/> */}
         </Switch>
       </div>
       )
