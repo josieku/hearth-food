@@ -6,24 +6,26 @@ import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from '
 
 function HistoryItem(item) {
   return (
-    <Item key={item._id} className="history-list-item">
-      <Item.Content><strong> Customer: </strong>{item.consumer.firstName}</Item.Content>
-      <Item.Content><strong>Meal: </strong>{item.meal.title}</Item.Content>
-      <Item.Content><strong>Time: </strong>{item.time.date}</Item.Content>
-      <Item.Content><strong>Status: </strong>
-        {item.completed
-          ? <span style={{fontWeight: "bold"}}>Done!</span>
-          : item.declineComment
-          ? <span>
-              <span style={{fontWeight: "bold"}}> Declined. </span>
-              <span style={{fontStyle:"italic"}}>Reasoning: `{item.declineComment}`</span>
-            </span>
-          : <span>Expired...</span>
-        }
-      </Item.Content>
-      <Item.Content><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Content>
-      <Divider/>
-    </Item>
+    <Element key={item._id}>
+      <Item key={item._id} className="history-list-item">
+        <Item.Content><strong> Customer: </strong>{item.consumer.firstName}</Item.Content>
+        <Item.Content><strong>Meal: </strong>{item.meal.title}</Item.Content>
+        <Item.Content><strong>Time: </strong>{item.time.date}</Item.Content>
+        <Item.Content><strong>Status: </strong>
+          {item.completed
+            ? <span style={{fontWeight: "bold"}}>Done!</span>
+            : item.declineComment
+            ? <span>
+                <span style={{fontWeight: "bold"}}> Declined. </span>
+                <span style={{fontStyle:"italic"}}>Reasoning: `{item.declineComment}`</span>
+              </span>
+            : <span>Expired...</span>
+          }
+        </Item.Content>
+        <Item.Content><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Content>
+        <Divider/>
+      </Item>
+    </Element>
   )
 }
 
@@ -50,16 +52,20 @@ export default class HistoryListing extends Component{
     return(
       <div>
         <Menu text fluid id="header" style={{padding: '3px'}}>
-        <Menu.Item header style={{color: 'white'}}>Request History</Menu.Item>
-      </Menu>
-       <Segment>
-      {this.state.loadingHistory
-      ? <Loader active inline='centered'>Loading your past meals</Loader>
-      : this.state.history.length > 0
-          ? this.state.history.map(HistoryItem)
-          : 'No past order.. Share your meals now!!'
-    }
-  </Segment>
+          <Menu.Item header style={{color: 'white'}}>Request History</Menu.Item>
+        </Menu>
+        {this.state.history.length > 0
+          ? <p><strong>Total requests: </strong> {this.state.history.length}</p>
+          : null
+        }
+       <Segment style={{height: "450px"}}>
+        {this.state.loadingHistory
+          ? <Loader active inline='centered'>Loading your past meals</Loader>
+          : this.state.history.length > 0
+              ? <Element style={style}>{this.state.history.map(HistoryItem)}</Element>
+              : 'No past order.. Share your meals now!!'
+        }
+      </Segment>
       </div>
     )
   }
