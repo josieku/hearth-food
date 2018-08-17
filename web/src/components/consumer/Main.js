@@ -25,24 +25,24 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
     Math.sin(dLon/2) * Math.sin(dLon/2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var d = R * c;
-    return d * 1000; // meters
+    return d * 1000/1609.34; // meters
 }
 
 function Listing(meal, user){
   var distance = measure(meal.chef.location.lat, meal.chef.location.lng, user.location.lat, user.location.lng)
-  var rounded = distance.toString().split('.')[0]
+  var rounded = distance.toString().slice(0, 4)
   return (
     <Element width="500px" key={meal._id}>
       <div id="listItem" key={meal._id}>
         <Item>
           <Grid columns={3}>
             <Grid.Column width={3}>
-              <Item.Image circular size="small" style={{padding: '3px'}} src={meal.picture} />
+              <Item.Image rounded size="small" style={{padding: '3px'}} src={meal.picture} />
               {meal.reviews.length > 4
-                ? <Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/>
-                : <p>No rating</p>
+                ? <center><Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/></center>
+                : <p align='center'>No rating</p>
               }
-              <span>{meal.reviews.length} reviews</span>
+              <Item.Content><center>{meal.reviews.length} Reviews</center></Item.Content>
             </Grid.Column>
             <Grid.Column width={8}>
               <Item.Content>
@@ -62,7 +62,7 @@ function Listing(meal, user){
                 <Item.Extra><h4>Cuisine</h4></Item.Extra>
                 <Item.Extra>{meal.cuisine}</Item.Extra>
                 <Item.Extra><h4>Distance from you</h4></Item.Extra>
-                <Item.Extra>{rounded} meters away!</Item.Extra>
+                <Item.Extra>{rounded} miles away!</Item.Extra>
                 <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
               </Item.Content>
             </Grid.Column>
@@ -115,7 +115,7 @@ function recentCondense(item, ind){
           <Item.Content>
             <Item.Extra><h4>${item.meal.price}</h4></Item.Extra>
           </Item.Content>
-          <Button size='mini' id="redButton">Request Again</Button>
+          <Button size='mini' id="redButton" href={`/meal/${item.meal._id}`}>Request Again</Button>
         </Grid.Column>
       </Grid>
     </Item>

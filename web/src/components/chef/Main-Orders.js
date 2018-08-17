@@ -7,7 +7,7 @@ function OrderItem(item, index, complete, cancel) {
   return (
     <Item key={item._id} className="order-list-item">
     <Grid>
-      <Grid.Column width={6}>
+      <Grid.Column width={10}>
         <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
         <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
         <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
@@ -15,11 +15,11 @@ function OrderItem(item, index, complete, cancel) {
         <Item.Extra><strong>Status: </strong> <span>Ready to cook!</span></Item.Extra>
         <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
       </Grid.Column>
-      <Grid.Column textAlign='right' width={6}>
+      <Grid.Column width={6}>
         {/* {item.payment
           ? <button disabled>Change pickup time</button>
           : <EditModal request={item} ind={index} change={change}/> } */}
-        <Button id="redButton" onClick={()=>complete(item._id, index)}>Delivered!</Button>
+          <Button id="redButton" onClick={()=>complete(item._id, index)}>Delivered!</Button>
         <Button id="redButton" onClick={()=>cancel(item, index)}>Cancel</Button>
       </Grid.Column>
     </Grid>

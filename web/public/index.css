@@ -8,7 +8,7 @@ html {
 }
 
 .App {
-  background-color: #F2EBEA;
+  background-color: #FFFCFC;
   min-height: 100vh;
 }
 
@@ -16,10 +16,18 @@ html {
   margin-left: 3%;
   margin-right: 3%;
 }
+
+/* Color Pallete
+red: #E0321F;
+white (background): #FFFCFC;
+Gray: #D3D3D3;
+orange: #EF901C;
+Green: #459B0C; */
+
+
 /* Landing Page Styles */
 #getStarted {
-  color: white;
-  background: #EF8300
+  background: white
 }
 #landingBackground {
   background-color: #E0321F
@@ -38,6 +46,7 @@ html {
 #sortButton {
   margin: 5px;
   background-color: white;
+  font-size: small;
 }
 
 /* Landing page styling */
@@ -53,12 +62,12 @@ html {
 }
 #loginButton {
   color: white;
-  background-color: #EF901C;
+  background-color: #E0321F;
   margin: 5px;
 }
 
 #loginMessage {
-  background-color: #EF8300;
+  background-color: #D3D3D3;
   color: white;
 }
 /* Consumer Landing Styling */
@@ -92,6 +101,14 @@ html {
   background-color: #E0321F;
   border-radius: 5px;
   padding-left: 3px;
+}
+#chefMenuButton {
+  background-color: white;
+  margin: 5px;
+  font-size: small;
+  color: black;
+  text-align: center;
+  padding-top: 15px
 }
 
 /* Add and Edit a dish form styling */

@@ -79,7 +79,7 @@ export default class Login extends React.Component {
                   type='password'
                   onChange={e => this.setState({password: e.target.value})}
                 />
-                <Button onClick={this.login} id="loginButton" fluid size='large'>
+                <Button onClick={this.login} id="loginButton" style={{width:'40%'}}>
                   Login
                 </Button>
               </Segment>
