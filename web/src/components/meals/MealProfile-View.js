@@ -184,18 +184,22 @@ return(
                 </Item>
               </Grid.Column>
               <Grid.Column width={8}>
-                <Image src={meal.picture} rounded fluid/>
-                <br />
                 <Grid.Row>
-                  Share this meal with your friends!
-                  <FacebookShareButton url={'localhost:3000/meal/' + meal._id} children={<FacebookIcon size={32} round={true} />}/>
-                  {/* <TwitterShareButton url={'localhost:3000/meal/' + meal._id} children={<TwitterIcon size={32} round={true} />}/>
-                  <PinterestShareButton url={'localhost:3000/meal/' + meal._id} children={<PinterestIcon size={32} round={true} />}/>
-                  <TumblrShareButton url={'localhost:3000/meal/' + meal._id} children={<TumblrIcon size={32} round={true} />}/>
-                  <RedditShareButton url={'localhost:3000/meal/' + meal._id} children={<RedditIcon size={32} round={true} />}/>
-                  <GooglePlusShareButton url={'localhost:3000/meal/' + meal._id} children={<GooglePlusIcon size={32} round={true} />}/>
-                  <WhatsappShareButton url={'localhost:3000/meal/' + meal._id} children={<WhatsappIcon size={32} round={true} />}/> */}
+                  <Image src={meal.picture} rounded fluid/>
                 </Grid.Row>
+                <br />
+                <Grid style={{marginLeft: '150px', marginTop: '20px'}}>
+                  Share this meal with your friends!
+                  <Grid.Row>
+                      <FacebookShareButton url={'localhost:3000/meal/' + meal._id} children={<FacebookIcon size={32} round={true} />}/>
+                      <TwitterShareButton url={'localhost:3000/meal/' + meal._id} children={<TwitterIcon size={32} round={true} />}/>
+                      <PinterestShareButton url={'localhost:3000/meal/' + meal._id} children={<PinterestIcon size={32} round={true} />}/>
+                      <TumblrShareButton url={'localhost:3000/meal/' + meal._id} children={<TumblrIcon size={32} round={true} />}/>
+                      <RedditShareButton url={'localhost:3000/meal/' + meal._id} children={<RedditIcon size={32} round={true} />}/>
+                      <GooglePlusShareButton url={'localhost:3000/meal/' + meal._id} children={<GooglePlusIcon size={32} round={true} />}/>
+                      <WhatsappShareButton url={'localhost:3000/meal/' + meal._id} children={<WhatsappIcon size={32} round={true} />}/>
+                  </Grid.Row>
+                </Grid>
               </Grid.Column>
               <Grid.Row>
                 <Grid.Column width={16}>
