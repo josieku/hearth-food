@@ -186,7 +186,7 @@ class LeaveReview extends Component {
                 <Grid.Row>
                   <Image src={meal.picture} rounded fluid/>
                 </Grid.Row>
-                <Grid style={{marginLeft: '150px', marginTop: '20px'}}>
+                <Grid style={{justifyContent: 'center', marginTop: '3%'}}>
                   Share this meal with your friends!
                   <Grid.Row>
                       <FacebookShareButton url={'localhost:3000/meal/' + meal._id} children={<FacebookIcon size={32} round={true} />}/>

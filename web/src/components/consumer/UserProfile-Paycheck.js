@@ -75,7 +75,7 @@ export default class ProfilePaycheck extends Component{
       height: '450px',
       overflowY: 'scroll',
       overflowX: 'hidden',
-      marginBottom: '100px',
+      marginBottom: '10px',
     }
     return(
       <div>
@@ -94,7 +94,7 @@ export default class ProfilePaycheck extends Component{
             <div style={{marginTop:"5px"}}>
               <p><strong>Earned this week: </strong> ${this.renderTotal(this.state.chargesOriginal)}</p>
             </div>
-            <Segment attached="top" style={{height: "500px"}}>
+            <Segment>
               <Element style={style}>
                 {this.state.charges.sort((a,b)=>a.time.time - b.time.time).map(ChargeListing)}
               </Element>

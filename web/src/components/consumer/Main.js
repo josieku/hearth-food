@@ -286,17 +286,16 @@ export default class Listings extends Component{
       <div className="main">
         {this.renderNotifs(notifs)}
         <Grid columns={2} padded="vertically">
-
           <Grid.Column width={9}>
             <Grid.Row>
-              <Menu text id="header">
+              <Menu text id="header" style={{marginTop: '0'}}>
                 <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
                     <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
                       options={cuisines} onChange={this.cuisineFilter} style={{width: "100px"}}/>
-                      <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                      <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
                         <Dropdown.Menu>
                           <Dropdown.Header content='Sort by selection' />
                           <Dropdown.Divider />
@@ -325,7 +324,6 @@ export default class Listings extends Component{
                   </Grid.Row>
 
                 </Grid.Column>
-
                 <Grid.Column width={7}>
                   <Grid.Row>
                     <Menu text id="header">

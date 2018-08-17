@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Item } from 'semantic-ui-react';
+import { Button, Divider, Header, Item } from 'semantic-ui-react';
 import * as Scroll from 'react-scroll';
 import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
@@ -36,8 +36,8 @@ export default class PendingListing extends Component{
           {this.props.pending.length > 0
             ? this.props.pending.map((item, ind) => PendingItem(item, ind < this.props.pending.length-1, ind, this.props.cancel))
             : <div>
-                <p align="center">No pending requests, request now!!</p>
-                <center><Button href="/dashboard">Go to dashboard</Button></center>
+                <Header align="center">No pending requests, request now!!</Header>
+                <center><Button href="/dashboard" id="redButton">Go to dashboard</Button></center>
               </div>
           }
         </Element>

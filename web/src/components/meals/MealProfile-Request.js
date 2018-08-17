@@ -91,7 +91,7 @@ export default class MealRequest extends Component {
                     <Button id="redButton" onClick={this.request} attached='bottom' size='mini' style={{width: '100px', borderRadius: '.28571429rem'}}>Request</Button>
                   </Grid.Column>
                   <Grid.Column>
-                    <Image src={meal.picture} size='large'/>
+                    <Image src={meal.picture} size='large' rounded style={{margin: '0 auto'}}/>
                   </Grid.Column>
                 </Grid>
             }
