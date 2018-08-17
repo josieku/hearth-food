@@ -99,6 +99,7 @@ const subheadings = {
 const descriptions = {
   marginBottom: '3px'
 }
+console.log(this.props.times)
 
 return(
   <div className="main">
