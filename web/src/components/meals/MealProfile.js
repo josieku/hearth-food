@@ -24,7 +24,8 @@ export default class MealProfile extends Component {
       .then(resp => resp.json())
       .then(async meal => {
         const times = {}
-        const availabilities = meal.availability.filter(item=>!item.passed);
+        const availabilities = meal.availability.filter(item=>
+          item.time > Date.now());
         // console.log('availabilities', availabilities)
         for (let ind in availabilities) {
           const date = availabilities[ind]["date"];

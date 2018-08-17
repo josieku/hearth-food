@@ -130,7 +130,6 @@ class LeaveReview extends Component {
         marginBottom: '5px',
         marginTop: '10px'
       }
-
       const descriptions = {
         marginBottom: '3px'
       }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Image, Message, Segment, Dimmer, Loader } from 'semantic-ui-react';
 import { Link } from "react-router-dom"
 
 import NavBar from './../general/NavBar';
@@ -8,12 +8,16 @@ export default class Login extends React.Component {
   state = {
     password: '',
     email: '',
+    loading: false,
+    error: false,
+    errorMsg: "",
   };
   componentDidMount(){
     this.props.notLand();
   };
   login = (event) => {
     event.preventDefault()
+    this.setState({ loading: true })
     console.log('about to login')
     fetch('/auth/login', {
       method: 'POST',
@@ -31,15 +35,20 @@ export default class Login extends React.Component {
         const user = await Promise.resolve(resp.json());
         console.log("passed!", user);
         this.props.login(user);
-        this.props.history.push({pathname: '/dashboard', state: {user: user}})
+        this.props.history.push({pathname: '/dashboard', state: {user: user}});
+        this.setState({
+          password: '',
+          email: '',
+          loading: false,
+        })
       }
       else{
-        throw "Login failed, please try again."
+        this.setState({
+          loading: false,
+          error: true,
+          errorMsg: "Login failed, please try again."
+        })
       }
-    })
-    this.setState({
-      password: '',
-      email: '',
     })
   }
 
@@ -75,6 +84,13 @@ export default class Login extends React.Component {
                 </Button>
               </Segment>
             </Form>
+            {this.state.error
+              ? <Message negative><p>{this.state.errorMsg}</p></Message>
+              : null
+            }
+            {this.state.loading
+              ? <Loader active/> 
+              : null }
             <Message id="loginMessage">
               New to us? <Link to='/auth/signup'>Sign Up</Link>
             </Message>

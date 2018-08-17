@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Divider, Dropdown, Grid, Input,Item, Loader, Menu, Rating, Message } from "semantic-ui-react";
+import { Button, Divider, Dropdown, Grid, Input,Item, Loader, Menu, Rating, Message, Segment } from "semantic-ui-react";
 import Fuse from 'fuse.js';
 import * as Scroll from 'react-scroll';
 import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
@@ -87,9 +87,11 @@ class MealListings extends Component {
       return this.props.bounds.contains(meal.chef.location)
     })
     return (
-        <Element id="listings-scroll-container" style={style}>
-          {meals.map(meal => Listing(meal, this.props.user))}
-        </Element>
+        // <Element id="listings-scroll-container" style={style}>
+          <Segment>
+            {meals.map(meal => Listing(meal, this.props.user))}
+          </Segment>
+        // </Element>
     )
   }
 };
@@ -139,7 +141,13 @@ export default class Listings extends Component{
     .then(resp => resp.json())
     .then(list => {
       const listings = list.filter(item =>
-        item.availability.filter(item=>item.time > Date.now()).length > 0);
+        item.availability.filter(time=>time.time > Date.now()).length > 0);
+      // console.log('!!!!LISTINGS!!!!', listings)
+      // console.log('times', listings.forEach(item =>
+      //   console.log('!!item', item, '!!!availability', item.availability.forEach(time =>
+      //     console.log('!!time', time.time > Date.now(), item.title)
+      //   ))
+      // ))
       const cuisines = {};
       for (let ind in listings){
         const genre = listings[ind]["cuisine"];
@@ -181,7 +189,7 @@ export default class Listings extends Component{
                                           .filter(item=>item.reviews.length > 4)
                                           .sort((a,b)=>b.overallRating-a.overallRating)
       const noRatings = this.state.listingsOriginal.filter(item=>item.reviews.length < 5);
-      console.log('noratings', noRatings);
+      // console.log('noratings', noRatings);
       const listings = yesRatings.concat(noRatings)
       this.setState({ listings })
     } else if (indicator === "reviews"){
@@ -263,8 +271,8 @@ export default class Listings extends Component{
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
                     <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
-                      options={cuisines} onChange={this.cuisineFilter}/>
-                      <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
+                      options={cuisines} onChange={this.cuisineFilter} style={{width: "100px"}}/>
+                      <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
                         <Dropdown.Menu>
                           <Dropdown.Header content='Sort by selection' />
                           <Dropdown.Divider />
@@ -302,14 +310,14 @@ export default class Listings extends Component{
                     <Menu text id="header">
                       <Menu.Item header style={{color: 'white'}}>Recent Meals</Menu.Item>
                     </Menu>
-                    <div id="listOfRecents">
+                    <Segment id="listOfRecents">
                       {this.state.loadingRecents
                         ? <Loader active inline='centered'/>
                         : this.state.recents.length > 0
                         ? this.state.recents.map((item,ind)=>recentCondense(item,ind))
                         : "No recent meals.  Start ordering now!"
                       }
-                    </div>
+                    </Segment>
                   </Grid.Row>
                 </Grid.Column>
               </Grid>
