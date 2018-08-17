@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
-import { Button, Divider, Item } from 'semantic-ui-react';
+import { Button, Divider, Header, Item } from 'semantic-ui-react';
 import * as Scroll from 'react-scroll';
 import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
@@ -35,8 +35,8 @@ export default class HistoryListing extends Component{
             ? this.props.pastOrders.map((item, ind) =>
                 HistoryItem(item, ind < this.props.pastOrders.length-1))
             : <div>
-                <p align="center">No previous orders?  Start ordering now!</p>
-                <center><Button href="/dashboard">Go to dashboard</Button></center>
+                <Header align="center">No previous orders?  Start ordering now!</Header>
+                <center><Button href="/dashboard" id="redButton">Go to dashboard</Button></center>
               </div>
           }
         </Element>

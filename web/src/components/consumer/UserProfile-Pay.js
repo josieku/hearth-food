@@ -62,7 +62,7 @@ export default class ProfilePay extends Component{
       height: '450px',
       overflowY: 'scroll',
       overflowX: 'hidden',
-      marginBottom: '100px',
+      marginBottom: '10px',
     }
     return(
       <div>

@@ -262,17 +262,17 @@ export default class Listings extends Component{
             : null
           }
         </div>
-        <Grid columns={2} padded="vertically">
-          <Grid.Column width={9}>
+        <Grid columns={2} padded="vertically" >
+          <Grid.Column width={9} style={{paddingTop: '0px'}}>
             <Grid.Row>
-              <Menu text id="header">
+              <Menu text id="header" style={{marginTop: '0'}}>
                 <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
                     <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
                       options={cuisines} onChange={this.cuisineFilter} style={{width: "100px"}}/>
-                      <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                      <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
                         <Dropdown.Menu>
                           <Dropdown.Header content='Sort by selection' />
                           <Dropdown.Divider />
@@ -299,9 +299,9 @@ export default class Listings extends Component{
                     : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={7}>
+                <Grid.Column width={7} style={{paddingTop: '0px'}}>
                   <Grid.Row>
-                    <Menu text id="header">
+                    <Menu text id="header" style={{marginTop: '0'}}>
                       <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
                     </Menu>
                     <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
