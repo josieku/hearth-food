@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route, Link } from "react-router-dom";
 import { Button, Divider, Dropdown, Grid, Item, Search, Modal } from "semantic-ui-react";
+import qs from 'query-string';
 
 import NavBar from './../general/NavBar';
 import Listings from './Main';
@@ -115,22 +116,15 @@ export default class ConsumerLanding extends Component{
     this.setState({ review: [] })
   }
 
-  // renderReviewModal = (request, ind) => {
-  //   return(
-  //     <AddReview user={this.props.user} add={this.props.rateMeal}
-  //       meal={request.meal} open={this.state.open} close={this.closeReviewModal}
-  //       requestId={request._id} verified={true} ind={ind}/>
-  //   )
-  // }
-
   render(){
     const user = this.props.user
     return(
       <div className="main">
         <NavBar notifications={this.state.notifications} user={user} logout={this.props.logout}/>
         <Switch>
-          <Route exact path="/dashboard/orders"
-            render={(props)=> <Orders user={user} {...props} />}/>
+          <Route exact path="/dashboard/orders" render={(props)=>
+            <Orders user={user} show={qs.parse(props.location.search).show}
+              {...props} />}/>
 
           <Route exact path="/dashboard/notifications" render={(props)=>
             <Notifications user={user} update={this.updateNotifications}

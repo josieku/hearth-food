@@ -16,10 +16,7 @@ function OrderItem(item, index, complete, cancel) {
         <Item.Extra><strong>Additional requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
       </Grid.Column>
       <Grid.Column width={6}>
-        {/* {item.payment
-          ? <button disabled>Change pickup time</button>
-          : <EditModal request={item} ind={index} change={change}/> } */}
-          <Button id="redButton" onClick={()=>complete(item._id, index)}>Delivered!</Button>
+        <Button id="redButton" onClick={()=>complete(item._id, index)}>Delivered!</Button>
         <Button id="redButton" onClick={()=>cancel(item, index)}>Cancel</Button>
       </Grid.Column>
     </Grid>

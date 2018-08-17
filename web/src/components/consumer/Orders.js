@@ -37,6 +37,22 @@ export default class Main extends Component{
       historyOriginal: orders.filter(item => item.expired),
       loading: false
     }))
+
+    if (this.state.loading){
+      if (this.props.show === "pending"){
+        this.setState({
+          activeItem: "Pending Orders"
+        })
+      } else if (this.props.show === "past"){
+        this.setState({
+          activeItem: "Past Orders"
+        })
+      } else {
+        this.setState({
+          activeItem: "Scheduled Orders"
+        })
+      }
+    }
   }
 
   cancel = (requestId, index) => {
