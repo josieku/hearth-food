@@ -1,6 +1,24 @@
 import React, { Component } from "react";
 import { Button, Divider, Form, Grid, Header, Image, Input, Item, Rating, Segment, TextArea, Loader, Modal, Checkbox } from 'semantic-ui-react';
 import RatingComp from 'react-star-rating-lite';
+import {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
+  PinterestShareButton,
+  VKShareButton,
+  OKShareButton,
+  RedditShareButton,
+  TumblrShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
+  ViberShareButton,
+  WorkplaceShareButton,
+  EmailShareButton,
+} from 'react-share';
 
 export default class AddReview extends Component {
   state = {
