@@ -2,7 +2,40 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Divider, Form, Grid, Header, Image, Input, Item, Rating, Segment, TextArea, Loader, Modal, Checkbox } from 'semantic-ui-react';
 import RatingComp from 'react-star-rating-lite';
-
+import {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
+  PinterestShareButton,
+  VKShareButton,
+  OKShareButton,
+  RedditShareButton,
+  TumblrShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
+  ViberShareButton,
+  WorkplaceShareButton,
+  EmailShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  TelegramIcon,
+  WhatsappIcon,
+  GooglePlusIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  VKIcon,
+  OKIcon,
+  RedditIcon,
+  TumblrIcon,
+  LivejournalIcon,
+  MailruIcon,
+  ViberIcon,
+  WorkplaceIcon,
+  EmailIcon,
+} from 'react-share';
 import AddReview from './MealProfile-Review';
 // import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
 //          PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
@@ -142,15 +175,48 @@ class LeaveReview extends Component {
                             }
                           </Grid.Row>
                         </Grid>
-                      </div>
-                      : <Item.Content>No available pick up times, check again later</Item.Content>}
-                      <Item.Header as='h3' style={subheadings}><strong>Cuisine: </strong></Item.Header>
-                      <Item.Content style={descriptions}>{meal.cuisine}</Item.Content>
-                      <Item.Header as='h3' style={subheadings}><strong>Description:</strong></Item.Header>
-                      <Item.Content style={descriptions}>{meal.description}</Item.Content>
-                      <Item.Header as='h3' style={subheadings}><strong>Ingredients:</strong></Item.Header>
-                      <Item.Content style={descriptions}>{meal.ingredients}</Item.Content>
-                    </Item>
+                  </div>
+                  : <Item.Content>No available pick up times, check again later</Item.Content>}
+                  <Item.Header as='h3' style={subheadings}><strong>Cuisine: </strong></Item.Header>
+                  <Item.Content style={descriptions}>{meal.cuisine}</Item.Content>
+                  <Item.Header as='h3' style={subheadings}><strong>Description:</strong></Item.Header>
+                  <Item.Content style={descriptions}>{meal.description}</Item.Content>
+                  <Item.Header as='h3' style={subheadings}><strong>Ingredients:</strong></Item.Header>
+                  <Item.Content style={descriptions}>{meal.ingredients}</Item.Content>
+                </Item>
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <Grid.Row>
+                  <Image src={meal.picture} rounded fluid/>
+                </Grid.Row>
+                <br />
+                <Grid style={{marginLeft: '150px', marginTop: '20px'}}>
+                  Share this meal with your friends!
+                  <Grid.Row>
+                      <FacebookShareButton url={'localhost:3000/meal/' + meal._id} children={<FacebookIcon size={32} round={true} />}/>
+                      <TwitterShareButton url={'localhost:3000/meal/' + meal._id} children={<TwitterIcon size={32} round={true} />}/>
+                      <PinterestShareButton url={'localhost:3000/meal/' + meal._id} children={<PinterestIcon size={32} round={true} />}/>
+                      <TumblrShareButton url={'localhost:3000/meal/' + meal._id} children={<TumblrIcon size={32} round={true} />}/>
+                      <RedditShareButton url={'localhost:3000/meal/' + meal._id} children={<RedditIcon size={32} round={true} />}/>
+                      <GooglePlusShareButton url={'localhost:3000/meal/' + meal._id} children={<GooglePlusIcon size={32} round={true} />}/>
+                      <WhatsappShareButton url={'localhost:3000/meal/' + meal._id} children={<WhatsappIcon size={32} round={true} />}/>
+                  </Grid.Row>
+                </Grid>
+              </Grid.Column>
+              <Grid.Row>
+                <Grid.Column width={16}>
+                  <Grid>
+                    <Grid.Column width={3}>
+                      <Header as='h2' style={{margin: '0'}}><strong>Meal Reviews </strong></Header>
+                    </Grid.Column>
+                    <Grid.Column width={10}>
+                      <LeaveReview user={user} add={this.props.add} meal={meal}
+                        requestId={this.props.requestId} verified={this.props.verified}/>
+                    </Grid.Column>
+                    </Grid>
+                    <Segment piled style={{marginTop: "10px"}}>
+                      <Reviews list={this.props.reviews}/>
+                    </Segment>
                   </Grid.Column>
                   <Grid.Column width={8}>
                     <Image src={meal.picture} rounded fluid/>

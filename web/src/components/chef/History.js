@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Divider, Grid, Header, Item, Loader, Menu, Segment } from 'semantic-ui-react';
+import * as Scroll from 'react-scroll';
+import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 function HistoryItem(item) {
   return (
@@ -38,17 +40,25 @@ export default class HistoryListing extends Component{
   }
 
   render(){
+    const style ={
+      position: 'relative',
+      height: '400px',
+      overflowY: 'scroll',
+      overflowX: 'hidden',
+      marginBottom: '100px',
+    }
     return(
       <div>
         <Menu text fluid id="header" style={{padding: '3px'}}>
         <Menu.Item header style={{color: 'white'}}>Request History</Menu.Item>
       </Menu>
+
+       <Segment>
       {this.state.loadingHistory
       ? <Loader active inline='centered'>Loading your past meals</Loader> :
-      <Segment>
         {this.state.history.length > 0
           ? this.state.history.map(HistoryItem)
-          : 'No history yet'}
+          : 'No past order.. Share your meals now!!'}
         </Segment>
     }
       </div>

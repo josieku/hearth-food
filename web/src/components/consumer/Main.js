@@ -10,7 +10,7 @@ import AddReview from '.././meals/MealProfile-Review';
 
 function UnseenNotifications(item){
   return(
-    <Message>
+    <Message key={item._id}>
       {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
     </Message>
   )
@@ -25,16 +25,12 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
     Math.sin(dLon/2) * Math.sin(dLon/2);
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     var d = R * c;
-    return d * 1000; // meters
+    return d * 1000/1609.34; // meters
 }
 
-
 function Listing(meal, user){
-  // console.log(meal)
-  // console.log(user)
   var distance = measure(meal.chef.location.lat, meal.chef.location.lng, user.location.lat, user.location.lng)
-  var rounded = distance.toString().split('.')[0]
-  // console.log(rounded)
+  var rounded = distance.toString().slice(0, 4)
   return (
     <Element width="500px" key={meal._id}>
       <div id="listItem" key={meal._id}>
@@ -66,7 +62,7 @@ function Listing(meal, user){
                 <Item.Extra><h4>Cuisine</h4></Item.Extra>
                 <Item.Extra>{meal.cuisine}</Item.Extra>
                 <Item.Extra><h4>Distance from you</h4></Item.Extra>
-                <Item.Extra>{rounded} meters away!</Item.Extra>
+                <Item.Extra>{rounded} miles away!</Item.Extra>
                 <Button id="redButton" href={`/meal/${meal._id}`} size='mini' >Request</Button>
               </Item.Content>
             </Grid.Column>
@@ -300,7 +296,6 @@ export default class Listings extends Component{
                     <Menu text id="header">
                       <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
                     </Menu>
-                    {/* <Map listings={this.state.listings}/> */}
                     <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
                   </Grid.Row>
                   <Grid.Row>

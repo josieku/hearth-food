@@ -28,7 +28,7 @@ router.get('/listings', (req, res) => {
 router.get('/:id', (req, res) => {
   // console.log('fetching');
   Meal.findById(req.params.id)
-      .populate('chef')
+      // .populate('chef')
       .populate('availability')
       .populate({ path: 'reviews', populate: { path: 'author'}})
       .exec()

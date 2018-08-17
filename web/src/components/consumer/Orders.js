@@ -117,7 +117,7 @@ export default class Main extends Component{
             <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
           </Menu.Menu>
         </Menu>
-        <Segment>
+        <Segment style={{height: "500px"}}>
             <Menu fluid tabular>
               <Menu.Item name="Scheduled Orders" active={activeItem === "Scheduled Orders"} onClick={this.handleClick} />
               <Menu.Item name="Pending Orders" active={activeItem === "Pending Orders"} onClick={this.handleClick} />
