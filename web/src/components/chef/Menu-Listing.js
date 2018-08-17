@@ -58,7 +58,7 @@ export default class MenuListing extends Component{
 
   render(){
     const { activeItem } = this.state
-    console.log(this.props.menu[0]);
+    // console.log(this.props.menu[0]);
     return (
       <div>
         <Menu text id="header">

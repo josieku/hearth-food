@@ -8,7 +8,31 @@ import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from '
 import MapContainer from '.././maps/MapContainer';
 import AddReview from '.././meals/MealProfile-Review';
 
+/** CONSUMER MAIN **/
+
 function UnseenNotifications(item){
+  if (item.type === "Accepted Request") {
+    return (
+      <Message key={item._id}>
+        <span>
+          {item.type}: {item.content}
+          <Button href={`/user/${item.user}/pay`} size="mini">See charges</Button>
+        </span>
+        <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
+      </Message>
+    )
+  } else if (item.type === "New Request") {
+    return (
+      <Message key={item._id}>
+        <span>
+          {item.type}: {item.content}
+          <Button href={`/dashboard/orders?show=pending`} size="mini">See Orders</Button>
+        </span>
+        <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
+      </Message>
+    )
+  }
+
   return(
     <Message key={item._id}>
       {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
@@ -71,14 +95,41 @@ function Listing(meal, user){
         </Item>
       </div>
     </Element>
-)
+  )
+}
+
+function recentCondense(item, ind){
+  return (
+    <div id="listItem" key={ind}>
+      <Item>
+        <Grid columns={2}>
+          <Grid.Column width={10}>
+            <Item.Content>
+              <Link to={`/meal/${item.meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
+              <Item.Header><h4>{item.meal.title}</h4></Item.Header>
+            </Link>
+            <Item.Content>
+              Ordered {new Date(item.time.time).toString().slice(0,15)} at {item.time.start}
+            </Item.Content>
+          </Item.Content>
+        </Grid.Column>
+        <Grid.Column width={6}>
+          <Button size='tiny' id="redButton" href={`/meal/${item.meal._id}`} style={{fontSize:"12px"}}>
+            Request Again
+          </Button>
+        </Grid.Column>
+      </Grid>
+    </Item>
+    <Divider />
+  </div>
+  )
 }
 
 class MealListings extends Component {
   render(){
     const style ={
       position: 'relative',
-      height: '810px',
+      height: '850px',
       overflowY: 'scroll',
       overflowX: 'hidden',
       marginBottom: '100px',
@@ -87,42 +138,14 @@ class MealListings extends Component {
       return this.props.bounds.contains(meal.chef.location)
     })
     return (
-        // <Element id="listings-scroll-container" style={style}>
-          <Segment>
+      <Segment style={{height: "900px"}}>
+        <Element id="listings-scroll-container" style={style}>
             {meals.map(meal => Listing(meal, this.props.user))}
-          </Segment>
-        // </Element>
+        </Element>
+      </Segment>
     )
   }
 };
-
-function recentCondense(item, ind){
-  return (
-    <div id="listItem" key={ind}>
-      <Item>
-        <Grid columns={2}>
-          <Grid.Column width={12}>
-            <Item.Content>
-              <Link to={`/meal/${item.meal._id}`} style={{textDecoration: 'none', color: 'black'}}>
-              <Item.Header><h2>{item.meal.title}</h2></Item.Header>
-            </Link>
-            <Item.Content>
-              Ordered {new Date(item.time.time).toString().slice(0,15)} at {item.time.start}
-            </Item.Content>
-          </Item.Content>
-        </Grid.Column>
-        <Grid.Column width={4}>
-          <Item.Content>
-            <Item.Extra><h4>${item.meal.price}</h4></Item.Extra>
-          </Item.Content>
-          <Button size='mini' id="redButton" href={`/meal/${item.meal._id}`}>Request Again</Button>
-        </Grid.Column>
-      </Grid>
-    </Item>
-    <Divider />
-  </div>
-)
-}
 
 export default class Listings extends Component{
   state = {
@@ -142,12 +165,6 @@ export default class Listings extends Component{
     .then(list => {
       const listings = list.filter(item =>
         item.availability.filter(time=>time.time > Date.now()).length > 0);
-      // console.log('!!!!LISTINGS!!!!', listings)
-      // console.log('times', listings.forEach(item =>
-      //   console.log('!!item', item, '!!!availability', item.availability.forEach(time =>
-      //     console.log('!!time', time.time > Date.now(), item.title)
-      //   ))
-      // ))
       const cuisines = {};
       for (let ind in listings){
         const genre = listings[ind]["cuisine"];
@@ -237,6 +254,23 @@ export default class Listings extends Component{
     }
   }
 
+  renderNotifs = notifs => {
+    return (
+      <div>
+        {notifs.filter(item=>!item.seen).length > 0
+          ? <div>
+              <span>
+                <strong>New notifications </strong>
+                <button onClick={this.mark}>Mark all as read</button>
+              </span>
+              {notifs.filter(item=>!item.seen).map(UnseenNotifications)}
+            </div>
+          : null
+        }
+      </div>
+    )
+  }
+
   mark = () => {
     this.props.updateNotifs(this.props.notifications.filter(item=>!item.seen))
   }
@@ -250,20 +284,9 @@ export default class Listings extends Component{
 
     return(
       <div className="main">
-        <div>
-          {notifs.filter(item=>!item.seen).length > 0
-            ? <div>
-                <span>
-                  <strong>New notifications </strong>
-                  <button onClick={this.mark}>Mark all as read</button>
-                </span>
-                {notifs.filter(item=>!item.seen).map(UnseenNotifications)}
-              </div>
-            : null
-          }
-        </div>
-        <Grid columns={2} padded="vertically" >
-          <Grid.Column width={9} style={{paddingTop: '0px'}}>
+        {this.renderNotifs(notifs)}
+        <Grid columns={2} padded="vertically">
+          <Grid.Column width={9}>
             <Grid.Row>
               <Menu text id="header" style={{marginTop: '0'}}>
                 <Menu.Item header style={{color: 'white'}}>Available Meals</Menu.Item>
@@ -293,16 +316,18 @@ export default class Listings extends Component{
                     </Menu.Menu>
                   </Menu>
                 </Grid.Row>
+
                 <Grid.Row style={{justifyContent: 'center'}}>
                   {this.state.loadingListing
                     ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
                     : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
                   </Grid.Row>
+
                 </Grid.Column>
-                <Grid.Column width={7} style={{paddingTop: '0px'}}>
+                <Grid.Column width={7}>
                   <Grid.Row>
-                    <Menu text id="header" style={{marginTop: '0'}}>
-                      <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
+                    <Menu text id="header">
+                      <Menu.Item header style={{color: 'white'}}>Map</Menu.Item>
                     </Menu>
                     <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
                   </Grid.Row>
@@ -320,7 +345,9 @@ export default class Listings extends Component{
                     </Segment>
                   </Grid.Row>
                 </Grid.Column>
+
               </Grid>
+
             {this.props.review.length > 0
               ? this.props.review.map((req,ind)=>
                   <AddReview user={this.props.user} add={this.props.rateMeal}
@@ -330,7 +357,7 @@ export default class Listings extends Component{
                 )
               : null
             }
-  </div>
-)
-}
+      </div>
+    )
+  }
 };

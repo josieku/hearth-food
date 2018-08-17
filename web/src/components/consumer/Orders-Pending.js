@@ -5,7 +5,6 @@ import * as Scroll from 'react-scroll';
 import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll';
 
 function PendingItem(item, bool, index, cancel) {
-  console.log(item)
   return (
     <Element key={item._id}>
       <Item key={item._id} className="request-list-item">

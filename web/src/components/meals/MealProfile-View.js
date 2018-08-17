@@ -37,8 +37,6 @@ import {
   EmailIcon,
 } from 'react-share';
 import AddReview from './MealProfile-Review';
-// import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
-//          PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
 
 function OneReview(review){
   return (

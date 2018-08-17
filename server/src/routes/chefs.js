@@ -97,7 +97,7 @@ router.post('/:id/requests/accept', (req, res) => {
       const newNotif = new Notification({
         type: 'Accepted Request',
         meal: request.meal._id,
-        content: `Your ${request.meal.title} meal request has been approved.  Now proceed to payment!`,
+        content: `Your ${request.meal.title} meal request has been approved!`,
         user: request.consumer,
         seen: false,
         time: Date.now()

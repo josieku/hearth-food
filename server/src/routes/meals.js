@@ -115,19 +115,34 @@ router.post('/:id/request', (req, res) => {
       available.save();
     })
 
-    let str = `New request for ${mealTitle} on `
-    str += `${new Date(req.body.time.date).toDateString()} at ${req.body.time.start}.`
+    let chefStr = `New request for ${mealTitle} on `
+    chefStr += `${new Date(req.body.time.date).toDateString()} at ${req.body.time.start}.`
 
-    const newNotif = new Notification({
+    const chefNotif = new Notification({
       type: 'New Request',
       meal: req.body.meal,
-      content: str,
+      content: chefStr,
       user: req.body.chef,
       seen: false,
       time: Date.now(),
     })
 
-    newNotif.save()
+    chefNotif.save()
+
+    let conStr = `New request for ${mealTitle} made for `
+    conStr += `${new Date(req.body.time.date).toDateString()} at ${req.body.time.start}.`
+
+    const consumerNotif = new Notification({
+      type: 'New Request',
+      meal: req.body.meal,
+      request: saved._id,
+      content: conStr,
+      user: req.body.consumer,
+      seen: false,
+      time: Date.now(),
+    })
+
+    consumerNotif.save()
 
   }).then(e => res.send('requested'))
   // console.log('meal requested');
