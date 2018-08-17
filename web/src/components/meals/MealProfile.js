@@ -25,7 +25,7 @@ export default class MealProfile extends Component {
       .then(async meal => {
         const times = {}
         const availabilities = meal.availability.filter(item=>!item.passed);
-        console.log('availabilities', availabilities)
+        // console.log('availabilities', availabilities)
         for (let ind in availabilities) {
           const date = availabilities[ind]["date"];
           if (times[date]){
@@ -36,7 +36,6 @@ export default class MealProfile extends Component {
             times[date] = [availabilities[ind]];
           }
         }
-        console.log('times!!!', times)
 
         await this.setState({
           meal,

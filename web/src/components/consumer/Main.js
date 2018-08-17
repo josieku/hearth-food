@@ -10,7 +10,7 @@ import AddReview from '.././meals/MealProfile-Review';
 
 function UnseenNotifications(item){
   return(
-    <Message>
+    <Message key={item._id}>
       {item.type}: {item.content} <span style={{color:"gray"}}>{new Date(item.time).toString()}</span>
     </Message>
   )
@@ -28,13 +28,9 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
     return d * 1000; // meters
 }
 
-
 function Listing(meal, user){
-  // console.log(meal)
-  // console.log(user)
   var distance = measure(meal.chef.location.lat, meal.chef.location.lng, user.location.lat, user.location.lng)
   var rounded = distance.toString().split('.')[0]
-  // console.log(rounded)
   return (
     <Element width="500px" key={meal._id}>
       <div id="listItem" key={meal._id}>
@@ -300,7 +296,6 @@ export default class Listings extends Component{
                     <Menu text id="header">
                       <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
                     </Menu>
-                    {/* <Map listings={this.state.listings}/> */}
                     <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
                   </Grid.Row>
                   <Grid.Row>
