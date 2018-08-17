@@ -31,13 +31,13 @@ function MenuListItem(item) {
             }
           </Item.Content>
           <br/>
-          <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
-          <Button href={`/meal/${item._id}`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>View</Button>
-          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Offer Meal</Button>
+          <Button href={`/meal/${item._id}/edit`} size='mini' id='redButton'>Edit</Button>
+          <Button href={`/meal/${item._id}`} size='mini' id='redButton'>View</Button>
+          <Button href={`/meal/${item._id}/setavailable`} size='mini' id='redButton'>Offer Meal</Button>
         </Item>
       </Grid.Column>
       <Grid.Column width={7}>
-        <Image src={item.picture} fluid circular/>
+        <Image src={item.picture} fluid rounded/>
       </Grid.Column>
     </Grid>
   )
@@ -58,9 +58,10 @@ export default class MenuListing extends Component{
 
   render(){
     const { activeItem } = this.state
+    console.log(this.props.menu[0]);
     return (
       <div>
-        <Menu text id="chefMenu">
+        <Menu text id="header">
           <Menu.Item header style={{color: 'white'}}>Your Menu</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
             <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
@@ -73,14 +74,14 @@ export default class MenuListing extends Component{
                 <Dropdown.Item onClick={()=>{this.props.sort("low")}}>Price: High to Low</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Button id="headerButton" href='/dashboard/menu/add'>Add a Dish</Button>
-            <Button id="headerButton" href='/dashboard/menu/archived'>See Archived Meals</Button>
+            <Button id="chefMenuButton" href='/dashboard/menu/add'>Add a Dish</Button>
+            <Button id="chefMenuButton" href='/dashboard/menu/archived'>See Archived Meals</Button>
           </Menu.Menu>
         </Menu>
         { this.props.loading
           ? <Loader active inline='centered'>Hungry customers await your delicious meals...</Loader>
           : this.props.menu.length > 0
-          ? <Segment style={{backgroundColor: '#EAF2EF'}}>
+          ? <Segment>
             <Grid columns={2}>
               <Grid.Column width={4} style={{paddingRight: '0px'}}>
                 <Menu fluid vertical tabular style={{borderRight: '0px'}}>

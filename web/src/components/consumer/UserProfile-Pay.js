@@ -73,7 +73,7 @@ export default class ProfilePay extends Component{
             <Button id='headerButton'>Change your billing information</Button>
           </Menu.Menu>
         </Menu>
-        <Segment attached="top" style={{height: "500px"}}>
+        <Segment>
           <Element style={style}>
             {this.state.charges.sort((a,b)=>a.time.time - b.time.time).map(ChargeListing)}
           </Element>

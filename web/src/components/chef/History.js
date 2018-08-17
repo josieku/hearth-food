@@ -52,16 +52,15 @@ export default class HistoryListing extends Component{
         <Menu text fluid id="header" style={{padding: '3px'}}>
         <Menu.Item header style={{color: 'white'}}>Request History</Menu.Item>
       </Menu>
-      <Segment piled style={{marginTop: 0, height: "500px"}}>
-        {this.state.loadingHistory
-          ? <Loader active inline='centered'>Loading your past meals</Loader>
-          : <Element id="history-listings" style={style}>
-              {this.state.history.length > 0
-                ? this.state.history.map(HistoryItem)
-                : 'No past orders... Share your meals now!!'}
-            </Element>
-        }
-      </Segment>
+
+       <Segment>
+      {this.state.loadingHistory
+      ? <Loader active inline='centered'>Loading your past meals</Loader> :
+        {this.state.history.length > 0
+          ? this.state.history.map(HistoryItem)
+          : 'No past order.. Share your meals now!!'}
+        </Segment>
+    }
       </div>
     )
   }

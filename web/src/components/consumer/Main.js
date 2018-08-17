@@ -37,12 +37,12 @@ function Listing(meal, user){
         <Item>
           <Grid columns={3}>
             <Grid.Column width={3}>
-              <Item.Image circular size="small" style={{padding: '3px'}} src={meal.picture} />
+              <Item.Image rounded size="small" style={{padding: '3px'}} src={meal.picture} />
               {meal.reviews.length > 4
-                ? <Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/>
-                : <p>No rating</p>
+                ? <center><Rating icon='star' size='mini' defaultRating={meal.overallRating} maxRating={5} disabled/></center>
+                : <p align='center'>No rating</p>
               }
-              <span>{meal.reviews.length} reviews</span>
+              <Item.Content><center>{meal.reviews.length} Reviews</center></Item.Content>
             </Grid.Column>
             <Grid.Column width={8}>
               <Item.Content>
@@ -113,7 +113,7 @@ function recentCondense(item, ind){
           <Item.Content>
             <Item.Extra><h4>${item.meal.price}</h4></Item.Extra>
           </Item.Content>
-          <Button size='mini' id="redButton">Request Again</Button>
+          <Button size='mini' id="redButton" href={`/meal/${item.meal._id}`}>Request Again</Button>
         </Grid.Column>
       </Grid>
     </Item>
@@ -264,7 +264,7 @@ export default class Listings extends Component{
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
                     <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
                       options={cuisines} onChange={this.cuisineFilter}/>
-                      <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                      <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
                         <Dropdown.Menu>
                           <Dropdown.Header content='Sort by selection' />
                           <Dropdown.Divider />
