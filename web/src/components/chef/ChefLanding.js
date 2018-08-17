@@ -35,7 +35,7 @@ export default class ChefLanding extends Component{
   }
 
   getNotifs = () => {
-    return setInterval(this.fetchNotifs, 10000);
+    return setInterval(this.fetchNotifs, 5000);
   }
 
   deleteNotif = (notifId, index) => {

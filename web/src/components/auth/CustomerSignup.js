@@ -4,6 +4,8 @@ var geo = window.navigator.geolocation
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
 
+import NavBar from './../general/NavBar';
+
 class CustomerSignup extends React.Component {
   state = {
     first: '',
@@ -21,7 +23,6 @@ class CustomerSignup extends React.Component {
     var self = this
     geo.getCurrentPosition(function(position) {
       if (position) {
-        console.log(position)
         self.setState({
           location: {lat: position.coords.latitude, lng: position.coords.longitude}
         })
@@ -34,11 +35,9 @@ class CustomerSignup extends React.Component {
 
   handleFile = (e) => {
     var _this = this
-    console.log(e.target.value)
     var fReader = new FileReader();
     fReader.readAsDataURL(e.target.files[0]);
     fReader.onloadend = function(event){
-        console.log(event.target.result);
         _this.setState({
           file: event.target.result
         })
@@ -86,9 +85,8 @@ class CustomerSignup extends React.Component {
   }
 
   render() {
-    console.log(this.state.location)
     return(
-      <div className='login-form'>
+      <div className='main'>
         <style>{`
           body > div,
           body > div > div,
@@ -96,6 +94,7 @@ class CustomerSignup extends React.Component {
             height: 100%;
           }
         `}</style>
+        <NavBar user={null}/>
         <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
           <Grid.Column style={{ maxWidth: 450 }}>
             <Header as='h2' textAlign='center'>

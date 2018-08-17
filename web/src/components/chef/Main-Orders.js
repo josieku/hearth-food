@@ -149,7 +149,7 @@ export default class OrderListing extends Component{
           </Menu>
         </Grid.Row>
         {this.props.loading
-          ? <Loader active inline='centered'/>
+          ? <Loader active inline='centered'>Get ready to put your apron on!</Loader>
           : this.props.orders.length > 0
           ? this.props.orders.map((item, ind) =>
             OrderItem(item, ind, this.props.complete, this.cancelModal))

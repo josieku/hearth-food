@@ -5,7 +5,8 @@ import Fuse from 'fuse.js';
 import * as Scroll from 'react-scroll';
 import { Element , Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
-import MapContainer from '.././maps/MapContainer'
+import MapContainer from '.././maps/MapContainer';
+import AddReview from '.././meals/MealProfile-Review';
 
 function UnseenNotifications(item){
   return(
@@ -29,13 +30,13 @@ function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement fu
 
 
 function Listing(meal, user){
-  console.log(meal)
-  console.log(user)
+  // console.log(meal)
+  // console.log(user)
   var distance = measure(meal.chef.location.lat, meal.chef.location.lng, user.location.lat, user.location.lng)
   var rounded = distance.toString().split('.')[0]
-  console.log(rounded)
+  // console.log(rounded)
   return (
-    <Element width="500px">
+    <Element width="500px" key={meal._id}>
       <div id="listItem" key={meal._id}>
         <Item>
           <Grid columns={3}>
@@ -86,12 +87,9 @@ class MealListings extends Component {
       overflowX: 'hidden',
       marginBottom: '100px',
     }
-    console.log(this.props.bounds)
-    console.log(this.props.listings)
     var meals = this.props.listings.filter(meal => {
       return this.props.bounds.contains(meal.chef.location)
     })
-    console.log(meals)
     return (
         <Element id="listings-scroll-container" style={style}>
           {meals.map(meal => Listing(meal, this.props.user))}
@@ -137,14 +135,15 @@ export default class Listings extends Component{
     cuisineSearch: [],
     loadingListing: true,
     loadingRecents: true,
-    radius: 500
+    radius: 500,
+    open: this.props.review.length > 0
   }
   componentDidMount = e => {
-    console.log(this.props)
     fetch('/meal/listings')
     .then(resp => resp.json())
     .then(list => {
-      const listings = list.filter(item => item.availability.length > 0);
+      const listings = list.filter(item =>
+        item.availability.filter(item=>item.time > Date.now()).length > 0);
       const cuisines = {};
       for (let ind in listings){
         const genre = listings[ind]["cuisine"];
@@ -172,7 +171,6 @@ export default class Listings extends Component{
     this.setState({
       bounds: bounds
     })
-    console.log(bounds)
   }
 
   sort = indicator => {
@@ -200,11 +198,9 @@ export default class Listings extends Component{
     if (indicator === "cuisine"){
       const listings = this.state.listings.slice()
                                           .filter(item=>{
-                                            console.log('item.cuisine', item.cuisine)
                                             for (let ind in input){
                                               if (item.cuisine[0] === input[ind]) return item;}
                                             })
-      console.log('filtered', listings)
       this.setState({ listings })
     } else if (indicator === "time"){
       const listings = this.state.listings.slice()
@@ -230,13 +226,11 @@ export default class Listings extends Component{
   }
 
   cuisineFilter = (e, data) => {
-    console.log('cuisine', data.value);
     if (data.value.length > 0){
       this.filter('cuisine', data.value)
     } else {
       this.setState({ listings: this.state.listingsOriginal })
     }
-    // this.setState({ cuisineSearch: data.value })
   }
 
   mark = () => {
@@ -272,58 +266,67 @@ export default class Listings extends Component{
                 <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                   <Input id='searchInHeader' icon='search'
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
-                  <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
-                    options={cuisines} onChange={this.cuisineFilter}/>
-                    <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
-                      <Dropdown.Menu>
-                        <Dropdown.Header content='Sort by selection' />
-                        <Dropdown.Divider />
-                        <Dropdown.Item onClick={()=>{this.sort("high")}}>
-                          Price: High to Low
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{this.sort("low")}}>
-                          Price: Low to High
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{this.sort("rating")}}>
-                          Highest Rated
-                        </Dropdown.Item>
-                        <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
-                          Most Reviewed
-                        </Dropdown.Item>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                </Menu.Menu>
-              </Menu>
-            </Grid.Row>
-            <Grid.Row style={{justifyContent: 'center'}}>
-            {this.state.loadingListing
-              ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
-              : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
-            </Grid.Row>
-          </Grid.Column>
-          <Grid.Column width={7}>
-            <Grid.Row>
-              <Menu text id="header">
-                <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
-              </Menu>
-                {/* <Map listings={this.state.listings}/> */}
-                <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
-            </Grid.Row>
-            <Grid.Row>
-                <Menu text id="header">
-                  <Menu.Item header style={{color: 'white'}}>Recent Meals</Menu.Item>
-                </Menu>
-            <div id="listOfRecents">
-              {this.state.loadingRecents
-                ? <Loader active inline='centered'/>
-                : this.state.recents.length > 0
-                ? this.state.recents.map((item,ind)=>recentCondense(item,ind))
-                : "No recent meals.  Start ordering now!"
-              }
-            </div>
-            </Grid.Row>
-          </Grid.Column>
-    </Grid>
+                    <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
+                      options={cuisines} onChange={this.cuisineFilter}/>
+                      <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                        <Dropdown.Menu>
+                          <Dropdown.Header content='Sort by selection' />
+                          <Dropdown.Divider />
+                          <Dropdown.Item onClick={()=>{this.sort("high")}}>
+                            Price: High to Low
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={()=>{this.sort("low")}}>
+                            Price: Low to High
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={()=>{this.sort("rating")}}>
+                            Highest Rated
+                          </Dropdown.Item>
+                          <Dropdown.Item onClick={()=>{this.sort("reviews")}}>
+                            Most Reviewed
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Menu.Menu>
+                  </Menu>
+                </Grid.Row>
+                <Grid.Row style={{justifyContent: 'center'}}>
+                  {this.state.loadingListing
+                    ? <Loader active inline='centered'>Finding the best meals for you...</Loader>
+                    : <MealListings listings={this.state.listings} user={this.props.user} bounds={this.state.bounds}/>}
+                  </Grid.Row>
+                </Grid.Column>
+                <Grid.Column width={7}>
+                  <Grid.Row>
+                    <Menu text id="header">
+                      <Menu.Item header style={{color: 'white'}}>Location of Meal</Menu.Item>
+                    </Menu>
+                    {/* <Map listings={this.state.listings}/> */}
+                    <MapContainer location={this.props.user.location} places={this.state.listings} sendBounds={this.sendBounds} />
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Menu text id="header">
+                      <Menu.Item header style={{color: 'white'}}>Recent Meals</Menu.Item>
+                    </Menu>
+                    <div id="listOfRecents">
+                      {this.state.loadingRecents
+                        ? <Loader active inline='centered'/>
+                        : this.state.recents.length > 0
+                        ? this.state.recents.map((item,ind)=>recentCondense(item,ind))
+                        : "No recent meals.  Start ordering now!"
+                      }
+                    </div>
+                  </Grid.Row>
+                </Grid.Column>
+              </Grid>
+            {this.props.review.length > 0
+              ? this.props.review.map((req,ind)=>
+                  <AddReview user={this.props.user} add={this.props.rateMeal}
+                    meal={req.meal} open={this.props.review.length > 0}
+                    close={this.props.close} auto={true}
+                    requestId={req._id} verified={true} ind={ind} />
+                )
+              : null
+            }
   </div>
 )
 }

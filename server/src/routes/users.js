@@ -63,6 +63,7 @@ router.get('/:id/toreview', (req, res) => {
 router.get('/:id/notif', (req, res) => {
   Notification.find({ user: req.params.id })
        .populate('meal')
+       .populate({path:'request', populate:{path:'meal'}})
        .exec()
        .then(notifications => {
          notifications = notifications.sort((a,b)=>b.time - a.time)

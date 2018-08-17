@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link, Switch } from 'react-router-dom';
-import { Button, Divider, Grid, Menu, Segment, Input } from 'semantic-ui-react';
+import { Button, Divider, Grid, Menu, Segment, Input, Loader } from 'semantic-ui-react';
 import Fuse from 'fuse.js';
 
 import PendingListing from './Orders-Pending';
@@ -19,7 +19,8 @@ export default class Main extends Component{
     scheduledOriginal: [],
     history: [],
     historyOriginal: [],
-    activeItem: "Scheduled Orders"
+    activeItem: "Scheduled Orders",
+    loading: true,
   }
 
   componentDidMount = () => {
@@ -33,7 +34,8 @@ export default class Main extends Component{
       scheduled: orders.filter(item => item.accepted && !item.expired),
       scheduledOriginal: orders.filter(item => item.accepted && !item.expired),
       history: orders.filter(item => item.expired),
-      historyOriginal: orders.filter(item => item.expired)
+      historyOriginal: orders.filter(item => item.expired),
+      loading: false
     }))
   }
 
@@ -121,7 +123,9 @@ export default class Main extends Component{
               <Menu.Item name="Pending Orders" active={activeItem === "Pending Orders"} onClick={this.handleClick} />
               <Menu.Item name="Past Orders" active={activeItem === "Past Orders"} onClick={this.handleClick} />
             </Menu>
-              {this.segmentDisplay(this.state.activeItem)}
+              {this.state.loading
+                ? <Loader active inline='centered'>Bringing up your orders...</Loader>
+                : this.segmentDisplay(this.state.activeItem)}
           </Segment>
       </div>
     )

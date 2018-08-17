@@ -341,8 +341,12 @@ var notificationSchema = mongoose.Schema({
   type: {
     type: String,
     enum: ['Accepted Request', 'Changed Request', 'Declined Request',
-    'Expired Request', 'New Request', 'Request Status', 'Changed Profile',
+    'Delivered Request', 'Expired Request', 'New Request', 'Request Status', 'Changed Profile',
     'Archived Meal', 'New Review']
+  },
+  request: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Request'
   },
   meal: {
     type: mongoose.Schema.ObjectId,

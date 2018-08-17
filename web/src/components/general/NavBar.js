@@ -65,35 +65,39 @@ export default class NavBar extends Component {
       return (
         <div>
           <Menu text style={{marginTop: '0px', paddingTop: '10px'}}>
-          <h2>hearth-EAT</h2>
-          <Menu.Menu text="true" id='navBar' position='right'>
-                <Menu.Item style={{padding: ''}} name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
-                <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
-                {notifWiggle
-                  ? <Transition animation="jiggle" duration="3000" visible={notifWiggle}>
-                      <Menu.Item icon="bell" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
-                    </Transition>
-                  : <Menu.Item icon="bell outline" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
-                }
-                <Menu.Item>
-                <Dropdown icon={'user'}>
-                  <Dropdown.Menu>
-                    <Dropdown.Item disabled>Hello, {user.firstName}</Dropdown.Item>
-                    <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
-                    <Dropdown.Item href={`/user/${id}/pay`}>Payment</Dropdown.Item>
-                    <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
+            <Menu.Menu id="navBar" position="left">
+              <Menu.Header as='h2'>hearth-EAT</Menu.Header>
+            </Menu.Menu>
+            <Menu.Menu text="true" id='navBar' position='right'>
+                  <Menu.Item style={{padding: ''}} name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
+                  <Menu.Item name='Orders' href='/dashboard/orders' active={ activeItem === 'Orders'}  onClick={()=>{this.setState({activeItem: 'Orders'})}}/>
+                  {notifWiggle
+                    ? <Transition animation="jiggle" duration="3000" visible={notifWiggle}>
+                        <Menu.Item icon="bell" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                      </Transition>
+                    : <Menu.Item icon="bell outline" href='/dashboard/notifications' active={ activeItem === 'Notificaitons'}  onClick={()=>{this.setState({activeItem: 'Notifications'})}}/>
+                  }
+                  <Menu.Item>
+                  <Dropdown icon={'user'}>
+                    <Dropdown.Menu>
+                      <Dropdown.Item disabled>Hello, {user.firstName}</Dropdown.Item>
+                      <Dropdown.Item href={`/user/${id}`}>Profile</Dropdown.Item>
+                      <Dropdown.Item href={`/user/${id}/pay`}>Payment</Dropdown.Item>
+                      <Dropdown.Item href='/auth/logout'>Logout</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+              </Menu.Item>
+            </Menu.Menu>
+          </Menu>
         </div>
       )
     } else if (role === "chef") {
       return (
         <div>
           <Menu text style={{marginTop: '0px', paddingTop: '10px'}}>
-            <h2> hearth-COOK </h2>
+            <Menu.Menu id="navBar" position="left">
+              <Menu.Header as='h2'>hearth-COOK</Menu.Header>
+            </Menu.Menu>
           <Menu.Menu  id='navBar' position='right'>
                 <Menu.Item name='Dashboard' href='/dashboard' active={ activeItem === 'Dashboard'}  onClick={()=>{this.setState({activeItem: 'Dashboard'})}}/>
                 <Menu.Item name='Menu' href='/dashboard/menu' active={ activeItem === 'Consumer'}  onClick={()=>{this.setState({activeItem: 'Consumer'})}}/>
@@ -122,7 +126,9 @@ export default class NavBar extends Component {
       return (
         <div>
           <Menu text style={{marginTop: '0px', paddingTop: '10px'}}>
-            <Header as='h2'>hearth</Header>
+          <Menu.Menu id="navBar" position="left">
+            <Menu.Header as='h2'>hearth</Menu.Header>
+          </Menu.Menu>
           <Menu.Menu id='navBar' position='right'>
                 <Menu.Item name='About' href='/' active={ activeItem === 'About'}  onClick={()=>{this.setState({activeItem: 'About'})}}/>
                 <Menu.Item name='Become a Chef' href='/' active={ activeItem === 'BecomeChef'}  onClick={()=>{this.setState({activeItem: 'BecomeChef'})}}/>

@@ -47,8 +47,8 @@ var MapWithLocation = compose(
   withHandlers({
     onMarkerClustererClick: () => (markerClusterer) => {
       const clickedMarkers = markerClusterer.getMarkers()
-      console.log(`Current clicked markers length: ${clickedMarkers.length}`)
-      console.log(clickedMarkers)
+      // console.log(`Current clicked markers length: ${clickedMarkers.length}`)
+      // console.log(clickedMarkers)
     },
   }),
   lifecycle({
@@ -70,11 +70,11 @@ var MapWithLocation = compose(
           // refs.map.fitBounds(bounds);
           var places = self.props.places
           var listings = {}
-          console.log(places)
+          // console.log(places)
           if (places) {
             places.forEach(meal => {
               if (listings[meal.chef._id]) {
-                console.log('hello')
+                // console.log('hello')
                 var arr = listings[meal.chef._id].concat({
                   position: meal.chef.location,
                   price: meal.price,
@@ -83,7 +83,7 @@ var MapWithLocation = compose(
                 })
                 listings[meal.chef._id] = arr
               } else {
-                console.log('goodbye')
+                // console.log('goodbye')
                 listings[meal.chef._id] = [{
                   position: meal.chef.location,
                   price: meal.price,
@@ -92,7 +92,7 @@ var MapWithLocation = compose(
                 }]
               }
             })
-            console.log(listings)
+            // console.log(listings)
           }
           if (places) {
             const nextMarkers = places.map(place => ({
@@ -114,29 +114,11 @@ var MapWithLocation = compose(
           }, () => {
               foo.onPlacesChanged()
               self.props.sendBounds(self.state.bounds)
-              console.log(self.state.bounds)
-              // if (refs.searchBox) {
-              //   var input = document.getElementById('search')
-              //   window.google.maps.event.trigger( input, 'focus')
-              //   // window.google.maps.event.trigger( input, 'keydown', {keyCode:13})
-              //   // var itemsloaded = window.google.maps.event
-              //   // itemsloaded.addDomListener(document.body,
-              //   //   'SearchTrigger',
-              //   //   function(e){
-              //   //     if(e.target.className==='search'){
-              //   //       //remove the listener
-              //   //       window.google.maps.event.removeListener(itemsloaded);
-              //   //       //trigger the events
-              //   //       window.google.maps.event.trigger( input, 'focus')
-              //   //       window.google.maps.event.trigger( input, 'keydown', {keyCode:13})
-              //   //     }
-              //   //   });
-              //   // itemsloaded.trigger(input, 'SearchTrigger')
             }
           )
         },
         showInfo: (a) => {
-          console.log('setting info state')
+          // console.log('setting info state')
           this.setState({showInfoIndex: a })
         }
       })
@@ -145,7 +127,7 @@ var MapWithLocation = compose(
   withScriptjs,
   withGoogleMap
   )((props) => {
-    console.log(window.google.maps)
+    // console.log(window.google.maps)
     var image = {
       url: 'https://static.thenounproject.com/png/5024-200.png',
       origin: new window.google.maps.Point(0, 0),
@@ -179,7 +161,6 @@ var MapWithLocation = compose(
           gridSize={60}
         >
           {_.map(props.markers, (markers, index) => {
-            console.log(markers)
             return (
               <Marker
                 key={index + 1}
@@ -189,10 +170,10 @@ var MapWithLocation = compose(
                 {(props.showInfoIndex === index + 1) &&
                   <InfoWindow onCloseClick={props.onToggleOpen}>
                     <div>
-                      {markers.map(marker => {
-                        console.log(marker)
+                      {markers.map((marker, index) => {
+                        // console.log(marker)
                         return(
-                          <div>
+                          <div key={index}>
                             <span style={{fontWeight: 'bold'}}>{marker.name}</span> <br />
                             ${marker.price} <br />
                             Rating: {marker.rating}
