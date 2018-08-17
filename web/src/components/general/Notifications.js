@@ -18,7 +18,7 @@ export default class Notifications extends Component{
     return (
       <Grid columns={2}>
         <Grid.Row>
-          <Grid.Column width={15}>
+          <Grid.Column width={14}>
             <Item key={item._id} id={`notification-${item.seen}`}>
               <Item.Content><strong>Type: </strong>{item.type}</Item.Content>
               <Item.Content><strong>Time: </strong>{new Date(item.time).toString()}</Item.Content>
@@ -26,7 +26,7 @@ export default class Notifications extends Component{
               <Item.Content>{item.content}</Item.Content>
             </Item>
           </Grid.Column>
-          <Grid.Column width={1} verticalAlign='middle'>
+          <Grid.Column width={1} verticalAlign='middle' style={{marginRight: '5px'}}>
             <Button size='mini'
                     id='redButton'
                     icon='trash alternate'
@@ -58,26 +58,26 @@ export default class Notifications extends Component{
         <Menu text fluid id="header">
           <Menu.Item header style={{color: 'white'}}>Notifications</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
-            <Button onClick={this.mark} id="redButton">
+            <Button onClick={this.mark} id="sortButton">
               Mark all as read
             </Button>
             { this.state.unread
-              ? <Button onClick={()=>this.setState({ unread: false })} size="mini" id="redButton">
+              ? <Button onClick={()=>this.setState({ unread: false })} size="mini" id="sortButton">
                 See all notifications
               </Button>
-              : <Button onClick={()=>this.setState({ unread: true })} size="mini" id="redButton">
+              : <Button onClick={()=>this.setState({ unread: true })} size="mini" id="sortButton">
                 See unread notifications
               </Button>
             }
           </Menu.Menu>
         </Menu>
-        <ul style={{listStyleType: "none"}}>
+        <Segment style={{marginTop: '0em'}}>
           {this.props.loading
             ? <Loader active inline='centered'>
                 Optimizing your dining experience...
               </Loader>
             : this.renderNotifs(this.state.unread)}
-        </ul>
+          </Segment>
       </div>
     )
   }

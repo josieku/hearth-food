@@ -45,11 +45,11 @@ export default class HistoryListing extends Component{
       </Menu>
       {this.state.loadingHistory
       ? <Loader active inline='centered'>Loading your past meals</Loader> :
-      <ul style={{listStyleType: "none"}}>
+      <Segment>
         {this.state.history.length > 0
           ? this.state.history.map(HistoryItem)
           : 'No history yet'}
-        </ul>
+        </Segment>
     }
       </div>
     )

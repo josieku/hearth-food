@@ -129,10 +129,10 @@ export default class SetAvailability extends Component {
           ? <Loader active inline='centered'>Be happy with hearth!</Loader>
           : <div>
             <Menu text id="header">
-              <Menu.Item header>Set pickup times for {meal.title}</Menu.Item>
+              <Menu.Item header style={{color: "white"}}>Set pickup times for {meal.title}</Menu.Item>
               <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                 {/* <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/> */}
-                <Button onClick={()=>this.setState({openAdd: true})}>Add Time Slot</Button>
+                <Button id='sortButton' onClick={()=>this.setState({openAdd: true})}>Add Time Slot</Button>
               </Menu.Menu>
             </Menu>
 

@@ -103,7 +103,7 @@ class CustomerSignup extends React.Component {
 
             </Header>
             <Form size='large'>
-              <Segment stacked>
+              <Segment piled>
                 <Form.Input fluid type="name" icon='user' iconPosition='left' placeholder='First Name' onChange={(e)=>this.setState({ first: e.target.value })}/>
                 <Form.Input fluid type="name" icon='user' iconPosition='left' placeholder='Last Name' onChange={(e)=>this.setState({ last: e.target.value })}/>
                 <Form.Input fluid type="number" icon='mobile' iconPosition='left' placeholder='Phone Number' onChange={(e)=>this.setState({ phone: e.target.value })}/>
