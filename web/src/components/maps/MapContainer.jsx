@@ -174,8 +174,7 @@ var MapWithLocation = compose(
                         // console.log(marker)
                         return(
                           <div key={index}>
-                            <span style={{fontWeight: 'bold'}}>{marker.name}</span> <br />
-                            ${marker.price} <br />
+                            <span style={{fontWeight: 'bold'}}>{marker.name}   </span>${marker.price} <br />
                             Rating: {marker.rating}
                           </div>
                         )

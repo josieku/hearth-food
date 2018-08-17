@@ -2,7 +2,40 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import { Button, Divider, Form, Grid, Header, Image, Input, Item, Rating, Segment, TextArea, Loader, Modal, Checkbox } from 'semantic-ui-react';
 import RatingComp from 'react-star-rating-lite';
-
+import {
+  FacebookShareButton,
+  GooglePlusShareButton,
+  LinkedinShareButton,
+  TwitterShareButton,
+  TelegramShareButton,
+  WhatsappShareButton,
+  PinterestShareButton,
+  VKShareButton,
+  OKShareButton,
+  RedditShareButton,
+  TumblrShareButton,
+  LivejournalShareButton,
+  MailruShareButton,
+  ViberShareButton,
+  WorkplaceShareButton,
+  EmailShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  TelegramIcon,
+  WhatsappIcon,
+  GooglePlusIcon,
+  LinkedinIcon,
+  PinterestIcon,
+  VKIcon,
+  OKIcon,
+  RedditIcon,
+  TumblrIcon,
+  LivejournalIcon,
+  MailruIcon,
+  ViberIcon,
+  WorkplaceIcon,
+  EmailIcon,
+} from 'react-share';
 import AddReview from './MealProfile-Review';
 // import { FacebookShareButton, GooglePlusShareButton, LinkedinShareButton, TwitterShareButton, WhatsappShareButton,
 //          PinterestShareButton, RedditShareButton, TumblrShareButton, EmailShareButton } from 'react-share';
@@ -152,6 +185,17 @@ return(
               </Grid.Column>
               <Grid.Column width={8}>
                 <Image src={meal.picture} rounded fluid/>
+                <br />
+                <Grid.Row>
+                  Share this meal with your friends!
+                  <FacebookShareButton url={'localhost:3000/meal/' + meal._id} children={<FacebookIcon size={32} round={true} />}/>
+                  {/* <TwitterShareButton url={'localhost:3000/meal/' + meal._id} children={<TwitterIcon size={32} round={true} />}/>
+                  <PinterestShareButton url={'localhost:3000/meal/' + meal._id} children={<PinterestIcon size={32} round={true} />}/>
+                  <TumblrShareButton url={'localhost:3000/meal/' + meal._id} children={<TumblrIcon size={32} round={true} />}/>
+                  <RedditShareButton url={'localhost:3000/meal/' + meal._id} children={<RedditIcon size={32} round={true} />}/>
+                  <GooglePlusShareButton url={'localhost:3000/meal/' + meal._id} children={<GooglePlusIcon size={32} round={true} />}/>
+                  <WhatsappShareButton url={'localhost:3000/meal/' + meal._id} children={<WhatsappIcon size={32} round={true} />}/> */}
+                </Grid.Row>
               </Grid.Column>
               <Grid.Row>
                 <Grid.Column width={16}>
