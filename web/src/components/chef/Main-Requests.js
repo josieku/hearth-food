@@ -5,14 +5,20 @@ import { Button, Divider, Dropdown, Grid, Input, Item, Menu, TextArea, Modal, Lo
 function RequestItem(item, index, accept, decline) {
   return (
     <Item key={item._id} className="request-list-item">
-      <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
-      <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
-      <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
-      <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
-      <Item.Extra><strong>Requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
-      <Button onClick={() => accept(item._id, index)}>Accept</Button>
-      <Button onClick={() => decline(item, index)}>Decline</Button>
-        <Divider />
+      <Grid>
+        <Grid.Column width={6}>
+          <Item.Header><strong>Customer: </strong>{item.consumer.firstName}</Item.Header>
+          <Item.Extra><strong>Meal: </strong>{item.meal.title}</Item.Extra>
+          <Item.Extra><strong>Date: </strong>{new Date(item.time.date).toString().slice(0,15)}</Item.Extra>
+          <Item.Extra><strong>Time: </strong>{item.time.start} to {item.time.end}</Item.Extra>
+          <Item.Extra><strong>Requests: </strong>{item.requests ? item.requests : 'None'}</Item.Extra>
+        </Grid.Column>
+        <Grid.Column textAlign='right' width={6}>
+          <Button id="redButton" onClick={() => accept(item._id, index)}>Accept</Button>
+          <Button id="redButton" onClick={() => decline(item, index)}>Decline</Button>
+        </Grid.Column>
+      </Grid>
+      <Divider />
     </Item>
   )
 }
@@ -58,32 +64,32 @@ export default class RequestListing extends Component{
               <Menu.Item header style={{color: 'white'}}>Requests</Menu.Item>
               <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
                 <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-                  <Dropdown icon='sort amount down' floating button className='icon' id='redButton'>
-                    <Dropdown.Menu>
-                      <Dropdown.Header content='Sort by selection' />
-                      <Dropdown.Divider />
-                      <Dropdown.Item onClick={()=>{this.props.sort("high")}}>
-                        Price: Low to High
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.props.sort("low")}}>
-                        Price: High to Low
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.props.sort("earliest")}}>
-                        Pickup Time: Earliest to Latest
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={()=>{this.props.sort("latest")}}>
-                        Pickup Time: Latest to Earliest
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Menu.Menu>
+                <Dropdown icon='sort amount down' floating button className='icon' id='sortButton'>
+                  <Dropdown.Menu>
+                    <Dropdown.Header content='Sort by selection' />
+                    <Dropdown.Divider />
+                    <Dropdown.Item onClick={()=>{this.props.sort("high")}}>
+                      Price: Low to High
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("low")}}>
+                      Price: High to Low
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("earliest")}}>
+                      Pickup Time: Earliest to Latest
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={()=>{this.props.sort("latest")}}>
+                      Pickup Time: Latest to Earliest
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Menu.Menu>
             </Menu>
           </Grid.Row>
           {this.props.loading
             ? <Loader active inline='centered'>Your meals are looking fire!</Loader>
             : this.props.requests.length > 0
             ? this.props.requests.map((item, ind) =>
-                RequestItem(item, ind, this.props.accept, this.open))
+            RequestItem(item, ind, this.props.accept, this.open))
             : 'No requests, start sharing your dishes!'
           }
           {this.state.item
@@ -99,8 +105,8 @@ export default class RequestListing extends Component{
               </Modal.Actions>
             </Modal>
             : null}
-      </Grid.Column>
-      </div>
-    )
+          </Grid.Column>
+        </div>
+      )
+    }
   }
-}

@@ -73,7 +73,7 @@ export default class ProfilePaycheck extends Component{
           <Menu.Item header style={{color: 'white'}}>Chef's Paycheck</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
             <Input id="searchInHeader" icon='search' onChange={(e)=>this.search(e.target.value)} placeholder="Search..."/>
-            <Button id='redButton'>Change your billing information</Button>
+            <Button id='headerButton'>Change your billing information</Button>
           </Menu.Menu>
         </Menu>
         {this.state.loading

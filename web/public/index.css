@@ -8,7 +8,7 @@ html {
 }
 
 .App {
-  background-color: #FFF7EF;
+  background-color: #F2EBEA;
   min-height: 100vh;
 }
 
@@ -19,10 +19,10 @@ html {
 /* Landing Page Styles */
 #getStarted {
   color: white;
-  background: #C60000
+  background: #EF8300
 }
 #landingBackground {
-  background-color: #F7C59F
+  background-color: #E0321F
 }
 /* General Styling */
 #navBar {
@@ -35,6 +35,10 @@ html {
 #cuisineSelect {
   margin: 5px;
 }
+#sortButton {
+  margin: 5px;
+  background-color: white;
+}
 
 /* Landing page styling */
 #mainPageMenu {
@@ -45,21 +49,22 @@ html {
   justify-content: center;
 }
 #loginHeader {
-  color: #B02E0C
+  color: #E0321F
 }
 #loginButton {
   color: white;
-  background-color: #C60000;
+  background-color: #EF901C;
   margin: 5px;
 }
 
 #loginMessage {
-  background-color: #D6D4D4;
+  background-color: #EF8300;
+  color: white;
 }
 /* Consumer Landing Styling */
 
 #header {
-  background-color: #C60000;
+  background-color: #E0321F;
   font-size: medium;
   height: 60px;
   color: white;
@@ -67,17 +72,24 @@ html {
   padding-left: 3px;
 }
 .smallHeader {
-  color: #C60000
+  color: #DE1A1A
 }
 
 /* Menu Styling  */
 #redButton {
-  background-color: #EAF2EF;
+  background-color: #EF901C;
   margin: 5px;
   font-size: small;
+  color: white;
+}
+#headerButton {
+  background-color: white;
+  margin: 5px;
+  font-size: small;
+  color: black;
 }
 #chefMenu {
-  background-color: #C60000;
+  background-color: #E0321F;
   border-radius: 5px;
   padding-left: 3px;
 }

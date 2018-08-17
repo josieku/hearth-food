@@ -64,7 +64,7 @@ export default class MenuListing extends Component{
           <Menu.Item header style={{color: 'white'}}>Your Menu</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
             <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-            <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+            <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
               <Dropdown.Menu>
                 <Dropdown.Header content='Sort by selection' />
                 <Dropdown.Divider />
@@ -73,8 +73,8 @@ export default class MenuListing extends Component{
                 <Dropdown.Item onClick={()=>{this.props.sort("low")}}>Price: High to Low</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
-            <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
+            <Button id="headerButton" href='/dashboard/menu/add'>Add a Dish</Button>
+            <Button id="headerButton" href='/dashboard/menu/archived'>See Archived Meals</Button>
           </Menu.Menu>
         </Menu>
         { this.props.loading
