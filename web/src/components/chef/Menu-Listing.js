@@ -17,8 +17,8 @@ function MenuListItem(item) {
           <Item.Content><strong>Number of reviews: </strong>{item.reviews.length}</Item.Content>
           <Rating icon='star' defaultRating={item.overallRating} maxRating={5} disabled/>
           <Item.Content><strong>Status: </strong>{item.status}</Item.Content>
-          <Button href={`/meal/${item._id}/edit`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Edit</Button>
-          <Button href={`/meal/${item._id}/setavailable`} size='mini' style={{backgroundColor: '#B73535', color: 'white'}}>Offer Meal</Button>
+          <Button id="redButton" href={`/meal/${item._id}/edit`} size='mini'>Edit</Button>
+          <Button id="redButton" href={`/meal/${item._id}/setavailable`} size='mini'>Offer Meal</Button>
           <Header>Recipe</Header>
           <Item.Content>{item.recipe}</Item.Content>
         </Item>
@@ -51,7 +51,7 @@ export default class MenuListing extends Component{
           <Menu.Item header style={{color: 'white'}}>Your Menu</Menu.Item>
           <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
             <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-            <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+            <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
               <Dropdown.Menu>
                 <Dropdown.Header content='Sort by selection' />
                 <Dropdown.Divider />
@@ -60,8 +60,8 @@ export default class MenuListing extends Component{
                 <Dropdown.Item onClick={()=>{this.props.sort("low")}}>Price: High to Low</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-            <Button href='/dashboard/menu/add' id='redButton'>Add a Dish</Button>
-            <Button href='/dashboard/menu/archived' id='redButton'>See Archived Meals</Button>
+            <Button id="headerButton" href='/dashboard/menu/add'>Add a Dish</Button>
+            <Button id="headerButton" href='/dashboard/menu/archived'>See Archived Meals</Button>
           </Menu.Menu>
         </Menu>
         { this.props.loading

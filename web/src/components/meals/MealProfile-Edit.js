@@ -113,7 +113,7 @@ export default class MealEdit extends Component {
           `}</style>
           <Grid style={{height: '100%', justifyContent: 'center'}} verticalAlign='middle'>
             <Grid.Column style={{maxWidth: 450}}>
-              <Header as="h2" textAlign="center">Edit Meal</Header>
+              <Header as="h2" textAlign="center" style={{color: "#E0321F"}}>Edit Meal</Header>
               <Form size='large'>
                 <Segment raised>
                   <Form.Input label="Dish Title" fluid placeholder="Title" value={meal.title} onChange={e => this.setState({title: e.target.value})} required/>
@@ -124,11 +124,11 @@ export default class MealEdit extends Component {
                   <Form.Input fluid label="Dish Picture" type="file" icon='camera retro' iconPosition='left' placeholder='Picture' onChange={(e)=>{this.handleFile(e)}} />
                   <Image src={this.state.file}  required/>
                   <div id="addDishButtons">
-                    <Button id="loginButton" size="large" onClick={this.save}>Save</Button>
-                    <Button id="loginButton" size="large"  style={{backgroundColor: '#d6d4d4'}} onClick={this.cancel}>Cancel</Button>
+                    <Button id="redButton" size="large" onClick={this.save}>Save</Button>
+                    <Button id="headerButton" size="large"  style={{backgroundColor: '#d6d4d4'}} onClick={this.cancel}>Cancel</Button>
                   </div>
                   <div style={{marginLeft: '30%', marginRight: '30%'}}>
-                    <Button id="loginButton" size="large" style={{backgroundColor: '#d6d4d4'}} onClick={this.archive}>Archive Meal</Button>
+                    <Button id="headerButton" size="large" style={{backgroundColor: '#d6d4d4'}} onClick={this.archive}>Archive Meal</Button>
                   </div>
                 </Segment>
               </Form>

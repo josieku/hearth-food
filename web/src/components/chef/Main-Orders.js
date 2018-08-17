@@ -19,8 +19,8 @@ function OrderItem(item, index, complete, cancel) {
         {/* {item.payment
           ? <button disabled>Change pickup time</button>
           : <EditModal request={item} ind={index} change={change}/> } */}
-        <Button onClick={()=>complete(item._id, index)}>Delivered!</Button>
-        <Button onClick={()=>cancel(item, index)}>Cancel</Button>
+        <Button id="redButton" onClick={()=>complete(item._id, index)}>Delivered!</Button>
+        <Button id="redButton" onClick={()=>cancel(item, index)}>Cancel</Button>
       </Grid.Column>
     </Grid>
   <Divider />
@@ -127,7 +127,7 @@ export default class OrderListing extends Component{
             <Menu.Item header style={{color: 'white'}}>Orders</Menu.Item>
             <Menu.Menu position='right' style={{padding: '3px', marginLeft: '5px'}}>
               <Input id='searchInHeader' icon='search' placeholder='Search...' onChange={(e)=>this.props.search(e.target.value)}/>
-                <Dropdown icon='sort amount down' floating button className='icon' id='redButton'>
+                <Dropdown icon='sort amount down' floating button className='icon' id='sortButton'>
                   <Dropdown.Menu>
                     <Dropdown.Header content='Sort by selection' />
                     <Dropdown.Divider />
