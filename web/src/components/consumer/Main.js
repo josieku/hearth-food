@@ -274,7 +274,7 @@ export default class Listings extends Component{
                     placeholder='Search...' onChange={(e)=>this.search(e.target.value)}/>
                   <Dropdown id='cuisineSelect' fluid placeholder='Cuisine' multiple search selection
                     options={cuisines} onChange={this.cuisineFilter}/>
-                    <Dropdown icon='sort amount down' floating button className="icon" id="redButton">
+                    <Dropdown icon='sort amount down' floating button className="icon" id="sortButton">
                       <Dropdown.Menu>
                         <Dropdown.Header content='Sort by selection' />
                         <Dropdown.Divider />

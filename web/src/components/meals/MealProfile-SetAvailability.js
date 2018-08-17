@@ -114,7 +114,7 @@ class TimeSlot extends Component {
     render(){
       return(
         <div>
-          <Button onClick={()=>this.setState({open: true})}>Add Time Slot</Button>
+          <Button id="headerButton" onClick={()=>this.setState({open: true})}>Add Time Slot</Button>
           <Modal open={this.state.open} size='small'>
             <Modal.Content>
               <Grid>

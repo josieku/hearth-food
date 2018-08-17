@@ -218,7 +218,7 @@ export default class Main extends Component{
           ? <div>
               <span>
                 <strong>New notifications </strong>
-                <button onClick={this.mark}>Mark all as read</button>
+                <Button id='redButton' onClick={this.mark}>Mark all as read</Button>
               </span>
               {notifs.filter(item=>!item.seen).map(UnseenNotifications)}
             </div>
