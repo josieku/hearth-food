@@ -1,60 +1,28 @@
 # hearth
-> Boilerplate containing a front-end using React and a back-end api using Express.
+Skip the cooking.  Eat Homemade.
+
+At hearth, students can become chefs and create homecooked meals while building community within the university. Order meals from students from different backgrounds and explore a more authentic style of cooking that you won't find in most restaurants.
+
+Each hearth chef goes through a process that ensures that each chef is qualified and knowledgable about the food they are serving. Our chefs go through trial meals with university embassadors to test for quality and safety. Each kitchen is inspected for cleanliness and standards to provide peace of mind for our customers.
+
+Every aspect of hearth is designed to influence a community between our users. The company name is meant to convey a sense of feeling of coziness and close family sitting around a fireplace. We want students to meet other people on campus that they may not have met otherwise, and form a connection through food.
+
+(Still in progress, as of Aug 2018)
 
 ### Motivation
-Some developers prefer to have back-end code separated from front-end code to promote separation of concerns.  
-Some developers prefer to have back-end code together with front-end code because it is more practical.  
-This starter kit aims for a middle ground, trying to preserve the goodness of both approaches.
+We've all been in college and reached a point where dining hall food has become unbearable, but we are either too tired, busy, or don’t know how to cook.  So, we’re introducing hearth - a food sharing platform that allows students who have the time, ability, and passion to cook to list their meals for other students on campus. 
 
-## Getting Started
+## Functionality
+Hearth is a fully frontend and backend integrated, as well as passport authenticated react web application that stores users and meals on our MongoDB database.  Customers are able to order available meals based on their map location, see their meals, and pay for them.  Chefs are able to add a dish, set offering times to sell it, and get paid.
+
+## Try Running the Program
 Clone the repository and remove the .git folder:  
 ```
-$ git clone https://github.com/hexacta/react-express-starter-kit my-app
-$ cd my-app
-$ rm -rf .git
+$ git clone https://github.com/josieku/hearth-food.git
+$ cd hearth-food
 $ npm install
-```
-
-Start development server:  
-```
 $ npm start
 ```
 
-That's all, you can now modify any front or back-end code and everything will be reloaded automatically.
-
-## Under the Hood
-### Inspiration
-- [express-es6-rest-api](https://github.com/developit/express-es6-rest-api) by [Jason Miller](https://github.com/developit)
-- [express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api) by [Kunal Kapadia](https://github.com/KunalKapadia)
-- [create-react-app](https://github.com/facebookincubator/create-react-app) by [Facebook](https://github.com/facebookincubator)
-
-### React
-The React application is fully contained inside the `web` folder. It is the bare output of `create-react-app`. The only configuration added is the `proxy` in package.json:
-```json
-	"proxy": "http://localhost:8080/"
-```
-
-Aaaand, an example of how to use fetch to call the API:
-```js
-  handleClick = async e => {
-    const response = await fetch("api/books/");
-    const books = await response.json();
-    this.setState({
-      books: books
-    })
-  };
-```
-
-### Express
-The `server` folder includes:
-- A REST API shell with Express
-- Transpiling with BabelJS
-
-And doesn't include:
-- Linting
-- Testing
-- Database
-
-## License
-
-MIT © [Hexacta](https://www.hexacta.com)
+## Team Members
+Josie, Griffen, and Dhruva
