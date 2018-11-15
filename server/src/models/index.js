@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
-var userSchema = require('./userSchema');
-var mealSchema = require('./mealSchema');
-var mealReviewSchema = require('./mealReviewSchema');
-var userReviewSchema = require('./userReviewSchema');
-var requestsSchema = require('./requestsSchema');
-var availabilitySchema = require('./availabilitySchema');
-var notificationSchema = require('./notificationSchema');
+var userSchema = require('./schema/userSchema');
+var mealSchema = require('./schema/mealSchema');
+var mealReviewSchema = require('./schema/mealReviewSchema');
+var userReviewSchema = require('./schema/userReviewSchema');
+var requestsSchema = require('./schema/requestsSchema');
+var availabilitySchema = require('./schema/availabilitySchema');
+var notificationSchema = require('./schema/notificationSchema');
 
 if (! process.env.MONGODB_URI){
   console.log('Error: MONGODB_URI is not set. Did you run source env.sh ?');
