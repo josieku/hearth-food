@@ -3,7 +3,7 @@ var session = require('express-session')
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
-var User = require('../models/models').User;
+var User = require('../models').User;
 //var MongoStore = require('connect-mongo')(session); //will use later??
 var mongoose = require('mongoose');
 

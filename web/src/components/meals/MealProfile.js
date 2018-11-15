@@ -110,7 +110,7 @@ export default class MealProfile extends Component {
   }
 
   setAvailability = async (times) => {
-    const chefId = this.state.chefId;
+    const chefId = this.props.user._id;
     await fetch(`/meal/${this.props.id}/setavailable`, {
       method: 'POST',
       headers: {
@@ -125,7 +125,7 @@ export default class MealProfile extends Component {
 
   render(){
     const id = this.props.id
-    console.log('state availabilities', this.state.availabilities)
+    // console.log('state availabilities', this.state.availabilities)
     // console.log(this.state.meal)
     return(
       <div className="main">

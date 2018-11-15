@@ -3,10 +3,10 @@ import { Router } from "express";
 const bodyParser = require('body-parser');
 const router = Router();
 
-var User = require('../models/models').User;
-var Meal = require('../models/models').Meal;
-var Request = require('../models/models').Request;
-var Notification = require('../models/models').Notification;
+var User = require('../models').User;
+var Meal = require('../models').Meal;
+var Request = require('../models').Request;
+var Notification = require('../models').Notification;
 
 router.get('/:id', (req, res) => {
   User.findById(req.params.id)
@@ -150,7 +150,7 @@ router.post('/:id/notif/markallread', async (req, res) => {
                 .then(notification => notification);
   }))
 
-  console.log('done promise')
+  console.log('done promise: notifications marked as read')
 
   Notification.find({ user: req.params.id })
               .then(notifications => res.json(notifications))

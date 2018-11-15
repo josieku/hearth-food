@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const User = require('.././models/models').User;
-const Notification = require('.././models/models').Notification;
+const User = require('../models').User;
+const Notification = require('../models').Notification;
 var mongoose = require('mongoose');
 var connect = process.env.MONGODB_URI;
 mongoose.connect(connect);

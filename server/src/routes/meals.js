@@ -6,12 +6,12 @@ import moment from 'moment'
 const bodyParser = require('body-parser');
 const router = Router();
 
-var Meal = require('../models/models').Meal;
-var Request = require('../models/models').Request;
-var User = require('../models/models').User;
-var Available = require('../models/models').Available;
-var Mealreview = require('../models/models').Mealreview;
-var Notification = require('../models/models').Notification;
+var Meal = require('../models').Meal;
+var Request = require('../models').Request;
+var User = require('../models').User;
+var Available = require('../models').Available;
+var Mealreview = require('../models').Mealreview;
+var Notification = require('../models').Notification;
 
 /* ROUTES */
 
@@ -167,7 +167,6 @@ router.post('/:id/archive', (req, res) => {
 })
 
 router.post('/:id/setavailable', async (req, res) => {
-  // console.log('times', req.body.times)
   const availability = await Promise.all(req.body.times.map(async item => {
     const date= new Date(item.date);
     const start = item.start.split(':');

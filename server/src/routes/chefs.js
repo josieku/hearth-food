@@ -1,12 +1,11 @@
 import { version } from "../../package.json";
 import { Router } from "express";
-const bodyParser = require('body-parser');
 const router = Router();
 
-var User = require('../models/models').User;
-var Meal = require('../models/models').Meal;
-var Request = require('../models/models').Request;
-var Notification = require('../models/models').Notification;
+var User = require('../models').User;
+var Meal = require('../models').Meal;
+var Request = require('../models').Request;
+var Notification = require('../models').Notification;
 
 router.get('/:id', (req, res) => {
   User.findOne({role:'chef', _id: req.params.id })
