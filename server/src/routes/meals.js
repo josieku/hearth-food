@@ -1,9 +1,7 @@
 import { version } from "../../package.json";
 import { Router } from "express";
 import cron from 'node-cron';
-import moment from 'moment'
 
-const bodyParser = require('body-parser');
 const router = Router();
 
 var Meal = require('../models').Meal;
@@ -26,7 +24,6 @@ router.get('/listings', (req, res) => {
 })
 
 router.get('/:id', (req, res) => {
-  // console.log('fetching');
   Meal.findById(req.params.id)
       // .populate('chef')
       .populate('availability')
@@ -177,6 +174,8 @@ router.post('/:id/setavailable', async (req, res) => {
 
     let final = {};
 
+    // update if changes were made to an existing available object
+    // create a new object if not
     if (item._id || item.availableId){
       const id = item._id || item.availableId;
       const updates = {
@@ -200,6 +199,7 @@ router.post('/:id/setavailable', async (req, res) => {
       await tempAvailable.save().then(available => {final = available});
     }
 
+    // use cron to schedule expiry of time availabilities
     let cronStr = `0 ${dateFull.getMinutes()} ${dateFull.getHours()} `
     cronStr += `${date.getDate()} ${date.getMonth()+1} ${date.getDay()}`
 
@@ -212,6 +212,7 @@ router.post('/:id/setavailable', async (req, res) => {
     return final
   }))
 
+  // update availability on meal
   await Meal.findByIdAndUpdate(req.params.id, { availability }, {new: true})
       .populate('availability')
       .exec()

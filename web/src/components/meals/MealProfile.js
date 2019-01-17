@@ -124,9 +124,7 @@ export default class MealProfile extends Component {
   }
 
   render(){
-    const id = this.props.id
-    // console.log('state availabilities', this.state.availabilities)
-    // console.log(this.state.meal)
+    const id = this.props.id;
     return(
       <div className="main">
         <NavBar user={this.props.user}/>
